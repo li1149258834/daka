@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head>
+<html lang="zh-CN" style="--accent: #5b8cff; --accent2: #7b6cff;"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4f6ef7">
@@ -11,86 +11,140 @@
 <title>双人打卡 · 互相监督</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#f4f6fb;--card:#fff;--line:#e6e9f2;--txt:#1f2333;--sub:#7b839b;
---blue:#4f6ef7;--green:#22b573;--orange:#ff9f43;--red:#f0525b;--purple:#8b5cf6}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
-font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-#app{max-width:720px;margin:0 auto;padding:0 12px 92px}
-header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,#4f6ef7,#8b5cf6);
-color:#fff;margin:0 -12px 12px;padding:14px 16px 12px;border-radius:0 0 18px 18px}
-header h1{margin:0;font-size:17px;font-weight:600}
-header .sub{font-size:12px;opacity:.9;margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.who{display:flex;gap:8px;margin-top:10px}
-.who button{flex:1;border:0;border-radius:12px;padding:9px 0;font-size:14px;font-weight:600;
-background:rgba(255,255,255,.22);color:#fff}
-.who button.on{background:#fff;color:var(--blue)}
-.card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px;
-box-shadow:0 1px 3px rgba(20,30,80,.06)}
-.card h2{margin:0 0 10px;font-size:15px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+:root{
+  --bg:#f4f7fd;--card:#fff;--ink:#1e2438;--sub:#8a92a8;--line:#edf1f9;
+  --accent:#5b8cff;--accent2:#7b6cff;
+  --ok:#28b485;--warn:#ff9f43;--bad:#f06a72;
+  --r:20px;--sh:0 4px 18px rgba(46,66,120,.07);
+}
+html,body{margin:0;padding:0;min-height:100%;
+  background:
+    radial-gradient(900px 420px at 100% -8%, #e7eeff 0%, rgba(231,238,255,0) 62%),
+    radial-gradient(720px 400px at -12% 2%, #fdeaf2 0%, rgba(253,234,242,0) 58%),
+    var(--bg);
+  background-attachment:fixed;color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased}
+#app{max-width:720px;margin:0 auto;padding:0 14px 100px}
+header{position:sticky;top:0;z-index:20;padding:16px 2px 10px;
+  background:linear-gradient(to bottom,rgba(244,247,253,.97) 68%,rgba(244,247,253,0));
+  backdrop-filter:blur(10px)}
+.htop{display:flex;align-items:baseline;gap:10px}
+.htop h1{margin:0;font-size:19px;font-weight:750;letter-spacing:.4px}
+.hdate{font-size:12px;color:var(--sub)}
+.hsub{font-size:11px;color:var(--sub);margin-top:3px;display:flex;align-items:center;gap:6px}
+.seg{display:flex;gap:10px;margin-top:13px}
+.segbtn{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;
+  border-radius:16px;padding:10px 12px;font:inherit;color:var(--ink);cursor:pointer;
+  box-shadow:0 1px 5px rgba(46,66,120,.05);transition:.18s}
+.segbtn .av{font-size:19px;line-height:1}
+.segbtn .nm{font-weight:650;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.segbtn .st{margin-left:auto;font-size:11px;color:var(--sub);white-space:nowrap}
+.segbtn.on{color:#fff;border-color:transparent}
+.segbtn.on.her{background:linear-gradient(135deg,#ff8fb1,#ffb199);box-shadow:0 8px 20px rgba(255,143,177,.32)}
+.segbtn.on.me{background:linear-gradient(135deg,#5b8cff,#7b6cff);box-shadow:0 8px 20px rgba(91,140,255,.30)}
+.segbtn.on .st{color:rgba(255,255,255,.92)}
+
+.card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.card.mini{padding:13px 16px}
+.card h2{margin:0 0 12px;font-size:15px;font-weight:650;display:flex;align-items:center;gap:8px}
 .card h2 .tag{margin-left:auto;font-size:11px;font-weight:400;color:var(--sub)}
+.mut{color:var(--sub);font-size:12px}
 .row{display:flex;gap:10px}
 .row>*{flex:1;min-width:0}
-.mut{color:var(--sub);font-size:12px}
-.btn{border:0;border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;
-background:var(--blue);color:#fff;width:100%}
-.btn.sm{padding:7px 10px;font-size:13px;width:auto}
-.btn.gray{background:#eef0f7;color:#545c73}
-.btn.green{background:var(--green)}
-.btn.red{background:var(--red)}
-.btn:disabled{opacity:.45}
-input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 10px;
-font:inherit;background:#fbfcff;color:var(--txt)}
-textarea{min-height:64px;resize:vertical}
-label.fl{display:block;font-size:12px;color:var(--sub);margin:8px 0 4px}
-.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:#eef0f7;color:#5a6480}
-.pill.ok{background:#e6f7ef;color:#128a55}
+
+.hero{display:flex;align-items:center;gap:14px;background:#fff;border-radius:var(--r);
+  padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.heroL{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+.av.big{font-size:25px;width:54px;height:54px;border-radius:17px;display:grid;place-items:center;flex:0 0 auto;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 6px 16px rgba(70,100,220,.20)}
+.heroName{font-weight:750;font-size:17px}
+.ring{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;position:relative;
+  background:conic-gradient(var(--accent) calc(var(--p) * 1%), #eef2fa 0)}
+.ring::after{content:'';position:absolute;inset:7px;border-radius:50%;background:#fff}
+.ring span{position:relative;font-size:12px;font-weight:750;color:var(--accent)}
+
+.task{display:flex;align-items:center;gap:11px;padding:12px 13px;border-radius:14px;background:#f8fafe;
+  margin-bottom:8px;transition:.15s;cursor:pointer}
+.task:last-child{margin-bottom:0}
+.task input{width:20px;height:20px;accent-color:var(--accent);flex:0 0 auto;margin:0}
+.task .tk{flex:1;font-size:14px}
+.task.done{background:#f1fbf6}
+.task.done .tk{color:var(--sub);text-decoration:line-through}
+
+.btn{border:0;border-radius:14px;padding:12px 16px;font:inherit;font-weight:650;color:#fff;width:100%;
+  cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  box-shadow:0 8px 18px rgba(70,100,220,.18);transition:.18s}
+.btn:active{transform:translateY(1px)}
+.btn.sm{padding:8px 12px;font-size:13px;width:auto;box-shadow:none;border-radius:11px}
+.btn.gray{background:#eef1f8;color:#5a6480;box-shadow:none}
+.btn.green{background:linear-gradient(135deg,#34c48a,#22b573);box-shadow:0 8px 18px rgba(34,181,115,.20)}
+.btn.red{background:#fdecec;color:#c63b43;box-shadow:none}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:13px;padding:10px 12px;
+  font:inherit;background:#fbfcff;color:var(--ink);outline:none;transition:.15s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);background:#fff;
+  box-shadow:0 0 0 3px rgba(91,140,255,.10)}
+textarea{min-height:66px;resize:vertical}
+label.fl{display:block;font-size:12px;color:var(--sub);margin:10px 0 5px}
+
+.pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;background:#eef1f8;color:#5a6480}
+.pill.ok{background:#e6f8f0;color:#12855a}
 .pill.no{background:#fdecec;color:#c63b43}
-.pill.blue{background:#eaefff;color:#3b57d6}
-.bar{height:9px;border-radius:9px;background:#eef0f7;overflow:hidden;margin:8px 0 4px}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,#4f6ef7,#8b5cf6);border-radius:9px}
-.pcard{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;
-padding:10px;margin-bottom:8px;background:#fbfcff}
-.pcard .em{font-size:22px}
-.pcard .nm{font-weight:600}
-.pcard .st{margin-left:auto;text-align:right;font-size:12px;color:var(--sub)}
-.word{text-align:center;padding:16px 8px 6px}
-.word .en{font-size:31px;font-weight:700;word-break:break-word}
-.word .ipa{color:var(--sub);margin-top:2px}
-.reveal{font-size:18px;margin-top:12px;font-weight:600;text-align:center}
-.list-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
-.list-item:last-child{border-bottom:0}
+.bar{height:8px;border-radius:8px;background:#eef2fa;overflow:hidden;margin:9px 0 6px}
+.bar i{display:block;height:100%;border-radius:8px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s}
+
+.bcard{background:#fff;border-radius:var(--r);padding:15px;margin-bottom:12px;box-shadow:var(--sh);
+  border-left:4px solid var(--accent)}
+.bcard.her{border-left-color:#ff8fb1}
+.bcard.me{border-left-color:#5b8cff}
+.bhead{display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:15px}
+.bhead .av{font-size:20px}
+.bhead b{font-weight:700}
+.bhead .pill{margin-left:auto}
+
+.list-item{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+.list-item:last-child{border-bottom:0;padding-bottom:0}
 .list-item .g{flex:1;min-width:0}
 .list-item .q{font-weight:600;word-break:break-word}
-.list-item .a{color:#3d4460;font-size:13px;margin-top:2px;word-break:break-word}
-.tabs{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
-display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:30}
-.tabs button{flex:1;border:0;background:none;font-size:11px;color:var(--sub);padding:6px 2px;
-display:flex;flex-direction:column;align-items:center;gap:3px}
-.tabs button .ic{font-size:19px;line-height:1}
-.tabs button.on{color:var(--blue);font-weight:700}
-.chk{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--line)}
-.chk:last-child{border-bottom:0}
-.chk input{width:20px;height:20px;flex:0 0 auto;accent-color:var(--blue)}
-.chk .t{flex:1;min-width:0}
-.chk.done .t{color:var(--sub);text-decoration:line-through}
-.empty{text-align:center;color:var(--sub);font-size:13px;padding:18px 0}
-.nudge{background:#fff8ec;border:1px solid #ffe4bd;border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:6px}
-.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:#222a44;color:#fff;
-padding:9px 16px;border-radius:20px;font-size:13px;z-index:99;opacity:0;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}
-.toast.on{opacity:1}
+.list-item .a{color:#3d4460;font-size:13px;margin-top:3px;word-break:break-word}
+
+.word{text-align:center;padding:18px 8px 6px}
+.word .en{font-size:32px;font-weight:750;word-break:break-word;letter-spacing:.3px}
+.word .ipa{color:var(--sub);margin-top:3px}
+.reveal{font-size:18px;font-weight:650;text-align:center;margin-top:14px}
+
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}
-.grid3 .n{font-size:19px;font-weight:700}
-.grid3 .l{font-size:11px;color:var(--sub)}
-.dot{width:8px;height:8px;border-radius:50%;background:#9aa3bd;display:inline-block}
-.dot.ok{background:#7ef0b4}.dot.err{background:#ffb3b8}.dot.wait{background:#ffd88a}
+.grid3 .n{font-size:20px;font-weight:750;color:var(--accent)}
+.grid3 .l{font-size:11px;color:var(--sub);margin-top:1px}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:2px;
+  padding:7px 6px calc(7px + env(safe-area-inset-bottom));
+  background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-top:1px solid var(--line)}
+.tabs button{flex:1;border:0;background:none;font:inherit;font-size:11px;color:var(--sub);
+  padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;
+  border-radius:12px;transition:.15s}
+.tabs button .ic{font-size:18px;line-height:1}
+.tabs button.on{color:var(--accent);font-weight:750;background:rgba(91,140,255,.07)}
+.tabs button.on.her{color:#ff7ba6;background:rgba(255,143,177,.10)}
+
+.empty{text-align:center;color:var(--sub);font-size:13px;padding:20px 10px;line-height:1.8}
+.nudge{background:linear-gradient(135deg,#fff9ef,#fff4e4);border:1px solid #ffe6c2;border-radius:14px;
+  padding:10px 12px;font-size:13px;margin-bottom:8px}
+.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-8px);background:#222a44;color:#fff;
+  padding:10px 18px;border-radius:22px;font-size:13px;z-index:99;opacity:0;transition:.25s;
+  pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 10px 30px rgba(20,30,60,.25)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.dot{width:7px;height:7px;border-radius:50%;background:#b9c0d2;display:inline-block}
+.dot.ok{background:#3ecf8e}.dot.err{background:#f06a72}.dot.wait{background:#ffc46b}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <h1>双人打卡 · 互相监督</h1>
-    <div class="sub"><span id="hdDate">2026-10-09</span><span id="hdSync"><span class="dot off"></span>未开启云同步（本地）</span></div>
-    <div class="who" id="who"></div>
+    <div class="htop"><h1>双人打卡</h1><div class="hdate" id="hdDate">2026-10-09</div></div>
+    <div class="hsub" id="hdSync"><span class="dot off"></span>本地数据</div>
+    <div class="seg" id="who"></div>
   </header>
   <main id="view"></main>
 </div>
@@ -336,59 +390,73 @@ function addError(u){
 }
 
 /* ================= 视图 ================= */
+const TABS = {
+  her:[['today','🏠','今日'],['words','📖','背单词'],['errors','📕','错题本'],
+       ['practice','✏️','每日一练'],['board','👀','监督'],['set','⚙️','设置']],
+  me :[['today','🏠','今日'],['study','🎯','学习线'],['errors','📕','错题本'],
+       ['practice','✏️','每日一练'],['board','👀','监督'],['set','⚙️','设置']]
+};
+const ACCENT = { her:['#ff8fb1','#ffb199'], me:['#5b8cff','#7b6cff'] };
+
 function render(){
+  const list = TABS[me] || TABS.her;
+  if (!list.some(t=>t[0]===tab)) tab = 'today';
+  const ac = ACCENT[me] || ACCENT.me;
+  document.documentElement.style.setProperty('--accent', ac[0]);
+  document.documentElement.style.setProperty('--accent2', ac[1]);
   $('#hdDate').textContent = TODAYS;
   drawSync();
-  $('#who').innerHTML = Object.values(S.users).map(u=>
-    `<button class="${me===u.id?'on':''}" onclick="switchWho('${u.id}')">${u.emoji} ${esc(u.name)}</button>`).join('');
-  const V = {today:viewToday, words:viewWords, errors:viewErrors, practice:viewPractice, mine:viewMine, set:viewSet};
+  $('#who').innerHTML = Object.values(S.users).map(u=>{
+    const ok = usr(TODAYS,u.id).checkin;
+    return `<button class="segbtn ${me===u.id?'on '+u.id:''}" onclick="switchWho('${u.id}')">
+      <span class="av">${u.emoji}</span><span class="nm">${esc(u.name)}</span>
+      <span class="st">${ok?'已打卡':'未打卡'}</span></button>`;
+  }).join('');
+  const V = { today:viewToday, words:viewWords, study:viewStudy, errors:viewErrors,
+              practice:viewPractice, board:viewBoard, set:viewSet };
   $('#view').innerHTML = (V[tab]||viewToday)();
-  const TABS = [['today','🏠','今日'],['words','📖','背单词'],['errors','📕','错题本'],
-                ['practice','✏️','每日一练'],['mine','🎯','我的学习'],['set','⚙️','设置']];
-  $('#tabs').innerHTML = TABS.map(([k,ic,t])=>
-    `<button class="${tab===k?'on':''}" onclick="switchTab('${k}')"><span class="ic">${ic}</span>${t}</button>`).join('');
+  $('#tabs').innerHTML = list.map(([k,ic,t])=>
+    `<button class="${tab===k?'on '+me:''}" onclick="switchTab('${k}')">
+      <span class="ic">${ic}</span>${t}</button>`).join('');
 }
 function drawSync(){
   const el = $('#hdSync'); if(!el) return;
-  const map = { off:['off','未开启云同步'], syncing:['wait','同步中…'], ok:['ok','已同步'], err:['err','同步失败'] };
+  const map = { off:['off','本地数据'], syncing:['wait','同步中…'], ok:['ok','云端已同步'], err:['err','同步失败'] };
   const [cls,txt] = map[cloudState]||map.off;
-  el.innerHTML = `<span class="dot ${cls}"></span>${txt}${cloud.gistId?'':'（本地）'}`;
+  el.innerHTML = `<span class="dot ${cls}"></span>${txt}`;
 }
-function switchWho(k){ me=k; localStorage.setItem('daka.who',k); render(); }
+function switchWho(k){ me=k; localStorage.setItem('daka.who',k); window.scrollTo(0,0); render(); }
 function switchTab(k){ tab=k; localStorage.setItem('daka.tab',k); window.scrollTo(0,0); render(); }
 
+/* ---------- 今日（只显示当前这个人） ---------- */
 function viewToday(){
-  const cards = Object.values(S.users).map(u=>{
-    const rec = usr(TODAYS,u.id), ts = tasksOf(u.id);
-    const doneN = ts.filter(t=>rec.tasks[t.k]).length;
-    return `<div class="pcard" onclick="switchWho('${u.id}')" style="cursor:pointer">
-      <div class="em">${u.emoji}</div>
-      <div style="min-width:0"><div class="nm">${esc(u.name)}${u.id===me?' · 当前':''}</div>
-      <div class="mut">今日 ${doneN}/${ts.length}　🔥连续 ${streak(u.id)} 天</div></div>
-      <div class="st">${rec.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}
-      <div class="mut">30天 ${rate30(u.id)}%</div></div></div>`;
-  }).join('');
-  const rec = usr(TODAYS,me), ts = tasksOf(me);
-  const tHtml = ts.map(t=>`<div class="chk ${rec.tasks[t.k]?'done':''}">
-      <input type="checkbox" ${rec.tasks[t.k]?'checked':''} onchange="toggleTask('${me}','${t.k}',this.checked)">
-      <div class="t">${t.t}</div></div>`).join('');
-  const nudges = S.nudges.slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,10);
+  const u = S.users[me], rec = usr(TODAYS,me), ts = tasksOf(me);
+  const doneN = ts.filter(t=>rec.tasks[t.k]).length;
+  const pct = Math.round(doneN/ts.length*100);
+  const totalDays = Object.keys(S.daily).filter(d=>S.daily[d][me]&&S.daily[d][me].checkin).length;
   return `
-  <div class="card"><h2>👥 今日战况 <span class="tag">${TODAYS}</span></h2>${cards}</div>
-  <div class="card"><h2>✅ 我的打卡 <span class="tag">${esc(S.users[me].name)}</span></h2>
-    ${tHtml}
-    <label class="fl">今天的一句话（做了什么 / 卡在哪）</label>
-    <textarea id="noteBox" placeholder="例如：背完 27 词，错了 4 个">${esc(rec.note||'')}</textarea>
-    <div style="margin-top:10px"><button class="btn ${rec.checkin?'gray':'green'}" onclick="doCheckin()">
-      ${rec.checkin?'✅ 已打卡（点此更新留言）':'打卡'}</button></div>
+  <div class="hero">
+    <div class="heroL"><div class="av big">${u.emoji}</div>
+      <div><div class="heroName">${esc(u.name)}</div>
+        <div class="mut">${rec.checkin?'今天已打卡 ✅':'今天还没打卡'}</div></div></div>
+    <div class="ring" style="--p:${pct}"><span>${doneN}/${ts.length}</span></div>
   </div>
-  <div class="card"><h2>📣 互相监督</h2>
-    <div class="row"><input id="nudgeTxt" placeholder="给对方留一句催促/鼓励">
-      <button class="btn sm" style="flex:0 0 78px" onclick="sendNudge()">发送</button></div>
-    <div style="margin-top:10px">${nudges.length? nudges.map(n=>`<div class="nudge">
-      <b>${esc(S.users[n.from]?S.users[n.from].name:n.from)}</b> → ${esc(S.users[n.to]?S.users[n.to].name:n.to)}
-      　<span class="mut">${MM(n.at||n.ts)}</span><br>${esc(n.text)}</div>`).join('') : '<div class="empty">还没有留言</div>'}</div>
-  </div>`;
+  <div class="card"><h2>今日任务 <span class="tag">${TODAYS}</span></h2>
+    ${ts.map(t=>`<label class="task ${rec.tasks[t.k]?'done':''}">
+      <input type="checkbox" ${rec.tasks[t.k]?'checked':''}
+        onchange="toggleTask('${me}','${t.k}',this.checked)">
+      <span class="tk">${t.t}</span></label>`).join('')}
+  </div>
+  <div class="card"><h2>今天的一句话</h2>
+    <textarea id="noteBox" placeholder="做了什么、卡在哪、明天要补什么">${esc(rec.note||'')}</textarea>
+    <button class="btn ${rec.checkin?'gray':''}" style="margin-top:11px" onclick="doCheckin()">
+      ${rec.checkin?'更新留言':'打卡'}</button>
+  </div>
+  <div class="card mini"><div class="grid3">
+    <div><div class="n">${streak(me)}</div><div class="l">连续打卡</div></div>
+    <div><div class="n">${rate30(me)}%</div><div class="l">近30天</div></div>
+    <div><div class="n">${totalDays}</div><div class="l">累计天数</div></div>
+  </div></div>`;
 }
 function toggleTask(u,k,v){
   const rec = usr(TODAYS,u); rec.tasks[k]=v; rec.at=NOW();
@@ -406,6 +474,45 @@ function sendNudge(){
   save(); render(); schedulePush(); toast('已发送');
 }
 
+/* ---------- 监督（两人一起看） ---------- */
+function viewBoard(){
+  const card = (k)=>{
+    const u = S.users[k], rec = usr(TODAYS,k), ts = tasksOf(k);
+    const doneN = ts.filter(t=>rec.tasks[t.k]).length;
+    const pct = Math.round(doneN/ts.length*100);
+    const extra = k==='her'
+      ? `单词进度 ${S.words.cursor}/${VOCAB.total}（${Math.round(S.words.cursor/VOCAB.total*100)}%）`
+      : `学习线已完成 ${Object.keys(S.knowledge).reduce((a,x)=>a+(S.knowledge[x].items||[]).filter(i=>i.done).length,0)} 项`;
+    return `<div class="bcard ${k}">
+      <div class="bhead"><span class="av">${u.emoji}</span><b>${esc(u.name)}</b>
+        ${rec.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}</div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="mut">今日任务 ${doneN}/${ts.length}　·　🔥 连续 ${streak(k)} 天　·　近30天 ${rate30(k)}%</div>
+      <div class="mut" style="margin-top:2px">${extra}</div>
+      <div class="mut" style="margin-top:2px">待复习错题 ${dueErrs(k).length} 条</div>
+      ${rec.note?`<div class="mut" style="margin-top:6px">💬 ${esc(rec.note)}</div>`:''}
+    </div>`;
+  };
+  const nudges = S.nudges.slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,12);
+  const other = me==='her' ? 'me' : 'her';
+  const otherRec = usr(TODAYS, other);
+  return `
+  <div class="card"><h2>👀 今日互相监督 <span class="tag">${TODAYS}</span></h2>
+    <div class="mut">${otherRec.checkin
+      ? esc(S.users[other].name)+' 今天已经打卡了 👍'
+      : esc(S.users[other].name)+' 今天还没打卡，可以催一催 👇'}</div></div>
+  ${card('her')}${card('me')}
+  <div class="card"><h2>📣 催一催 / 夸一夸</h2>
+    <div class="row"><input id="nudgeTxt" placeholder="给 ${esc(S.users[other].name)} 留一句话">
+      <button class="btn sm" style="flex:0 0 78px" onclick="sendNudge()">发送</button></div>
+    <div style="margin-top:12px">${nudges.length? nudges.map(n=>`<div class="nudge">
+      <b>${esc(S.users[n.from]?S.users[n.from].name:n.from)}</b>
+      <span class="mut">→ ${esc(S.users[n.to]?S.users[n.to].name:n.to)} · ${MM(n.at||n.ts)}</span>
+      <br>${esc(n.text)}</div>`).join('') : '<div class="empty">还没有留言，先给对方说句加油吧</div>'}</div>
+  </div>`;
+}
+
+/* ---------- 她的专项：背单词 ---------- */
 function viewWords(){
   const { w, total, daysLeft, suggest } = plan();
   const rec = w.days[TODAYS];
@@ -427,43 +534,40 @@ function viewWords(){
           <div class="ipa">${esc(wd.ipa||'')}</div><div class="mut">${esc(wd.u||'')}</div></div>
         <div class="mut" style="text-align:center">${answered+1} / ${words.length}</div>
         <div class="bar"><i style="width:${Math.round(answered/words.length*100)}%"></i></div>
-        <div class="row" style="margin-top:12px">
+        <div class="row" style="margin-top:14px">
           <button class="btn gray" onclick="grade(${cur},false)">😵 不认识</button>
           <button class="btn green" onclick="grade(${cur},true)">😀 认识</button></div>
         <div style="margin-top:10px"><button class="btn gray" onclick="reveal()">👀 看释义</button></div>
         <div id="revealBox"></div>`;
     } else {
       const list = words.map((x,i)=>({...x, k:known.includes(rec.from+i), u2:unknown.includes(rec.from+i)}));
-      body = `<div class="grid3" style="margin-bottom:10px">
+      body = `<div class="grid3" style="margin-bottom:12px">
           <div><div class="n">${words.length}</div><div class="l">今日词数</div></div>
-          <div><div class="n" style="color:var(--green)">${known.length}</div><div class="l">认识</div></div>
-          <div><div class="n" style="color:var(--red)">${unknown.length}</div><div class="l">不认识</div></div></div>
-        ${unknown.length?'<div class="mut" style="margin-bottom:6px">不认识的已自动进错题本，明天复习。</div>':''}
+          <div><div class="n" style="color:#28b485">${known.length}</div><div class="l">认识</div></div>
+          <div><div class="n" style="color:#f06a72">${unknown.length}</div><div class="l">不认识</div></div></div>
+        ${unknown.length?'<div class="mut" style="margin-bottom:8px">不认识的已自动进错题本，明天复习。</div>':''}
         ${list.map(x=>`<div class="list-item"><div class="g">
           <div class="q">${esc(x.en)} ${x.ipa?`<span class="mut">${esc(x.ipa)}</span>`:''}
             ${x.u2?'<span class="pill no">错</span>':(x.k?'<span class="pill ok">对</span>':'')}</div>
           <div class="a">${esc((x.pos?x.pos+' ':'')+x.cn)}</div>
           <div class="mut">${esc(x.u||'')}</div></div></div>`).join('')}
-        <div style="margin-top:12px">${rec.done? '<div class="empty">✅ 今日已完成</div>'
+        <div style="margin-top:14px">${rec.done? '<div class="empty">✅ 今日已完成</div>'
           : '<button class="btn green" onclick="finishToday()">完成今日背诵</button>'}</div>`;
     }
   }
   return `
-  <div class="card"><h2>📖 高中英语单词 · 首轮计划</h2>
+  <div class="card"><h2>📖 高中英语单词 · 首轮</h2>
     <div class="grid3">
-      <div><div class="n">${learned}</div><div class="l">已排入计划</div></div>
+      <div><div class="n">${learned}</div><div class="l">已排入</div></div>
       <div><div class="n">${total}</div><div class="l">总词数</div></div>
       <div><div class="n">${daysLeft}</div><div class="l">距 ${MM(w.endDate)}</div></div></div>
     <div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="mut">已完成 ${pct}%　·　剩余 ${total-learned} 词　·　按当前速度建议每天 <b>${suggest}</b> 个</div>
-    <div class="row" style="margin-top:10px">
-      <div><label class="fl">每天背几个</label><input type="number" min="5" max="300" value="${w.perDay}"
-        onchange="setPer(this.value)"></div>
-      <div><label class="fl">首轮完成日</label><input type="date" value="${w.endDate}" onchange="setEnd(this.value)"></div>
-    </div>
+    <div class="mut">已完成 ${pct}%　·　剩余 ${total-learned} 词　·　建议每天 <b>${suggest}</b> 个</div>
+    <div class="row" style="margin-top:11px">
+      <div><label class="fl">每天背几个</label><input type="number" min="5" max="300" value="${w.perDay}" onchange="setPer(this.value)"></div>
+      <div><label class="fl">首轮完成日</label><input type="date" value="${w.endDate}" onchange="setEnd(this.value)"></div></div>
     <div class="mut" style="margin-top:6px">已完成背诵天数：${doneDays} 天</div></div>
-  <div class="card"><h2>🔤 今日单词 <span class="tag">${TODAYS}${rec?`　第 ${rec.from+1}–${rec.to} 词`:'　未开始'}</span></h2>${body}</div>
-  <div class="card"><h2>📚 词库</h2><div class="mut">外研版（2019）必修 1–3 + 选择性必修 1–4，42 单元共 ${total} 条，按教材单元顺序推进。</div></div>`;
+  <div class="card"><h2>🔤 今日单词 <span class="tag">${TODAYS}${rec?`　第 ${rec.from+1}–${rec.to} 词`:'　未开始'}</span></h2>${body}</div>`;
 }
 function setPer(v){ S.words.perDay = Math.max(1, Number(v)||27); S.words.metaAt = NOW(); save(); render(); schedulePush(); }
 function setEnd(v){ S.words.endDate = v; S.words.metaAt = NOW(); save(); render(); schedulePush(); }
@@ -479,87 +583,86 @@ function finishToday(){
   save(); render(); schedulePush(); toast('今日背诵完成 🎉');
 }
 
+/* ---------- 错题本（只显示当前这个人） ---------- */
 function viewErrors(){
-  const block = (u,label)=>{
-    const due = dueErrs(u), all = errsOf(u).filter(e=>!e.mastered);
-    return `<div class="card"><h2>${label} · 今天要复习 <span class="tag">${due.length} 条</span></h2>
-      ${due.length? due.slice(0,10).map(e=>`<div class="list-item"><div class="g">
-        <div class="q">${esc(e.q)}</div>${e.a?`<div class="a">✅ ${esc(e.a)}</div>`:''}
-        <div class="mut"><span class="pill">${esc(e.subject||'')}</span></div></div>
-        <button class="btn sm green" onclick="reviewError('${e.id}')">已复习</button></div>`).join('')
-      : '<div class="empty">今天没有到期错题</div>'}
-      </div>
-      <div class="card"><h2>${label} · 未掌握 <span class="tag">${all.length} 条</span></h2>
-      ${all.length? all.slice().reverse().slice(0,40).map(e=>`<div class="list-item"><div class="g">
-        <div class="q">${esc(e.q)}</div>${e.a?`<div class="a">✅ ${esc(e.a)}</div>`:''}
-        ${e.note?`<div class="mut">📝 ${esc(e.note)}</div>`:''}
-        <div class="mut"><span class="pill">${esc(e.subject||'')}</span>
-          <span class="pill ${e.mastered?'ok':''}">第${(e.stage||0)+1}轮</span>
-          ${e.nextReview?`<span class="pill">下次 ${MM(e.nextReview)}</span>`:''}</div></div>
-        <button class="btn sm gray" onclick="reviewError('${e.id}')">已复习</button></div>`).join('')
-      : '<div class="empty">暂无</div>'}</div>`;
-  };
-  return `<div class="card"><h2>➕ 添加错题</h2>
-      <label class="fl">给谁记</label><select id="eWho"><option value="her">🌸 外甥女</option><option value="me">🚗 我</option></select>
-      <label class="fl">科目 / 来源</label><input id="eq" placeholder="英语 / 数学 / 物理">
-      <label class="fl">题目（原题或知识点）</label><textarea id="eQ"></textarea>
-      <label class="fl">正确答案 / 解析</label><textarea id="eA"></textarea>
-      <label class="fl">备注（为什么错）</label><input id="eN" placeholder="选填">
-      <div style="margin-top:10px"><button class="btn" onclick="addError($('#eWho').value)">加入错题本</button></div></div>
-    ${block('her','🌸 外甥女')}${block('me','🚗 我')}`;
+  const u = me, name = esc(S.users[u].name);
+  const due = dueErrs(u), all = errsOf(u).filter(e=>!e.mastered);
+  return `
+  <div class="card"><h2>➕ 添加错题 <span class="tag">${name}</span></h2>
+    <label class="fl">科目 / 来源</label><input id="eq" placeholder="英语 / 数学 / 物理">
+    <label class="fl">题目（原题或知识点）</label><textarea id="eQ"></textarea>
+    <label class="fl">正确答案 / 解析</label><textarea id="eA"></textarea>
+    <label class="fl">备注（为什么错）</label><input id="eN" placeholder="选填">
+    <button class="btn" style="margin-top:11px" onclick="addError('${u}')">加入错题本</button></div>
+  <div class="card"><h2>🔔 今天要复习 <span class="tag">${due.length} 条</span></h2>
+    ${due.length? due.slice(0,10).map(e=>`<div class="list-item"><div class="g">
+      <div class="q">${esc(e.q)}</div>${e.a?`<div class="a">✅ ${esc(e.a)}</div>`:''}
+      <div class="mut" style="margin-top:3px"><span class="pill">${esc(e.subject||'')}</span></div></div>
+      <button class="btn sm green" onclick="reviewError('${e.id}')">已复习</button></div>`).join('')
+    : '<div class="empty">今天没有到期的错题，很棒 👏</div>'}</div>
+  <div class="card"><h2>📕 未掌握 <span class="tag">${all.length} 条</span></h2>
+    ${all.length? all.slice().reverse().slice(0,40).map(e=>`<div class="list-item"><div class="g">
+      <div class="q">${esc(e.q)}</div>${e.a?`<div class="a">✅ ${esc(e.a)}</div>`:''}
+      ${e.note?`<div class="mut">📝 ${esc(e.note)}</div>`:''}
+      <div class="mut" style="margin-top:3px"><span class="pill">${esc(e.subject||'')}</span>
+        <span class="pill">第${(e.stage||0)+1}轮</span>
+        ${e.nextReview?`<span class="pill">下次 ${MM(e.nextReview)}</span>`:''}</div></div>
+      <button class="btn sm gray" onclick="reviewError('${e.id}')">已复习</button></div>`).join('')
+    : '<div class="empty">暂无错题</div>'}</div>`;
 }
 
+/* ---------- 每日一练（只显示当前这个人） ---------- */
 function viewPractice(){
-  const today = S.practice.filter(p=>p.date===TODAYS);
-  const recent = S.practice.slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,15);
-  return `<div class="card"><h2>✏️ 今日一练 <span class="tag">${TODAYS}</span></h2>
-    <label class="fl">今天练了什么 / 遇到什么难点</label><textarea id="pBox"></textarea>
-    <label class="fl">谁来记</label><select id="pWho"><option value="her">🌸 外甥女</option><option value="me">🚗 我</option></select>
-    <div style="margin-top:10px"><button class="btn" onclick="addPractice()">记录下来</button></div></div>
+  const u = me;
+  const today = S.practice.filter(p=>p.user===u && p.date===TODAYS);
+  const recent = S.practice.filter(p=>p.user===u).sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,15);
+  return `
+  <div class="card"><h2>✏️ 今天练了什么 <span class="tag">${esc(S.users[u].name)}</span></h2>
+    <textarea id="pBox" placeholder="例如：函数单调性判断，还是容易漏定义域"></textarea>
+    <button class="btn" style="margin-top:11px" onclick="addPractice()">记录下来</button></div>
   <div class="card"><h2>📋 今天（${today.length}）</h2>
     ${today.length? today.map(p=>`<div class="list-item"><div class="g">
-      <div class="q">${esc(S.users[p.user]?S.users[p.user].name:p.user)}</div>
-      <div class="a">${esc(p.text)}</div>
-      <div class="mut">${p.done?'<span class="pill ok">已完成</span>':'<span class="pill">待完成</span>'}</div></div>
+      <div class="a" style="font-size:14px;color:var(--ink)">${esc(p.text)}</div>
+      <div class="mut" style="margin-top:3px">${p.done?'<span class="pill ok">已完成</span>':'<span class="pill">待完成</span>'}</div></div>
       ${p.done?'':`<button class="btn sm green" onclick="donePractice('${p.id}')">完成</button>`}</div>`).join('')
     : '<div class="empty">今天还没有记录</div>'}</div>
-  <div class="card"><h2>🕘 最近</h2>
+  <div class="card"><h2>🕘 最近记录</h2>
     ${recent.length? recent.map(p=>`<div class="list-item"><div class="g">
-      <div class="mut">${MM(p.date)} · ${esc(S.users[p.user]?S.users[p.user].name:p.user)}</div>
-      <div class="a">${esc(p.text)}</div></div></div>`).join('') : '<div class="empty">暂无</div>'}</div>`;
+      <div class="mut">${MM(p.date)}</div><div class="a">${esc(p.text)}</div></div></div>`).join('')
+    : '<div class="empty">暂无</div>'}</div>`;
 }
 function addPractice(){
   const t = ($('#pBox').value||'').trim(); if(!t) return toast('请填写内容');
-  S.practice.push({ id:uid(), user:$('#pWho').value, date:TODAYS, text:t, done:false, at:NOW() });
+  S.practice.push({ id:uid(), user:me, date:TODAYS, text:t, done:false, at:NOW() });
   save(); render(); schedulePush(); toast('已记录');
 }
 function donePractice(id){
   const p = S.practice.find(x=>x.id===id); if(!p) return;
   p.done = true; p.at = NOW();
-  const r = usr(TODAYS,'her'); if (p.user==='her') r.tasks.practice = true;
+  if (p.user==='her') { const r = usr(TODAYS,'her'); r.tasks.practice = true; r.at = NOW(); }
   save(); render(); schedulePush();
 }
 
+/* ---------- 我的专项：三条学习线 ---------- */
 const TRACKS = { car:'🚗', media:'📱', ai:'🎬' };
-function viewMine(){
-  return `<div class="card"><h2>🎯 我的学习线</h2>
-    <div class="mut">每条线自己列条目，做过就勾掉；三条全勾会自动打卡。</div></div>` +
-    Object.keys(S.knowledge).map(key=>{
-      const tr = S.knowledge[key], items = tr.items||[];
-      const done = items.filter(i=>i.done).length;
-      const pct = items.length? Math.round(done/items.length*100):0;
-      return `<div class="card"><h2>${TRACKS[key]||'📌'} ${esc(tr.title)} <span class="tag">${done}/${items.length}</span></h2>
-        <div class="bar"><i style="width:${pct}%"></i></div>
-        ${items.length? items.slice().reverse().slice(0,30).map(i=>`<div class="chk ${i.done?'done':''}">
-          <input type="checkbox" ${i.done?'checked':''} onchange="toggleKnow('${key}','${i.id}',this.checked)">
-          <div class="t">${esc(i.title)}${i.note?`<div class="mut">${esc(i.note)}</div>`:''}</div>
-          <button class="btn sm gray" style="flex:0 0 auto" onclick="delKnow('${key}','${i.id}')">删</button></div>`).join('')
-        : '<div class="empty">还没有条目</div>'}
-        <div class="row" style="margin-top:10px">
-          <input id="k_${key}_t" placeholder="今天要学/要做的一条">
-          <button class="btn sm" style="flex:0 0 66px" onclick="addKnow('${key}')">添加</button></div>
-      </div>`;
-    }).join('');
+function viewStudy(){
+  const blocks = Object.keys(S.knowledge).map(key=>{
+    const tr = S.knowledge[key], items = tr.items||[];
+    const done = items.filter(i=>i.done).length;
+    const pct = items.length? Math.round(done/items.length*100):0;
+    return `<div class="card"><h2>${TRACKS[key]||'📌'} ${esc(tr.title)} <span class="tag">${done}/${items.length}</span></h2>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      ${items.length? items.slice().reverse().slice(0,30).map(i=>`<div class="task ${i.done?'done':''}">
+        <input type="checkbox" ${i.done?'checked':''} onchange="toggleKnow('${key}','${i.id}',this.checked)">
+        <span class="tk">${esc(i.title)}${i.note?`<div class="mut">${esc(i.note)}</div>`:''}</span>
+        <button class="btn sm gray" onclick="delKnow('${key}','${i.id}')">删</button></div>`).join('')
+      : '<div class="empty">还没有条目，先加一条今天要学的</div>'}
+      <div class="row" style="margin-top:11px">
+        <input id="k_${key}_t" placeholder="今天要学 / 要做的一条">
+        <button class="btn sm" style="flex:0 0 68px" onclick="addKnow('${key}')">添加</button></div></div>`;
+  }).join('');
+  return `<div class="card"><h2>🎯 我的学习线 <span class="tag">李鑫</span></h2>
+      <div class="mut">三条线各列条目，做完勾掉；三条都勾上会自动打卡。</div></div>${blocks}`;
 }
 function addKnow(key){
   const inp = $('#k_'+key+'_t'); const t = inp.value.trim(); if(!t) return;
