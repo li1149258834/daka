@@ -594,8 +594,10 @@ function viewSet(){
     <label class="fl">访问令牌 Token</label>
     <input id="cTok" value="${esc(cloud.token)}" placeholder="粘贴 Token" onchange="cloudSetTok(this.value)">
     <div class="mut" style="margin-top:6px">Gitee: 设置 → 私人令牌 → 勾选 gists　|　GitHub: Settings → Developer settings → Tokens，勾选 gist</div>
-    <label class="fl">数据编号 Gist ID（第一次点“创建并同步”会自动生成）</label>
+    <label class="fl">数据编号 Gist ID</label>
     <input id="cGid" value="${esc(cloud.gistId)}" placeholder="留空则自动创建" onchange="cloudSetGid(this.value)">
+    <div class="mut" style="margin-top:6px">⚠️ 两台设备必须填<b>同一个</b> Gist ID 才会同步。<br>
+      第一台：点「创建 / 立即同步」→ 上面框里会自动出现一串编号；把这串编号发给另一台，粘到同一个框里，再点同步。</div>
     <div class="row" style="margin-top:10px">
       <button class="btn green" onclick="cloudSync(true)">创建 / 立即同步</button>
     </div>
