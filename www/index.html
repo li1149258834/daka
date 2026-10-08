@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" style="--accent: #5b8cff; --accent2: #7b6cff;"><head>
+<html lang="zh-CN" style="--accent: #ff8fb1; --accent2: #ffb199;"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4f6ef7">
@@ -137,6 +137,25 @@ label.fl{display:block;font-size:12px;color:var(--sub);margin:10px 0 5px}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .dot{width:7px;height:7px;border-radius:50%;background:#b9c0d2;display:inline-block}
 .dot.ok{background:#3ecf8e}.dot.err{background:#f06a72}.dot.wait{background:#ffc46b}
+
+.calhead{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.calhead b{font-size:16px}
+.calhead .sp{margin-left:auto;display:flex;gap:6px}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.calwd{text-align:center;font-size:11px;color:var(--sub);padding:2px 0}
+.calday{position:relative;aspect-ratio:1/1;border-radius:12px;background:#f8fafe;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:.15s}
+.calday.empty{background:transparent;cursor:default}
+.calday.today{outline:2px solid var(--accent);outline-offset:-2px}
+.calday.sel{background:#eef2ff}
+.calday .dn{font-weight:600;line-height:1}
+.calday .dots{display:flex;gap:3px;height:7px;margin-top:3px}
+.dotm{width:6px;height:6px;border-radius:50%;display:inline-block}
+.dotm.her{background:#ff8fb1}
+.dotm.me{background:#5b8cff}
+.calleg{display:flex;gap:14px;font-size:11px;color:var(--sub);margin-top:11px;align-items:center}
+.statline{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.statline:last-child{border-bottom:0}
 </style>
 </head>
 <body>
@@ -149,7 +168,7 @@ label.fl{display:block;font-size:12px;color:var(--sub);margin:10px 0 5px}
   <main id="view"></main>
 </div>
 <div class="tabs" id="tabs"></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">今日背诵完成 🎉</div>
 
 <script>
 /* ================= 词库（内嵌，离线可用） ================= */
@@ -181,7 +200,7 @@ function defaultState(){
     v: 2, updatedAt: NOW(),
     users: { her:{id:'her',name:'蒋语璐',emoji:'🌸'}, me:{id:'me',name:'李鑫',emoji:'🚗'} },
     words: { cursor:0, perDay:27, endDate:'2026-12-31', days:{} },
-    daily: {}, errors: [], practice: [],
+    daily: {}, errors: [], practice: [], logs: [], reviewLog: [],
     knowledge: { car:{title:'汽车安全知识',items:[]}, media:{title:'自媒体运营',items:[]}, ai:{title:'AI视频制作',items:[]} },
     nudges: []
   };
@@ -229,6 +248,8 @@ function mergeState(a, b){
   };
   out.errors = byId(out.errors, b.errors);
   out.practice = byId(out.practice, b.practice);
+  out.logs = byId(out.logs, b.logs);
+  out.reviewLog = byId(out.reviewLog, b.reviewLog);
   out.nudges = byId(out.nudges, b.nudges);
   const k = out.knowledge;
   for (const key of Object.keys(b.knowledge||{})){
@@ -315,8 +336,9 @@ async function cloudSync(manual){
 }
 
 /* ================= 打卡事项 ================= */
-const HER_TASKS = [ {k:'words',t:'背英语单词（按计划）'}, {k:'errors',t:'错题本复习'}, {k:'practice',t:'每日一练'} ];
-const ME_TASKS  = [ {k:'car',t:'汽车安全知识'}, {k:'media',t:'自媒体运营'}, {k:'ai',t:'AI 视频制作'} ];
+const HER_TASKS = [ {k:'words',t:'背英语单词'}, {k:'errors',t:'错题本复习'}, {k:'practice',t:'每日一练'} ];
+const ME_TASKS  = [ {k:'car',t:'汽车安全知识'}, {k:'media',t:'自媒体（视频/文案）'},
+                    {k:'ai',t:'AI 视频制作'}, {k:'sport',t:'锻炼'} ];
 const tasksOf = u => u==='her' ? HER_TASKS : ME_TASKS;
 
 function usr(date,u){
@@ -378,6 +400,8 @@ function reviewError(id){
   const e = S.errors.find(x=>x.id===id); if(!e) return;
   const st = (e.stage||0)+1;
   e.mastered = st>=INTERVALS.length; e.stage = st; e.at = NOW();
+  S.reviewLog = S.reviewLog || [];
+  S.reviewLog.push({ id:uid(), user:e.user, date:TODAYS, errorId:id, at:NOW() });
   e.nextReview = e.mastered ? null : addDays(TODAYS, INTERVALS[Math.min(st,INTERVALS.length-1)]);
   save(); render(); schedulePush();
 }
@@ -391,16 +415,54 @@ function addError(u){
 
 /* ================= 视图 ================= */
 const TABS = {
-  her:[['today','🏠','今日'],['words','📖','背单词'],['errors','📕','错题本'],
-       ['practice','✏️','每日一练'],['board','👀','监督'],['set','⚙️','设置']],
-  me :[['today','🏠','今日'],['study','🎯','学习线'],['errors','📕','错题本'],
-       ['practice','✏️','每日一练'],['board','👀','监督'],['set','⚙️','设置']]
+  her:[['today','🏠','今日'],['errors','📕','错题本'],['practice','✏️','每日一练'],
+       ['calendar','📅','日历'],['board','👀','监督'],['set','⚙️','设置']],
+  me :[['today','🏠','今日'],['study','📚','学习线'],
+       ['calendar','📅','日历'],['board','👀','监督'],['set','⚙️','设置']]
 };
 const ACCENT = { her:['#ff8fb1','#ffb199'], me:['#5b8cff','#7b6cff'] };
+const TRACKS = { car:['🚗','汽车安全知识'], media:['📱','自媒体运营'],
+                 ai:['🎬','AI视频制作'], sport:['🏃','锻炼'] };
+const ME_HINT = {
+  car:'今天学到的汽车安全知识点（例：雨天跟车距离要加倍）',
+  media:'今天发的视频或文案（写标题就行）',
+  ai:'今天推进了什么（工具、技巧、作品都算）',
+  sport:'今天练了什么、多少分钟'
+};
+let calYM = TODAYS.slice(0,7);
+let calSel = TODAYS;
+
+/* ---------- 通用 ---------- */
+function weekRange(d){
+  const dt = new Date(d+'T00:00:00'); const wd = (dt.getDay()+6)%7;
+  const mon = new Date(dt); mon.setDate(dt.getDate()-wd);
+  const sun = new Date(mon); sun.setDate(mon.getDate()+6);
+  return [dstr(mon), dstr(sun)];
+}
+function logsOf(date, track){
+  return (S.logs||[]).filter(l=>l.user==='me' && l.date===date && (!track||l.track===track));
+}
+function taskState(date,u){
+  if (u==='me'){
+    const logs = logsOf(date);
+    const st = {};
+    for (const k of Object.keys(TRACKS)) st[k] = logs.some(l=>l.track===k);
+    return st;
+  }
+  const rec = usr(date,u); return rec.tasks||{};
+}
+function taskListOf(u){
+  return u==='me' ? Object.keys(TRACKS).map(k=>({k, t:TRACKS[k][1]}))
+                  : HER_TASKS.map(x=>({k:x.k, t:x.t}));
+}
+function tasksDone(date,u){
+  const st = taskState(date,u), list = taskListOf(u);
+  return { st, list, n: list.filter(x=>st[x.k]).length, total: list.length };
+}
 
 function render(){
   const list = TABS[me] || TABS.her;
-  if (!list.some(t=>t[0]===tab)) tab = 'today';
+  if (!list.some(x=>x[0]===tab)) tab = 'today';
   const ac = ACCENT[me] || ACCENT.me;
   document.documentElement.style.setProperty('--accent', ac[0]);
   document.documentElement.style.setProperty('--accent2', ac[1]);
@@ -412,12 +474,12 @@ function render(){
       <span class="av">${u.emoji}</span><span class="nm">${esc(u.name)}</span>
       <span class="st">${ok?'已打卡':'未打卡'}</span></button>`;
   }).join('');
-  const V = { today:viewToday, words:viewWords, study:viewStudy, errors:viewErrors,
-              practice:viewPractice, board:viewBoard, set:viewSet };
+  const V = { today:viewToday, study:viewStudy, errors:viewErrors, practice:viewPractice,
+              calendar:viewCalendar, board:viewBoard, set:viewSet };
   $('#view').innerHTML = (V[tab]||viewToday)();
-  $('#tabs').innerHTML = list.map(([k,ic,t])=>
+  $('#tabs').innerHTML = list.map(([k,ic,tx])=>
     `<button class="${tab===k?'on '+me:''}" onclick="switchTab('${k}')">
-      <span class="ic">${ic}</span>${t}</button>`).join('');
+      <span class="ic">${ic}</span>${tx}</button>`).join('');
 }
 function drawSync(){
   const el = $('#hdSync'); if(!el) return;
@@ -428,109 +490,51 @@ function drawSync(){
 function switchWho(k){ me=k; localStorage.setItem('daka.who',k); window.scrollTo(0,0); render(); }
 function switchTab(k){ tab=k; localStorage.setItem('daka.tab',k); window.scrollTo(0,0); render(); }
 
-/* ---------- 今日（只显示当前这个人） ---------- */
+/* ---------- 今日 ---------- */
 function viewToday(){
-  const u = S.users[me], rec = usr(TODAYS,me), ts = tasksOf(me);
-  const doneN = ts.filter(t=>rec.tasks[t.k]).length;
-  const pct = Math.round(doneN/ts.length*100);
+  const u = S.users[me], rec = usr(TODAYS,me);
+  const { st, list, n, total } = tasksDone(TODAYS,me);
+  const pct = Math.round(n/total*100);
   const totalDays = Object.keys(S.daily).filter(d=>S.daily[d][me]&&S.daily[d][me].checkin).length;
+  const body = me==='her' ? herWordsCard() + herTasksCard(st) : meLogsCards();
   return `
   <div class="hero">
     <div class="heroL"><div class="av big">${u.emoji}</div>
       <div><div class="heroName">${esc(u.name)}</div>
         <div class="mut">${rec.checkin?'今天已打卡 ✅':'今天还没打卡'}</div></div></div>
-    <div class="ring" style="--p:${pct}"><span>${doneN}/${ts.length}</span></div>
+    <div class="ring" style="--p:${pct}"><span>${n}/${total}</span></div>
   </div>
-  <div class="card"><h2>今日任务 <span class="tag">${TODAYS}</span></h2>
-    ${ts.map(t=>`<label class="task ${rec.tasks[t.k]?'done':''}">
-      <input type="checkbox" ${rec.tasks[t.k]?'checked':''}
-        onchange="toggleTask('${me}','${t.k}',this.checked)">
-      <span class="tk">${t.t}</span></label>`).join('')}
-  </div>
+  ${body}
   <div class="card"><h2>今天的一句话</h2>
     <textarea id="noteBox" placeholder="做了什么、卡在哪、明天要补什么">${esc(rec.note||'')}</textarea>
     <button class="btn ${rec.checkin?'gray':''}" style="margin-top:11px" onclick="doCheckin()">
-      ${rec.checkin?'更新留言':'打卡'}</button>
-  </div>
+      ${rec.checkin?'更新留言':'打卡'}</button></div>
   <div class="card mini"><div class="grid3">
     <div><div class="n">${streak(me)}</div><div class="l">连续打卡</div></div>
     <div><div class="n">${rate30(me)}%</div><div class="l">近30天</div></div>
-    <div><div class="n">${totalDays}</div><div class="l">累计天数</div></div>
-  </div></div>`;
+    <div><div class="n">${totalDays}</div><div class="l">累计天数</div></div></div></div>`;
 }
-function toggleTask(u,k,v){
-  const rec = usr(TODAYS,u); rec.tasks[k]=v; rec.at=NOW();
-  const all = tasksOf(u).every(t=>rec.tasks[t.k]);
-  if (all && !rec.checkin) { rec.checkin = true; toast('任务全部完成，自动打卡 🎉'); }
-  save(); render(); schedulePush();
+function toggleWordCfg(){
+  const el = $('#wcfg'); if(!el) return;
+  el.style.display = el.style.display==='none' ? 'flex' : 'none';
 }
-function doCheckin(){
-  const rec = usr(TODAYS,me); rec.note = $('#noteBox').value; rec.checkin = true; rec.at = NOW();
-  save(); render(); schedulePush(); toast('打卡成功');
-}
-function sendNudge(){
-  const t = ($('#nudgeTxt').value||'').trim(); if(!t) return;
-  S.nudges.push({ id:uid(), from:me, to: me==='her'?'me':'her', text:t, ts:TODAYS, at:NOW() });
-  save(); render(); schedulePush(); toast('已发送');
-}
-
-/* ---------- 监督（两人一起看） ---------- */
-function viewBoard(){
-  const card = (k)=>{
-    const u = S.users[k], rec = usr(TODAYS,k), ts = tasksOf(k);
-    const doneN = ts.filter(t=>rec.tasks[t.k]).length;
-    const pct = Math.round(doneN/ts.length*100);
-    const extra = k==='her'
-      ? `单词进度 ${S.words.cursor}/${VOCAB.total}（${Math.round(S.words.cursor/VOCAB.total*100)}%）`
-      : `学习线已完成 ${Object.keys(S.knowledge).reduce((a,x)=>a+(S.knowledge[x].items||[]).filter(i=>i.done).length,0)} 项`;
-    return `<div class="bcard ${k}">
-      <div class="bhead"><span class="av">${u.emoji}</span><b>${esc(u.name)}</b>
-        ${rec.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}</div>
-      <div class="bar"><i style="width:${pct}%"></i></div>
-      <div class="mut">今日任务 ${doneN}/${ts.length}　·　🔥 连续 ${streak(k)} 天　·　近30天 ${rate30(k)}%</div>
-      <div class="mut" style="margin-top:2px">${extra}</div>
-      <div class="mut" style="margin-top:2px">待复习错题 ${dueErrs(k).length} 条</div>
-      ${rec.note?`<div class="mut" style="margin-top:6px">💬 ${esc(rec.note)}</div>`:''}
-    </div>`;
-  };
-  const nudges = S.nudges.slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,12);
-  const other = me==='her' ? 'me' : 'her';
-  const otherRec = usr(TODAYS, other);
-  return `
-  <div class="card"><h2>👀 今日互相监督 <span class="tag">${TODAYS}</span></h2>
-    <div class="mut">${otherRec.checkin
-      ? esc(S.users[other].name)+' 今天已经打卡了 👍'
-      : esc(S.users[other].name)+' 今天还没打卡，可以催一催 👇'}</div></div>
-  ${card('her')}${card('me')}
-  <div class="card"><h2>📣 催一催 / 夸一夸</h2>
-    <div class="row"><input id="nudgeTxt" placeholder="给 ${esc(S.users[other].name)} 留一句话">
-      <button class="btn sm" style="flex:0 0 78px" onclick="sendNudge()">发送</button></div>
-    <div style="margin-top:12px">${nudges.length? nudges.map(n=>`<div class="nudge">
-      <b>${esc(S.users[n.from]?S.users[n.from].name:n.from)}</b>
-      <span class="mut">→ ${esc(S.users[n.to]?S.users[n.to].name:n.to)} · ${MM(n.at||n.ts)}</span>
-      <br>${esc(n.text)}</div>`).join('') : '<div class="empty">还没有留言，先给对方说句加油吧</div>'}</div>
-  </div>`;
-}
-
-/* ---------- 她的专项：背单词 ---------- */
-function viewWords(){
+function herWordsCard(){
   const { w, total, daysLeft, suggest } = plan();
   const rec = w.days[TODAYS];
   const learned = w.cursor, pct = total? Math.round(learned/total*100):0;
-  const doneDays = Object.keys(w.days).filter(d=>w.days[d].done).length;
-  let body;
-  if (!rec) {
+  let inner;
+  if (!rec){
     const n = Math.min(total-w.cursor, Number(w.perDay)||suggest);
-    body = `<div class="empty">今天还没有开始<br><br>
-      <button class="btn" style="max-width:230px;margin:0 auto" onclick="startToday()">开始今日背诵（${n} 词）</button></div>`;
+    inner = `<div class="empty">今天还没开始<br><br>
+      <button class="btn" style="max-width:240px;margin:0 auto" onclick="startToday()">开始今日背诵（${n} 词）</button></div>`;
   } else {
     const words = VOCAB.words.slice(rec.from, rec.to);
     const known = rec.known||[], unknown = rec.unknown||[];
     const answered = known.length + unknown.length;
     const cur = rec.from + answered;
-    if (answered < words.length && !rec.done) {
+    if (answered < words.length && !rec.done){
       const wd = VOCAB.words[cur];
-      body = `<div class="word"><div class="en">${esc(wd.en)}</div>
+      inner = `<div class="word"><div class="en">${esc(wd.en)}</div>
           <div class="ipa">${esc(wd.ipa||'')}</div><div class="mut">${esc(wd.u||'')}</div></div>
         <div class="mut" style="text-align:center">${answered+1} / ${words.length}</div>
         <div class="bar"><i style="width:${Math.round(answered/words.length*100)}%"></i></div>
@@ -540,34 +544,78 @@ function viewWords(){
         <div style="margin-top:10px"><button class="btn gray" onclick="reveal()">👀 看释义</button></div>
         <div id="revealBox"></div>`;
     } else {
-      const list = words.map((x,i)=>({...x, k:known.includes(rec.from+i), u2:unknown.includes(rec.from+i)}));
-      body = `<div class="grid3" style="margin-bottom:12px">
+      const rows = words.map((x,i)=>{
+        const k = known.includes(rec.from+i), u2 = unknown.includes(rec.from+i);
+        return `<div class="list-item"><div class="g">
+          <div class="q">${esc(x.en)} ${x.ipa?`<span class="mut">${esc(x.ipa)}</span>`:''}
+            ${u2?'<span class="pill no">错</span>':(k?'<span class="pill ok">对</span>':'')}</div>
+          <div class="a">${esc((x.pos?x.pos+' ':'')+x.cn)}</div>
+          <div class="mut">${esc(x.u||'')}</div></div></div>`;
+      }).join('');
+      inner = `<div class="grid3" style="margin-bottom:12px">
           <div><div class="n">${words.length}</div><div class="l">今日词数</div></div>
           <div><div class="n" style="color:#28b485">${known.length}</div><div class="l">认识</div></div>
           <div><div class="n" style="color:#f06a72">${unknown.length}</div><div class="l">不认识</div></div></div>
         ${unknown.length?'<div class="mut" style="margin-bottom:8px">不认识的已自动进错题本，明天复习。</div>':''}
-        ${list.map(x=>`<div class="list-item"><div class="g">
-          <div class="q">${esc(x.en)} ${x.ipa?`<span class="mut">${esc(x.ipa)}</span>`:''}
-            ${x.u2?'<span class="pill no">错</span>':(x.k?'<span class="pill ok">对</span>':'')}</div>
-          <div class="a">${esc((x.pos?x.pos+' ':'')+x.cn)}</div>
-          <div class="mut">${esc(x.u||'')}</div></div></div>`).join('')}
+        ${rows}
         <div style="margin-top:14px">${rec.done? '<div class="empty">✅ 今日已完成</div>'
           : '<button class="btn green" onclick="finishToday()">完成今日背诵</button>'}</div>`;
     }
   }
-  return `
-  <div class="card"><h2>📖 高中英语单词 · 首轮</h2>
-    <div class="grid3">
-      <div><div class="n">${learned}</div><div class="l">已排入</div></div>
-      <div><div class="n">${total}</div><div class="l">总词数</div></div>
-      <div><div class="n">${daysLeft}</div><div class="l">距 ${MM(w.endDate)}</div></div></div>
+  return `<div class="card"><h2>📖 今日单词 <span class="tag">${rec?`第 ${rec.from+1}–${rec.to} 词`:'未开始'}</span></h2>
     <div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="mut">已完成 ${pct}%　·　剩余 ${total-learned} 词　·　建议每天 <b>${suggest}</b> 个</div>
-    <div class="row" style="margin-top:11px">
-      <div><label class="fl">每天背几个</label><input type="number" min="5" max="300" value="${w.perDay}" onchange="setPer(this.value)"></div>
+    <div class="mut">首轮 ${learned}/${total}（${pct}%）· 距 ${MM(w.endDate)} 还有 ${daysLeft} 天 · 每天 <b>${w.perDay}</b> 个
+      <button class="btn sm gray" style="margin-left:6px" onclick="toggleWordCfg()">调整</button></div>
+    <div id="wcfg" style="display:none;margin-top:9px" class="row">
+      <div><label class="fl">每天几个</label><input type="number" min="5" max="300" value="${w.perDay}" onchange="setPer(this.value)"></div>
       <div><label class="fl">首轮完成日</label><input type="date" value="${w.endDate}" onchange="setEnd(this.value)"></div></div>
-    <div class="mut" style="margin-top:6px">已完成背诵天数：${doneDays} 天</div></div>
-  <div class="card"><h2>🔤 今日单词 <span class="tag">${TODAYS}${rec?`　第 ${rec.from+1}–${rec.to} 词`:'　未开始'}</span></h2>${body}</div>`;
+    <div style="margin-top:14px">${inner}</div></div>`;
+}
+function herTasksCard(st){
+  return `<div class="card"><h2>今日任务</h2>
+    ${HER_TASKS.map(x=>`<label class="task ${st[x.k]?'done':''}">
+      <input type="checkbox" ${st[x.k]?'checked':''} onchange="toggleTask('her','${x.k}',this.checked)">
+      <span class="tk">${x.t}</span></label>`).join('')}</div>`;
+}
+function meLogsCards(){
+  return Object.keys(TRACKS).map(k=>{
+    const [ic,name] = TRACKS[k];
+    const mine = logsOf(TODAYS,k);
+    const done = mine.length>0;
+    return `<div class="card"><h2>${ic} ${name}
+        <span class="tag">${done?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}</span></h2>
+      ${mine.map(l=>`<div class="list-item"><div class="g">
+          <div class="a" style="font-size:14px;color:var(--ink)">${esc(l.text)}</div></div>
+        <button class="btn sm gray" onclick="delLog('${l.id}')">删</button></div>`).join('')}
+      <textarea id="log_${k}" placeholder="${ME_HINT[k]}" style="min-height:54px"></textarea>
+      <button class="btn ${done?'gray':''}" style="margin-top:9px" onclick="addLog('${k}')">
+        ${done?'再记一条':'打卡完成'}</button></div>`;
+  }).join('');
+}
+function addLog(track){
+  const el = $('#log_'+track); const tx = (el.value||'').trim();
+  if (!tx) return toast('先写一句今天做了什么');
+  S.logs.push({ id:uid(), user:'me', track, date:TODAYS, text:tx, at:NOW() });
+  const rec = usr(TODAYS,'me'); rec.at = NOW();
+  const st = taskState(TODAYS,'me');
+  if (Object.keys(TRACKS).every(k=>st[k]) && !rec.checkin){ rec.checkin = true; toast('四件事全完成，自动打卡 🎉'); }
+  else toast('已记录');
+  save(); render(); schedulePush();
+}
+function delLog(id){ S.logs = (S.logs||[]).filter(l=>l.id!==id); save(); render(); schedulePush(); }
+function toggleTask(u,k,v){
+  const rec = usr(TODAYS,u); rec.tasks[k]=v; rec.at=NOW();
+  if (HER_TASKS.every(x=>rec.tasks[x.k]) && !rec.checkin) { rec.checkin = true; toast('任务全部完成，自动打卡 🎉'); }
+  save(); render(); schedulePush();
+}
+function doCheckin(){
+  const rec = usr(TODAYS,me); rec.note = $('#noteBox').value; rec.checkin = true; rec.at = NOW();
+  save(); render(); schedulePush(); toast('打卡成功');
+}
+function sendNudge(){
+  const tx = ($('#nudgeTxt').value||'').trim(); if(!tx) return;
+  S.nudges.push({ id:uid(), from:me, to: me==='her'?'me':'her', text:tx, ts:TODAYS, at:NOW() });
+  save(); render(); schedulePush(); toast('已发送');
 }
 function setPer(v){ S.words.perDay = Math.max(1, Number(v)||27); S.words.metaAt = NOW(); save(); render(); schedulePush(); }
 function setEnd(v){ S.words.endDate = v; S.words.metaAt = NOW(); save(); render(); schedulePush(); }
@@ -583,7 +631,27 @@ function finishToday(){
   save(); render(); schedulePush(); toast('今日背诵完成 🎉');
 }
 
-/* ---------- 错题本（只显示当前这个人） ---------- */
+/* ---------- 学习线（历史存档） ---------- */
+function viewStudy(){
+  const [a,b] = weekRange(calSel);
+  const all = (S.logs||[]).filter(l=>l.user==='me');
+  const cards = Object.keys(TRACKS).map(k=>{
+    const [ic,name] = TRACKS[k];
+    const items = all.filter(l=>l.track===k);
+    const wk = items.filter(l=>l.date>=a && l.date<=b).length;
+    return `<div class="card"><h2>${ic} ${name}
+        <span class="tag">本周 ${wk} 条 · 累计 ${items.length} 条</span></h2>
+      ${items.length? items.slice().sort((x,y)=>(y.at||'')>(x.at||'')?1:-1).slice(0,8).map(l=>
+        `<div class="list-item"><div class="g"><div class="mut">${MM(l.date)}</div>
+          <div class="a">${esc(l.text)}</div></div>
+          <button class="btn sm gray" onclick="delLog('${l.id}')">删</button></div>`).join('')
+      : '<div class="empty">还没有记录，去「今日」打卡</div>'}</div>`;
+  }).join('');
+  return `<div class="card"><h2>📚 我的学习线 <span class="tag">李鑫</span></h2>
+    <div class="mut">每天三件事 + 锻炼，在「今日」里打卡；这里是历史存档与累计统计。</div></div>${cards}`;
+}
+
+/* ---------- 错题本（她的） ---------- */
 function viewErrors(){
   const u = me, name = esc(S.users[u].name);
   const due = dueErrs(u), all = errsOf(u).filter(e=>!e.mastered);
@@ -611,7 +679,7 @@ function viewErrors(){
     : '<div class="empty">暂无错题</div>'}</div>`;
 }
 
-/* ---------- 每日一练（只显示当前这个人） ---------- */
+/* ---------- 每日一练（她的） ---------- */
 function viewPractice(){
   const u = me;
   const today = S.practice.filter(p=>p.user===u && p.date===TODAYS);
@@ -632,8 +700,8 @@ function viewPractice(){
     : '<div class="empty">暂无</div>'}</div>`;
 }
 function addPractice(){
-  const t = ($('#pBox').value||'').trim(); if(!t) return toast('请填写内容');
-  S.practice.push({ id:uid(), user:me, date:TODAYS, text:t, done:false, at:NOW() });
+  const tx = ($('#pBox').value||'').trim(); if(!tx) return toast('请填写内容');
+  S.practice.push({ id:uid(), user:me, date:TODAYS, text:tx, done:false, at:NOW() });
   save(); render(); schedulePush(); toast('已记录');
 }
 function donePractice(id){
@@ -643,41 +711,129 @@ function donePractice(id){
   save(); render(); schedulePush();
 }
 
-/* ---------- 我的专项：三条学习线 ---------- */
-const TRACKS = { car:'🚗', media:'📱', ai:'🎬' };
-function viewStudy(){
-  const blocks = Object.keys(S.knowledge).map(key=>{
-    const tr = S.knowledge[key], items = tr.items||[];
-    const done = items.filter(i=>i.done).length;
-    const pct = items.length? Math.round(done/items.length*100):0;
-    return `<div class="card"><h2>${TRACKS[key]||'📌'} ${esc(tr.title)} <span class="tag">${done}/${items.length}</span></h2>
+/* ---------- 日历 + 一周小结 ---------- */
+function calPick(ds){ calSel = ds; if (ds.slice(0,7)!==calYM) calYM = ds.slice(0,7); render(); }
+function calMove(n){
+  const [y,m] = calYM.split('-').map(Number);
+  const d = new Date(y, m-1+n, 1);
+  calYM = d.getFullYear()+'-'+pad(d.getMonth()+1);
+  render();
+}
+function dayDetail(ds){
+  const her = S.daily[ds] && S.daily[ds].her, him = S.daily[ds] && S.daily[ds].me;
+  const hw = S.words.days[ds];
+  const himLogs = logsOf(ds);
+  return `<div class="card"><h2>📌 ${ds} 详情</h2>
+    <div class="statline"><span>🌸 ${esc(S.users.her.name)}</span>
+      <span>${her&&her.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}
+      ${hw?`　单词 ${hw.from+1}–${hw.to}`:''}</span></div>
+    ${her&&her.note?`<div class="mut" style="margin:-2px 0 6px">💬 ${esc(her.note)}</div>`:''}
+    <div class="statline"><span>🚗 ${esc(S.users.me.name)}</span>
+      <span>${him&&him.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}
+      　记录 ${himLogs.length} 条</span></div>
+    ${him&&him.note?`<div class="mut" style="margin:-2px 0 6px">💬 ${esc(him.note)}</div>`:''}
+    ${himLogs.length? himLogs.map(l=>`<div class="mut">· ${TRACKS[l.track]?TRACKS[l.track][0]+' ':''}${esc(l.text)}</div>`).join('') : ''}
+  </div>`;
+}
+function weekSummary(){
+  const [a,b] = weekRange(calSel);
+  const days = []; for (let d=a; d<=b; d=addDays(d,1)) days.push(d);
+  const ck = u => days.filter(d=>S.daily[d]&&S.daily[d][u]&&S.daily[d][u].checkin).length;
+  const herWords = days.reduce((s,d)=>{ const r=S.words.days[d]; return s + (r? Math.max(0, r.to-r.from):0); },0);
+  const herErr = (S.reviewLog||[]).filter(r=>r.user==='her' && r.date>=a && r.date<=b).length;
+  const herPr = S.practice.filter(p=>p.user==='her' && p.date>=a && p.date<=b).length;
+  const ml = (S.logs||[]).filter(l=>l.user==='me' && l.date>=a && l.date<=b);
+  const cnt = k => ml.filter(l=>l.track===k).length;
+  const sportDays = new Set(ml.filter(l=>l.track==='sport').map(l=>l.date)).size;
+  const line = (l,r)=>`<div class="statline"><span>${l}</span><b>${r}</b></div>`;
+  return `<div class="card"><h2>🗓 一周小结 <span class="tag">${MM(a)} ~ ${MM(b)}</span></h2>
+    <div class="mut" style="margin-bottom:6px">🌸 ${esc(S.users.her.name)}</div>
+    ${line('打卡天数', ck('her')+' / 7 天')}
+    ${line('背单词', herWords+' 词')}
+    ${line('错题复习', herErr+' 条')}
+    ${line('每日一练', herPr+' 条')}
+    <div class="mut" style="margin:10px 0 6px">🚗 ${esc(S.users.me.name)}</div>
+    ${line('打卡天数', ck('me')+' / 7 天')}
+    ${line('🚗 汽车安全知识', cnt('car')+' 条')}
+    ${line('📱 自媒体（视频/文案）', cnt('media')+' 条')}
+    ${line('🎬 AI视频制作', cnt('ai')+' 条')}
+    ${line('🏃 锻炼', sportDays+' 天 / '+cnt('sport')+' 次')}
+  </div>`;
+}
+function viewCalendar(){
+  const [y,m] = calYM.split('-').map(Number);
+  const offset = (new Date(y, m-1, 1).getDay()+6)%7;
+  const dim = new Date(y, m, 0).getDate();
+  let cells = [];
+  for (let i=0;i<offset;i++) cells.push(null);
+  for (let d=1; d<=dim; d++){
+    const ds = calYM+'-'+pad(d);
+    const her = !!(S.daily[ds]&&S.daily[ds].her&&S.daily[ds].her.checkin);
+    const him = !!(S.daily[ds]&&S.daily[ds].me&&S.daily[ds].me.checkin);
+    cells.push({d, ds, her, him});
+  }
+  const grid = cells.map(c=> c
+    ? `<div class="calday ${c.ds===TODAYS?'today':''} ${c.ds===calSel?'sel':''}" onclick="calPick('${c.ds}')">
+         <span class="dn">${c.d}</span>
+         <span class="dots">${c.her?'<i class="dotm her"></i>':''}${c.him?'<i class="dotm me"></i>':''}</span>
+       </div>`
+    : '<div class="calday empty"></div>').join('');
+  const wd = ['一','二','三','四','五','六','日'].map(x=>`<div class="calwd">${x}</div>`).join('');
+  const monthCk = Object.keys(S.daily).filter(d=>d.slice(0,7)===calYM);
+  const herM = monthCk.filter(d=>S.daily[d].her&&S.daily[d].her.checkin).length;
+  const himM = monthCk.filter(d=>S.daily[d].me&&S.daily[d].me.checkin).length;
+  return `
+  <div class="card"><div class="calhead">
+      <b>${y} 年 ${m} 月</b>
+      <div class="sp">
+        <button class="btn sm gray" onclick="calMove(-1)">‹</button>
+        <button class="btn sm gray" onclick="calPick('${TODAYS}');calYM='${TODAYS.slice(0,7)}';render()">今天</button>
+        <button class="btn sm gray" onclick="calMove(1)">›</button></div></div>
+    <div class="calgrid">${wd}${grid}</div>
+    <div class="calleg"><span><i class="dotm her"></i> ${esc(S.users.her.name)}</span>
+      <span><i class="dotm me"></i> ${esc(S.users.me.name)}</span>
+      <span style="margin-left:auto">本月 ${herM} / ${himM} 天</span></div>
+  </div>
+  ${dayDetail(calSel)}
+  ${weekSummary()}`;
+}
+
+/* ---------- 监督 ---------- */
+function viewBoard(){
+  const card = (k)=>{
+    const u = S.users[k], rec = usr(TODAYS,k);
+    const { st, list, n, total } = tasksDone(TODAYS,k);
+    const pct = Math.round(n/total*100);
+    const extra = k==='her'
+      ? `单词进度 ${S.words.cursor}/${VOCAB.total}（${Math.round(S.words.cursor/VOCAB.total*100)}%）`
+      : `今日记录 ${logsOf(TODAYS).length} 条 · 累计 ${(S.logs||[]).filter(l=>l.user==='me').length} 条`;
+    return `<div class="bcard ${k}">
+      <div class="bhead"><span class="av">${u.emoji}</span><b>${esc(u.name)}</b>
+        ${rec.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}</div>
       <div class="bar"><i style="width:${pct}%"></i></div>
-      ${items.length? items.slice().reverse().slice(0,30).map(i=>`<div class="task ${i.done?'done':''}">
-        <input type="checkbox" ${i.done?'checked':''} onchange="toggleKnow('${key}','${i.id}',this.checked)">
-        <span class="tk">${esc(i.title)}${i.note?`<div class="mut">${esc(i.note)}</div>`:''}</span>
-        <button class="btn sm gray" onclick="delKnow('${key}','${i.id}')">删</button></div>`).join('')
-      : '<div class="empty">还没有条目，先加一条今天要学的</div>'}
-      <div class="row" style="margin-top:11px">
-        <input id="k_${key}_t" placeholder="今天要学 / 要做的一条">
-        <button class="btn sm" style="flex:0 0 68px" onclick="addKnow('${key}')">添加</button></div></div>`;
-  }).join('');
-  return `<div class="card"><h2>🎯 我的学习线 <span class="tag">李鑫</span></h2>
-      <div class="mut">三条线各列条目，做完勾掉；三条都勾上会自动打卡。</div></div>${blocks}`;
-}
-function addKnow(key){
-  const inp = $('#k_'+key+'_t'); const t = inp.value.trim(); if(!t) return;
-  S.knowledge[key].items.push({ id:uid(), title:t, note:'', done:false, date:TODAYS, at:NOW() });
-  save(); render(); schedulePush();
-}
-function toggleKnow(key,id,v){
-  const it = S.knowledge[key].items.find(i=>i.id===id); if(!it) return;
-  it.done = v; it.at = NOW();
-  const r = usr(TODAYS,'me'); r.tasks[key] = v || r.tasks[key]; r.at = NOW();
-  save(); render(); schedulePush();
-}
-function delKnow(key,id){
-  S.knowledge[key].items = S.knowledge[key].items.filter(i=>i.id!==id);
-  save(); render(); schedulePush();
+      <div class="mut">今日任务 ${n}/${total}　·　🔥 连续 ${streak(k)} 天　·　近30天 ${rate30(k)}%</div>
+      <div class="mut" style="margin-top:2px">${extra}</div>
+      <div class="mut" style="margin-top:2px">待复习错题 ${dueErrs(k).length} 条</div>
+      ${rec.note?`<div class="mut" style="margin-top:6px">💬 ${esc(rec.note)}</div>`:''}
+    </div>`;
+  };
+  const nudges = S.nudges.slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,12);
+  const other = me==='her' ? 'me' : 'her';
+  const otherRec = usr(TODAYS, other);
+  return `
+  <div class="card"><h2>👀 今日互相监督 <span class="tag">${TODAYS}</span></h2>
+    <div class="mut">${otherRec.checkin
+      ? esc(S.users[other].name)+' 今天已经打卡了 👍'
+      : esc(S.users[other].name)+' 今天还没打卡，可以催一催 👇'}</div></div>
+  ${card('her')}${card('me')}
+  <div class="card"><h2>📣 催一催 / 夸一夸</h2>
+    <div class="row"><input id="nudgeTxt" placeholder="给 ${esc(S.users[other].name)} 留一句话">
+      <button class="btn sm" style="flex:0 0 78px" onclick="sendNudge()">发送</button></div>
+    <div style="margin-top:12px">${nudges.length? nudges.map(n=>`<div class="nudge">
+      <b>${esc(S.users[n.from]?S.users[n.from].name:n.from)}</b>
+      <span class="mut">→ ${esc(S.users[n.to]?S.users[n.to].name:n.to)} · ${MM(n.at||n.ts)}</span>
+      <br>${esc(n.text)}</div>`).join('') : '<div class="empty">还没有留言，先给对方说句加油吧</div>'}</div>
+  </div>`;
 }
 
 /* ================= 设置 ================= */
@@ -954,7 +1110,7 @@ setInterval(()=>{ if (cloud.auto && cloud.token && document.visibilityState==='v
 document.addEventListener('visibilitychange', ()=>{ if (document.visibilityState==='visible' && cloud.auto && cloud.token) cloudSync(false); });
 
 /* ================= 启动 ================= */
-S = load();
+S = load(); S.logs = S.logs || []; S.reviewLog = S.reviewLog || [];
 render();
 if (cloud.auto && cloud.token) cloudSync(false);
 if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
