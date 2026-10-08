@@ -1,0 +1,30 @@
+name: build-apk
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build APK
+        run: |
+          npm install
+          npx cordova platform add android
+          npx cordova build android --debug
+      - name: Publish APK to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-${{ github.run_number }}
+          name: 双人打卡 APK ${{ github.run_number }}
+          files: platforms/android/app/build/outputs/apk/debug/app-debug.apk
