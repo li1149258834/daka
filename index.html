@@ -162,13 +162,13 @@ label.fl{display:block;font-size:12px;color:var(--sub);margin:10px 0 5px}
 <div id="app">
   <header>
     <div class="htop"><h1>双人打卡</h1><div class="hdate" id="hdDate">2026-10-09</div></div>
-    <div class="hsub" id="hdSync"><span class="dot off"></span>本地数据</div>
+    <div class="hsub" id="hdSync"><span class="dot ok"></span>云端已同步</div>
     <div class="seg" id="who"></div>
   </header>
   <main id="view"></main>
 </div>
 <div class="tabs" id="tabs"></div>
-<div class="toast" id="toast">今日背诵完成 🎉</div>
+<div class="toast" id="toast"></div>
 
 <script>
 /* ================= 词库（内嵌，离线可用） ================= */
@@ -946,13 +946,17 @@ function manifestSource(){
   }, null, 2);
 }
 function swSource(){
-  return "const C='daka-v1';" +
+  return "const C='daka-v3';" +
   "self.addEventListener('install',function(e){self.skipWaiting()});" +
   "self.addEventListener('activate',function(e){e.waitUntil(self.clients.claim())});" +
   "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;" +
-  "e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){" +
+  "var nav=(e.request.mode==='navigate');" +
+  "e.respondWith(caches.open(C).then(function(c){" +
+  "if(nav){return fetch(e.request).then(function(res){if(res&&res.status===200)c.put(e.request,res.clone());return res;})" +
+  ".catch(function(){return c.match(e.request);});}" +
+  "return c.match(e.request).then(function(r){" +
   "var f=fetch(e.request).then(function(res){if(res&&res.status===200)c.put(e.request,res.clone());return res;}).catch(function(){return r;});" +
-  "return r||f;}))}));";
+  "return r||f;});}));}";
 }
 function configXml(){
   return '<?xml version="1.0" encoding="utf-8"?>\n' +
