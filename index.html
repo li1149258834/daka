@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4f6ef7">
-<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'&gt;&lt;rect width='16' height='16' rx='4' fill='%232b2926'/&gt;&lt;rect x='1' y='1' width='3' height='3' fill='%23c8a27a'/&gt;&lt;rect x='12' y='1' width='3' height='3' fill='%23c8a27a'/&gt;&lt;rect x='2' y='4' width='12' height='8' fill='%23c8a27a'/&gt;&lt;rect x='5' y='6' width='2' height='2' fill='%232b2926'/&gt;&lt;rect x='9' y='6' width='2' height='2' fill='%232b2926'/&gt;&lt;rect x='6' y='9' width='4' height='1' fill='%232b2926'/&gt;&lt;/svg&gt;"></head><body><rect width="16" height="16" rx="4" fill="%23141a22"><rect x="1" y="1" width="3" height="3" fill="%23e8b95a"><rect x="12" y="1" width="3" height="3" fill="%23e8b95a"><rect x="2" y="4" width="12" height="8" fill="%23e8b95a"><rect x="5" y="6" width="2" height="2" fill="%23141a22"><rect x="9" y="6" width="2" height="2" fill="%23141a22"><rect x="6" y="9" width="4" height="1" fill="%23141a22">"&gt;
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'&gt;&lt;rect width='16' height='16' rx='4' fill='%232b2926'/&gt;&lt;rect x='1' y='1' width='3' height='3' fill='%23c8a27a'/&gt;&lt;rect x='12' y='1' width='3' height='3' fill='%23c8a27a'/&gt;&lt;rect x='2' y='4' width='12' height='8' fill='%23c8a27a'/&gt;&lt;rect x='5' y='6' width='2' height='2' fill='%232b2926'/&gt;&lt;rect x='9' y='6' width='2' height='2' fill='%232b2926'/&gt;&lt;rect x='6' y='9' width='4' height='1' fill='%232b2926'/&gt;&lt;/svg&gt;"></head><body class=""><rect width="16" height="16" rx="4" fill="%23141a22"><rect x="1" y="1" width="3" height="3" fill="%23e8b95a"><rect x="12" y="1" width="3" height="3" fill="%23e8b95a"><rect x="2" y="4" width="12" height="8" fill="%23e8b95a"><rect x="5" y="6" width="2" height="2" fill="%23141a22"><rect x="9" y="6" width="2" height="2" fill="%23141a22"><rect x="6" y="9" width="4" height="1" fill="%23141a22">"&gt;
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Noir Whiskers">
@@ -276,14 +276,66 @@ label.fl{display:block;font-size:12px;color:var(--sub);margin:12px 0 5px;font-we
 body.switching #view{opacity:0;transform:translateY(12px) scale(.995)}
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+
+/* ===== 日程表式日历 ===== */
+.segc-wrap{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:-4px 0 18px}
+.segc{flex:1;border:0;background:none;font:inherit;font-size:13px;color:var(--sub);padding:10px 0;cursor:pointer;
+  position:relative;font-weight:500}
+.segc.on{color:var(--ink);font-weight:700}
+.segc.on::after{content:'';position:absolute;left:26%;right:26%;bottom:-1px;height:2px;border-radius:2px;background:var(--char)}
+.cmon{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px}
+.cmon b{font-size:25px;font-weight:700;letter-spacing:-.4px}
+.cmon .mut{margin-left:8px;font-size:13px}
+.carrows{display:flex;gap:12px}
+.car{border:0;background:none;font-size:19px;color:var(--ink);cursor:pointer;padding:2px 4px;line-height:1}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.calwd{font-size:11px;color:var(--sub);padding:5px 0;font-weight:500}
+.cday{position:relative;padding:8px 0 10px;font-size:15px;color:var(--ink);cursor:pointer;display:flex;
+  flex-direction:column;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.cday:active{opacity:.6}
+.cday.dim{color:#d2cbc0;cursor:default}
+.cday.we{color:var(--bad)}
+.cday.dim.we{color:#e7d9d2}
+.cday>span{width:33px;height:33px;border-radius:50%;display:grid;place-items:center;margin-top:-7px}
+.cday.today>span{background:var(--char);color:#fff;font-weight:600}
+.cday.sel>span{background:color-mix(in srgb,var(--accent) 28%,transparent)}
+.cdot{width:5px;height:5px;border-radius:50%;background:transparent;display:block}
+.cdot.her{background:#b9837c}.cdot.me{background:#ab8354}
+.cdot.both{background:linear-gradient(90deg,#b9837c 50%,#ab8354 50%)}
+.agtitle-bar{display:flex;align-items:center;justify-content:space-between;margin:22px 0 12px;
+  font-size:14px;font-weight:600;letter-spacing:.5px}
+.agenda{display:flex;gap:12px;align-items:flex-start;background:var(--soft);border-radius:20px;padding:12px;
+  margin-bottom:10px}
+.agenda:last-child{margin-bottom:0}
+.tblock{width:64px;flex:0 0 64px;border-radius:16px;padding:11px 5px;text-align:center;color:#fff;
+  display:flex;flex-direction:column;gap:3px}
+.tblock b{font-size:12px;font-weight:600;line-height:1.2}
+.tblock span{font-size:11px;opacity:.88}
+.tblock.dark{background:var(--char)}
+.tblock.tan{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.tblock.soft{background:#cbb9a3}
+.agbody{flex:1;min-width:0}
+.agtitle{font-weight:600;font-size:14px;display:flex;align-items:center;gap:7px;word-break:break-word}
+.agsub{font-size:12px;color:var(--sub);margin-top:4px;word-break:break-word}
+.nowbadge{background:var(--bad);color:#fff;font-size:10px;padding:2px 7px;border-radius:6px;font-weight:600;
+  letter-spacing:.5px;flex:0 0 auto}
+.agicon{width:26px;height:26px;flex:0 0 auto;opacity:.9;margin-top:2px}
+.agicon svg{width:100%;height:100%;display:block}
+.daybig{display:flex;align-items:baseline;gap:12px;margin:2px 0 18px}
+.daybig b{font-size:40px;font-weight:700;letter-spacing:-1.5px}
+.ybox{display:flex;flex-direction:column;gap:8px}
+.yrow{display:flex;align-items:center;justify-content:space-between;background:var(--soft);border:1px solid var(--line);
+  border-radius:16px;padding:13px 15px;cursor:pointer}
+.yrow.on{border-color:var(--accent2);background:color-mix(in srgb,var(--accent) 15%,#fff)}
+.yrow b{font-weight:600;font-size:14px}
 </style>
 
 
-<div id="splash"><div class="spl-inner">
+<div id="splash" class=""><div class="spl-inner">
   <div class="spl-logo" id="splLogo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges" width="100%" height="100%"><rect width="16" height="16" rx="4" fill="#2b2926"></rect><path d="M1.5 5.5 L1.5 2 L4.2 4.8 Z" fill="#c8a27a"></path><path d="M14.5 5.5 L14.5 2 L11.8 4.8 Z" fill="#c8a27a"></path><rect x="2.6" y="4.6" width="10.8" height="8" rx="1.6" fill="#c8a27a"></rect><rect x="4.6" y="6.6" width="1.9" height="2.4" rx=".5" fill="#2b2926"></rect><rect x="9.5" y="6.6" width="1.9" height="2.4" rx=".5" fill="#2b2926"></rect><rect x="7.2" y="9.6" width="1.6" height=".9" fill="#2b2926"></rect><rect x=".4" y="8.4" width="2.4" height=".5" fill="#c8a27a"></rect><rect x="13.2" y="8.4" width="2.4" height=".5" fill="#c8a27a"></rect></svg></div>
   <h1>Noir Whiskers</h1>
   <div class="spl-sub">双人打卡 · 互相监督</div>
-  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">高考英语 3500 词中，高频词覆盖了绝大多数阅读文本。</div></div>
+  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">猫的呼噜声（25～150Hz）可能有助于骨骼自愈。</div></div>
   <div class="row spl-actions"><button class="btn gray" onclick="nextFact()">换一条</button><button class="btn" onclick="enterApp()">进入</button></div>
 </div></div>
 <div id="app">
@@ -692,6 +744,7 @@ const ME_HINT = { car:'今天的知识点（例：ABS 与 ESP 的区别）',
   media:'今天发的视频/文案（标题或链接）', ai:'今天推进的一步', sport:'练了什么、多久' };
 let calYM = TODAYS.slice(0,7);
 let calSel = TODAYS;
+let calMode = 'month';
 let dayWordsOpen = false;
 let errView = 'todo';
 let errSubj = '英语';
@@ -1082,38 +1135,117 @@ function donePractice(id){ const p=S.practice.find(x=>x.id===id); if(!p) return;
 function calPick(ds){ calSel=ds; dayWordsOpen=false; if(ds.slice(0,7)!==calYM) calYM=ds.slice(0,7); render(); }
 function calMove(n){ const [y,m]=calYM.split('-').map(Number); const d=new Date(y,m-1+n,1);
   calYM=d.getFullYear()+'-'+pad(d.getMonth()+1); render(); }
+function setCalMode(m){ calMode=m; render(); }
 function toggleDayWords(){ dayWordsOpen=!dayWordsOpen; render(); }
-function dayDetail(ds){
-  const her=S.daily[ds]&&S.daily[ds].her, him=S.daily[ds]&&S.daily[ds].me;
-  const s = sessionOf(ds);
-  const himLogs = logsOf(ds);
-  let wordsBlock='';
-  if (s){
-    const list = sessionList(s);
-    wordsBlock = `<div style="margin-top:9px">
-      <button class="btn sm gray" onclick="toggleDayWords()">${dayWordsOpen?'收起':'查看当天单词（'+list.length+' 个）'}</button>
-      ${dayWordsOpen? `<div style="margin-top:9px">${list.map(({wi,kind})=>{
-        const wd=VOCAB.words[wi];
-        const ok = kind==='new'? s.known.includes(wi) : s.reviewOk.includes(wi);
-        const bad = kind==='new'? s.unknown.includes(wi) : s.reviewWrong.includes(wi);
-        return `<div class="list-item"><div class="g">
-          <div class="q">${esc(wd.en)} ${wd.ipa?`<span class="mut">${esc(wd.ipa)}</span>`:''}
-            ${bad?'<span class="pill no">错</span>':(ok?'<span class="pill ok">对</span>':(kind==='review'?'<span class="pill">复习</span>':''))}</div>
-          <div class="a">${esc((wd.pos?wd.pos+' ':'')+wd.cn)}</div></div></div>`;
-      }).join('')}</div>`:''}</div>`;
-  }
-  return `<div class="card"><h2>📌 ${ds} 详情</h2>
-    <div class="statline"><span>🌸 ${esc(S.users.her.name)}</span>
-      <span>${her&&her.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}
-      ${s?`　单词 ${s.newFrom+1}–${s.newTo} + 复习 ${(s.review||[]).length}`:''}</span></div>
-    ${her&&her.note?`<div class="mut" style="margin:-2px 0 6px">💬 ${esc(her.note)}</div>`:''}
-    <div class="statline"><span>🚗 ${esc(S.users.me.name)}</span>
-      <span>${him&&him.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}
-      　记录 ${himLogs.length} 条</span></div>
-    ${him&&him.note?`<div class="mut" style="margin:-2px 0 6px">💬 ${esc(him.note)}</div>`:''}
-    ${himLogs.length? himLogs.map(l=>`<div class="mut">· ${TRACKS[l.track]?TRACKS[l.track][0]+' ':''}${esc(l.text)}</div>`).join('') : ''}
-    ${wordsBlock}</div>`;
+function isWE(ds){ const g=new Date(ds+'T00:00:00').getDay(); return g===0||g===6; }
+
+function wordsOfDay(ds){
+  const s=sessionOf(ds); if(!s) return '';
+  const list=sessionList(s);
+  return `<div style="margin-top:9px">
+    <button class="btn sm gray" onclick="toggleDayWords()">${dayWordsOpen?'收起':'查看当天单词（'+list.length+' 个）'}</button>
+    ${dayWordsOpen? `<div style="margin-top:10px">${list.map(({wi,kind})=>{
+      const wd=VOCAB.words[wi];
+      const ok = kind==='new'? s.known.includes(wi) : s.reviewOk.includes(wi);
+      const bad = kind==='new'? s.unknown.includes(wi) : s.reviewWrong.includes(wi);
+      return `<div class="list-item"><div class="g">
+        <div class="q">${esc(wd.en)} ${wd.ipa?`<span class="mut">${esc(wd.ipa)}</span>`:''}
+          ${bad?'<span class="pill no">错</span>':(ok?'<span class="pill ok">对</span>':(kind==='review'?'<span class="pill">复习</span>':''))}</div>
+        <div class="a">${esc((wd.pos?wd.pos+' ':'')+wd.cn)}</div></div></div>`;
+    }).join('')}</div>`:''}</div>`;
 }
+
+function agendaHtml(ds){
+  const her=S.daily[ds]&&S.daily[ds].her, him=S.daily[ds]&&S.daily[ds].me;
+  const s=sessionOf(ds), hlogs=logsOf(ds);
+  const herN = s? (s.newTo-s.newFrom) : 0, herR = s? (s.review||[]).length : 0;
+  const today = ds===TODAYS;
+  const items=[];
+  items.push({cls:'dark', l1:'单词', l2:(herN+herR)+' 个',
+    title:esc(S.users.her.name)+' · 背单词',
+    sub:(her&&her.checkin?'已打卡':'未打卡') + (s? ' · 新词 '+herN+' · 复习 '+herR : ' · 未开始'),
+    now:today&&her&&her.checkin, who:'her', extra: wordsOfDay(ds)});
+  items.push({cls:'tan', l1:'记录', l2:hlogs.length+' 条',
+    title:esc(S.users.me.name)+' · 学习线',
+    sub:(him&&him.checkin?'已打卡':'未打卡') + (hlogs.length? ' · '+esc(hlogs[0].text).slice(0,18) : ' · 暂无记录'),
+    now:today&&him&&him.checkin, who:'me', extra:''});
+  hlogs.slice(0,6).forEach(l=>{
+    items.push({cls:'soft', l1:(TRACKS[l.track]?TRACKS[l.track][0]:'·'), l2:MM(l.date),
+      title:esc(l.text), sub:TRACKS[l.track]?TRACKS[l.track][1]:'', now:false, who:'me', extra:''});
+  });
+  if (her&&her.note) items.push({cls:'soft', l1:'💬', l2:'留言', title:esc(her.note), sub:esc(S.users.her.name)+' 的留言', now:false, who:'her', extra:''});
+  if (him&&him.note) items.push({cls:'soft', l1:'💬', l2:'留言', title:esc(him.note), sub:esc(S.users.me.name)+' 的留言', now:false, who:'me', extra:''});
+  return items.map(it=>`<div class="agenda">
+    <div class="tblock ${it.cls}"><b>${it.l1}</b><span>${it.l2}</span></div>
+    <div class="agbody">
+      <div class="agtitle">${it.title}${it.now?'<span class="nowbadge">当前</span>':''}</div>
+      <div class="agsub">${it.sub}</div>
+      ${it.extra||''}
+    </div>
+    <div class="agicon">${catSVG(it.who)}</div>
+  </div>`).join('');
+}
+
+function monthGrid(){
+  const [y,m]=calYM.split('-').map(Number);
+  const offset=(new Date(y,m-1,1).getDay()+6)%7;
+  const dim=new Date(y,m,0).getDate();
+  const prevDim=new Date(y,m-1,0).getDate();
+  const cells=[];
+  for(let i=offset-1;i>=0;i--) cells.push({d:prevDim-i, dim:true});
+  for(let d=1;d<=dim;d++) cells.push({d, ds:calYM+'-'+pad(d)});
+  const need=(7-(cells.length%7))%7;
+  for(let d=1;d<=need;d++) cells.push({d, dim:true});
+  const wd=['一','二','三','四','五','六','日'].map(x=>`<div class="calwd">${x}</div>`).join('');
+  const body=cells.map(c=>{
+    if(c.dim) return `<div class="cday dim${c.d>20?'':''}">${c.d}</div>`;
+    const ds=c.ds;
+    const her=!!(S.daily[ds]&&S.daily[ds].her&&S.daily[ds].her.checkin);
+    const him=!!(S.daily[ds]&&S.daily[ds].me&&S.daily[ds].me.checkin);
+    const isT=ds===TODAYS, isS=ds===calSel;
+    const dot = (her&&him)?'both':(her?'her':(him?'me':'none'));
+    return `<div class="cday ${isT?'today':''} ${isS&&!isT?'sel':''} ${isWE(ds)?'we':''}" onclick="calPick('${ds}')">
+      <span>${c.d}</span><i class="cdot ${dot}"></i></div>`;
+  }).join('');
+  return `<div class="calendar">${wd}${body}</div>`;
+}
+
+function yearView(){
+  const y=Number(calYM.slice(0,4));
+  let rows='';
+  for(let m=1;m<=12;m++){
+    const ym=y+'-'+pad(m);
+    const days=Object.keys(S.daily).filter(d=>d.slice(0,7)===ym);
+    const her=days.filter(d=>S.daily[d].her&&S.daily[d].her.checkin).length;
+    const him=days.filter(d=>S.daily[d].me&&S.daily[d].me.checkin).length;
+    rows+=`<div class="yrow ${ym===calYM?'on':''}" onclick="calYM='${ym}';calMode='month';render()">
+      <b>${m} 月</b><span class="mut">🌸 ${her} 天 · 🚗 ${him} 天</span></div>`;
+  }
+  return `<div class="ybox">${rows}</div>`;
+}
+
+function viewCalendar(){
+  const [y,m]=calYM.split('-').map(Number);
+  const names={day:'日',month:'月',year:'年'};
+  const seg=['day','month','year'].map(k=>
+    `<button class="segc ${calMode===k?'on':''}" onclick="setCalMode('${k}')">${names[k]}</button>`).join('');
+  const head=`<div class="cmon">
+      <div><b>${m} 月</b><span class="mut">${y}</span></div>
+      <div class="carrows"><button class="car" onclick="calMove(-1)">←</button>
+        <button class="car" onclick="calMove(1)">→</button></div></div>`;
+  let body='';
+  if (calMode==='month') body = head + monthGrid();
+  else if (calMode==='day'){
+    const g=new Date(calSel+'T00:00:00').getDay();
+    body = head + `<div class="daybig"><b>${Number(calSel.slice(8,10))}</b>
+      <span class="mut">${calSel} · ${['周日','周一','周二','周三','周四','周五','周六'][g]}</span></div>`;
+  } else body = yearView();
+  const agenda = (calMode==='year') ? ''
+    : `<div class="agtitle-bar"><span>当天安排</span><span class="mut">${calSel}</span></div>${agendaHtml(calSel)}`;
+  return `<div class="card"><div class="segc-wrap">${seg}</div>${body}${agenda}</div>
+    ${calMode==='year' ? '' : weekSummary()}`;
+}
+
 function heatStrip(){
   let s='';
   for (let i=6;i>=0;i--){ const d=addDays(TODAYS,-i);
@@ -1123,7 +1255,7 @@ function heatStrip(){
     s+='<div class="heat '+st+'" title="'+d+'"><span>'+MM(d)+'</span>'+
        '<div class="hdots">'+(her?'<i class="dotm her"></i>':'')+(him?'<i class="dotm me"></i>':'')+'</div></div>';
   }
-  return '<div class="card mini"><h2>🔥 近 7 天</h2><div class="heatstrip">'+s+'</div></div>';
+  return '<div class="heatstrip">'+s+'</div>';
 }
 function weekSummary(){
   const [a,b]=weekRange(calSel);
@@ -1137,6 +1269,8 @@ function weekSummary(){
   const sportDays=new Set(ml.filter(l=>l.track==='sport').map(l=>l.date)).size;
   const line=(l,r)=>`<div class="statline"><span>${l}</span><b>${r}</b></div>`;
   return `<div class="card"><h2>🗓 一周小结 <span class="tag">${MM(a)} ~ ${MM(b)}</span></h2>
+    <div class="mut" style="margin-bottom:9px">近 7 天</div>${heatStrip()}
+    <div style="height:14px"></div>
     <div class="mut" style="margin-bottom:6px">🌸 ${esc(S.users.her.name)}</div>
     ${line('打卡天数',ck('her')+' / 7')}
     ${line('背单词',herWords+' 词')}
@@ -1148,38 +1282,6 @@ function weekSummary(){
     ${line('📱 自媒体',cnt('media')+' 条')}
     ${line('🎬 AI视频',cnt('ai')+' 条')}
     ${line('🏃 锻炼',sportDays+' 天')}</div>`;
-}
-function viewCalendar(){
-  const [y,m]=calYM.split('-').map(Number);
-  const offset=(new Date(y,m-1,1).getDay()+6)%7;
-  const dim=new Date(y,m,0).getDate();
-  let cells=[];
-  for(let i=0;i<offset;i++) cells.push(null);
-  for(let d=1;d<=dim;d++){
-    const ds=calYM+'-'+pad(d);
-    const her=!!(S.daily[ds]&&S.daily[ds].her&&S.daily[ds].her.checkin);
-    const him=!!(S.daily[ds]&&S.daily[ds].me&&S.daily[ds].me.checkin);
-    cells.push({d,ds,her,him});
-  }
-  const grid=cells.map(c=> c
-    ? `<div class="calday ${c.her&&c.him?'both':(c.her?'onlyHer':(c.him?'onlyMe':''))} ${c.ds===TODAYS?'today':''} ${c.ds===calSel?'sel':''}" onclick="calPick('${c.ds}')">
-         <span class="dn">${c.d}</span><span class="dots">${c.her?'<i class="dotm her"></i>':''}${c.him?'<i class="dotm me"></i>':''}</span></div>`
-    : '<div class="calday empty"></div>').join('');
-  const wd=['一','二','三','四','五','六','日'].map(x=>`<div class="calwd">${x}</div>`).join('');
-  const mc=Object.keys(S.daily).filter(d=>d.slice(0,7)===calYM);
-  const herM=mc.filter(d=>S.daily[d].her&&S.daily[d].her.checkin).length;
-  const himM=mc.filter(d=>S.daily[d].me&&S.daily[d].me.checkin).length;
-  return `<div class="card"><div class="calhead">
-      <b>${y} 年 ${m} 月</b>
-      <div class="sp"><button class="btn sm gray" onclick="calMove(-1)">‹</button>
-        <button class="btn sm gray" onclick="calYM='${TODAYS.slice(0,7)}';calPick('${TODAYS}')">今天</button>
-        <button class="btn sm gray" onclick="calMove(1)">›</button></div></div>
-    <div class="calgrid">${wd}${grid}</div>
-    <div class="calleg"><span><i class="dotm her"></i> ${esc(S.users.her.name)}</span>
-      <span><i class="dotm me"></i> ${esc(S.users.me.name)}</span>
-      <span style="margin-left:auto">本月 ${herM} / ${himM} 天</span></div></div>
-  ${heatStrip()}
-  ${dayDetail(calSel)}${weekSummary()}`;
 }
 
 /* ---------- 监督 ---------- */
