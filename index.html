@@ -244,13 +244,13 @@ label.fl{display:block;font-size:12px;color:var(--sub);margin:11px 0 5px;font-we
         <div><h1>Noir Whiskers</h1><div class="tagline">双人打卡 · 互相监督</div></div></div>
       <div class="hdate" id="hdDate">2026-10-17</div>
     </div>
-    <div class="hsub" id="hdSync"><span class="dot off"></span>本地数据</div>
+    <div class="hsub" id="hdSync"><span class="dot ok"></span>云端已同步</div>
     <div class="seg" id="who"></div>
   </header>
   <main id="view"></main>
 </div>
 <div class="tabs" id="tabs"></div>
-<div class="toast" id="toast">今日背诵完成 🎉</div>
+<div class="toast" id="toast">已加入错题本</div>
 
 <script>
 /* ================= 词库（内嵌，离线可用） ================= */
@@ -583,7 +583,7 @@ function reviewError(id){
   save(); render(); schedulePush();
 }
 function addError(){
-  const subj = ($('#esub')||{}).value || '英语';
+  const subj = errSubj || '英语';
   const q = (($('#eQ')||{}).value||'').trim();
   const reason = (($('#eR')||{}).value||'').trim();
   if (!q && !pendingImg) return toast('请填写错误内容或拍张照片');
@@ -917,14 +917,16 @@ function errPickImg(inp){
   rd.readAsDataURL(f);
 }
 function viewErrors(){
-  const subjs = SUBJECTS.map(s=>{
-    const n = errsOf('her').filter(e=>e.subject===s).length;
+  const norm = s => SUBJECTS.includes(s) ? s : '未分类';
+  const tabs = SUBJECTS.concat(['未分类']).filter(s => s==='未分类' ? errsOf('her').some(e=>norm(e.subject)==='未分类') : true);
+  const subjs = tabs.map(s=>{
+    const n = errsOf('her').filter(e=>norm(e.subject)===s).length;
     return `<button class="tagbtn ${errSubj===s?'on':''}" onclick="setErrSubj('${s}')">${s} ${n}</button>`;
   }).join('');
   const opts = (S.reasonOptions||{})[errSubj] || [];
-  const all = errsOf('her').filter(e=>e.subject===errSubj);
+  const all = errsOf('her').filter(e=>norm(e.subject)===errSubj);
   const todo = all.filter(e=>!e.mastered);
-  const due = dueErrs('her').filter(e=>e.subject===errSubj);
+  const due = dueErrs('her').filter(e=>norm(e.subject)===errSubj);
   const list = (errView==='all'?all:todo).slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1);
   const row = e => `<div class="list-item"><div class="g">
       <div class="mut">${MM(e.createdAt||e.at||'')}
