@@ -274,8 +274,14 @@ body.switching #view{opacity:0;transform:translateY(12px) scale(.995)}
 .heat.none{opacity:.5}
 </style>
 </head>
-<body class="">
-
+<body>
+<div id="splash"><div class="spl-inner">
+  <div class="spl-logo" id="splLogo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges" width="100%" height="100%"><rect width="16" height="16" rx="3.5" fill="#141a22"></rect><path d="M1.5 5.5 L1.5 2 L4.2 4.8 Z" fill="#e8b95a"></path><path d="M14.5 5.5 L14.5 2 L11.8 4.8 Z" fill="#e8b95a"></path><rect x="2.6" y="4.6" width="10.8" height="8" rx="1.6" fill="#e8b95a"></rect><rect x="4.6" y="6.6" width="1.9" height="2.4" rx=".5" fill="#141a22"></rect><rect x="9.5" y="6.6" width="1.9" height="2.4" rx=".5" fill="#141a22"></rect><rect x="7.2" y="9.6" width="1.6" height=".9" fill="#141a22"></rect><rect x=".4" y="8.4" width="2.4" height=".5" fill="#e8b95a"></rect><rect x="13.2" y="8.4" width="2.4" height=".5" fill="#e8b95a"></rect></svg></div>
+  <h1>Noir Whiskers</h1>
+  <div class="spl-sub">双人打卡 · 互相监督</div>
+  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">费曼学习法：能把知识讲给别人听懂，才算真正掌握。</div></div>
+  <div class="row spl-actions"><button class="btn gray" onclick="nextFact()">换一条</button><button class="btn" onclick="enterApp()">进入</button></div>
+</div></div>
 <div id="app">
   <header>
     <div class="topbar">
@@ -289,7 +295,7 @@ body.switching #view{opacity:0;transform:translateY(12px) scale(.995)}
   <main id="view"></main>
 </div>
 <div class="tabs" id="tabs"></div>
-<div class="toast" id="toast">已斩，此词以后不再复习</div>
+<div class="toast" id="toast"></div>
 
 <script>
 /* ================= 词库（内嵌，离线可用） ================= */
@@ -300,11 +306,11 @@ const FACTS = ['人一生约眨 5 亿次眼，每次 0.1～0.4 秒。','章鱼�
 let factIdx = Math.floor(Math.random()*FACTS.length);
 function initSplash(){
   const el = $('#splash'); if(!el) return;
-  if (localStorage.getItem('daka.splash') === TODAYS){ el.remove(); return; }
+  if (localStorage.getItem('daka.splash') === TODAYS){ el.style.display='none'; return; }
   $('#splFact').textContent = FACTS[factIdx];
 }
 function nextFact(){ factIdx=(factIdx+1)%FACTS.length; const f=$('#splFact'); if(f) f.textContent=FACTS[factIdx]; }
-function enterApp(){ localStorage.setItem('daka.splash', TODAYS); const el=$('#splash'); if(el){ el.classList.add('hide'); setTimeout(()=>el.remove(), 420); } }
+function enterApp(){ localStorage.setItem('daka.splash', TODAYS); const el=$('#splash'); if(el){ el.classList.add('hide'); setTimeout(()=>{ el.style.display='none'; el.classList.remove('hide'); }, 420); } }
 
 /* ================= 基础工具 ================= */
 const $ = (s,r=document)=>r.querySelector(s);
