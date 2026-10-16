@@ -1,154 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN" style="--accent: #ff8fb1; --accent2: #ffb199;"><head>
+<html lang="zh-CN"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4f6ef7">
-<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'&gt;&lt;text y='26' font-size='26'&gt;✅&lt;/text&gt;&lt;/svg&gt;">
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'&gt;&lt;rect width='16' height='16' rx='4' fill='%23141a22'/&gt;&lt;rect x='1' y='1' width='3' height='3' fill='%23e8b95a'/&gt;&lt;rect x='12' y='1' width='3' height='3' fill='%23e8b95a'/&gt;&lt;rect x='2' y='4' width='12' height='8' fill='%23e8b95a'/&gt;&lt;rect x='5' y='6' width='2' height='2' fill='%23141a22'/&gt;&lt;rect x='9' y='6' width='2' height='2' fill='%23141a22'/&gt;&lt;rect x='6' y='9' width='4' height='1' fill='%23141a22'/&gt;&lt;/svg&gt;">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="双人打卡">
+<meta name="apple-mobile-web-app-title" content="Noir Whiskers">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>双人打卡 · 互相监督</title>
+<title>Noir Whiskers · 双人打卡</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#f1f5fc;
-  --card:#ffffff;
-  --ink:#1b2134;
-  --sub:#8790a6;
-  --line:#eaeef7;
-  --accent:#5b8cff; --accent2:#7a6bff;
-  --her:#ff86b0; --her2:#ffb08a;
-  --me:#5b8cff; --me2:#7a6bff;
-  --ok:#20b581; --warn:#f5a524; --bad:#ef5f6b;
-  --r:22px;
-  --sh:0 1px 2px rgba(38,55,105,.04), 0 10px 24px -14px rgba(38,55,105,.22);
-  --sh-lg:0 2px 6px rgba(38,55,105,.05), 0 18px 40px -18px rgba(38,55,105,.28);
-  --soft:#f7f9fe;
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#0e1320; --card:#161d2c; --ink:#e9edf7; --sub:#8b95ad; --line:#242e42;
-    --soft:#1b2334;
-    --sh:0 1px 2px rgba(0,0,0,.3), 0 12px 28px -16px rgba(0,0,0,.6);
-    --sh-lg:0 2px 8px rgba(0,0,0,.35), 0 20px 44px -20px rgba(0,0,0,.75);
-  }
-  .hero,.tabs{backdrop-filter:none}
-  .hero{background:linear-gradient(135deg,rgba(91,140,255,.16),rgba(122,107,255,.10))}
-  .hero.her{background:linear-gradient(135deg,rgba(255,134,176,.16),rgba(255,176,138,.10))}
+  --bg:#0d1017;--card:#161b26;--card2:#1b2230;--ink:#eef1f7;--sub:#8a93a9;--line:#232c3e;
+  --accent:#e8b95a;--accent2:#c9993d;
+  --her:#c98fa4;--me:#e8b95a;
+  --ok:#57b98a;--bad:#e06a76;
+  --r:20px;
+  --sh:0 2px 6px rgba(0,0,0,.35),0 16px 36px -20px rgba(0,0,0,.8);
+  --sh-lg:0 4px 12px rgba(0,0,0,.4),0 26px 60px -24px rgba(0,0,0,.9);
+  --soft:#1c2330;
 }
 html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100%;color:var(--ink);
-  background:
-    radial-gradient(1000px 460px at 100% -10%, rgba(91,140,255,.13) 0%, rgba(91,140,255,0) 62%),
-    radial-gradient(760px 420px at -12% 0%, rgba(255,134,176,.12) 0%, rgba(255,134,176,0) 58%),
-    var(--bg);
+body{margin:0;min-height:100%;color:var(--ink);background:
+  radial-gradient(1200px 500px at 110% -10%, rgba(232,185,90,.07) 0%, rgba(232,185,90,0) 60%),
+  radial-gradient(900px 460px at -12% 0%, rgba(201,143,164,.05) 0%, rgba(201,143,164,0) 55%),
+  var(--bg);
   background-attachment:fixed;
-  font:15px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  font:15px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
   letter-spacing:.01em;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
-#app{max-width:720px;margin:0 auto;padding:0 16px calc(112px + env(safe-area-inset-bottom))}
+#app{max-width:720px;margin:0 auto;padding:0 16px calc(120px + env(safe-area-inset-bottom))}
 
-/* ---------- 顶栏 ---------- */
+/* 顶栏 */
 header{position:sticky;top:0;z-index:20;padding:16px 0 10px;
-  background:linear-gradient(to bottom,var(--bg) 62%,rgba(241,245,252,0));
-  backdrop-filter:saturate(1.4) blur(10px)}
-.htop{display:flex;align-items:baseline;gap:9px}
-.htop h1{margin:0;font-size:20px;font-weight:780;letter-spacing:-.2px}
-.hdate{font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums}
-.hsub{font-size:11px;color:var(--sub);margin-top:4px;display:flex;align-items:center;gap:6px}
+  background:linear-gradient(to bottom,var(--bg) 60%,rgba(13,16,23,0));
+  backdrop-filter:blur(12px)}
+.topbar{display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+.logo{width:42px;height:42px;border-radius:13px;overflow:hidden;flex:0 0 auto;display:grid;place-items:center;
+  background:#141a22;border:1px solid var(--line);box-shadow:var(--sh)}
+.logo svg{display:block}
+.brand h1{margin:0;font-size:18px;font-weight:780;letter-spacing:.2px}
+.brand .tagline{font-size:11px;color:var(--sub);margin-top:1px}
+.hdate{font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap}
+.hsub{font-size:11px;color:var(--sub);margin-top:9px;display:flex;align-items:center;gap:6px}
 .seg{display:flex;gap:10px;margin-top:14px}
-.segbtn{flex:1;display:flex;align-items:center;gap:10px;border:1px solid var(--line);
-  background:var(--card);border-radius:18px;padding:10px 12px;font:inherit;color:var(--ink);
-  cursor:pointer;box-shadow:var(--sh);transition:transform .16s cubic-bezier(.2,.8,.3,1),box-shadow .2s,background .2s}
+.segbtn{flex:1;display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--card);
+  border-radius:17px;padding:10px 12px;font:inherit;color:var(--ink);cursor:pointer;box-shadow:var(--sh);
+  transition:transform .16s,box-shadow .2s,border-color .2s}
 .segbtn:active{transform:scale(.975)}
-.segbtn .av{font-size:18px;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;
+.segbtn .av{font-size:18px;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
   flex:0 0 auto;background:var(--soft);transition:.2s}
 .segbtn .nm{font-weight:680;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.segbtn .st{margin-left:auto;font-size:11px;color:var(--sub);white-space:nowrap;
-  font-variant-numeric:tabular-nums}
-.segbtn.on{color:#fff;border-color:transparent;box-shadow:var(--sh-lg)}
-.segbtn.on.her{background:linear-gradient(135deg,var(--her),var(--her2))}
-.segbtn.on.me{background:linear-gradient(135deg,var(--me),var(--me2))}
-.segbtn.on .av{background:rgba(255,255,255,.24)}
-.segbtn.on .st{color:rgba(255,255,255,.94)}
+.segbtn .st{margin-left:auto;font-size:11px;color:var(--sub);white-space:nowrap}
+.segbtn.on.her{border-color:color-mix(in srgb,var(--her) 55%,transparent)}
+.segbtn.on.her .av{background:linear-gradient(135deg,var(--her),#8a5a6d)}
+.segbtn.on.me{border-color:color-mix(in srgb,var(--me) 60%,transparent)}
+.segbtn.on.me .av{background:linear-gradient(135deg,var(--me),var(--accent2))}
+.segbtn.on .st{color:var(--ink)}
 
-/* ---------- 卡片 ---------- */
+/* 卡片 */
 .card{background:var(--card);border-radius:var(--r);padding:17px;margin-bottom:13px;
-  box-shadow:var(--sh);border:1px solid var(--line);animation:rise .34s cubic-bezier(.2,.8,.3,1) both}
+  box-shadow:var(--sh);border:1px solid var(--line);animation:rise .32s cubic-bezier(.2,.8,.3,1) both}
 .card.mini{padding:14px 17px}
 @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.card h2{margin:0 0 13px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;
-  letter-spacing:-.1px}
+.card h2{margin:0 0 13px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;letter-spacing:-.1px}
 .card h2 .tag{margin-left:auto;font-size:11px;font-weight:500;color:var(--sub);white-space:nowrap}
 .mut{color:var(--sub);font-size:12px}
 .row{display:flex;gap:10px}
 .row>*{flex:1;min-width:0}
 
-/* ---------- 今日 hero ---------- */
+/* 今日 hero */
 .hero{display:flex;align-items:center;gap:15px;border-radius:var(--r);padding:17px;margin-bottom:13px;
-  background:linear-gradient(135deg,rgba(91,140,255,.10),rgba(122,107,255,.06));
-  border:1px solid var(--line);box-shadow:var(--sh);animation:rise .34s cubic-bezier(.2,.8,.3,1) both}
-.hero.her{background:linear-gradient(135deg,rgba(255,134,176,.13),rgba(255,176,138,.07))}
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--sh);
+  animation:rise .32s cubic-bezier(.2,.8,.3,1) both}
+.hero.her{border-color:color-mix(in srgb,var(--her) 40%,var(--line))}
 .heroL{display:flex;align-items:center;gap:13px;flex:1;min-width:0}
-.av.big{font-size:24px;width:54px;height:54px;border-radius:18px;display:grid;place-items:center;
-  flex:0 0 auto;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));
-  box-shadow:0 10px 22px -10px var(--accent)}
-.heroName{font-weight:780;font-size:18px;letter-spacing:-.2px}
+.av.big{font-size:24px;width:54px;height:54px;border-radius:17px;display:grid;place-items:center;flex:0 0 auto;
+  color:#141a22;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 22px -12px var(--accent)}
+.heroName{font-weight:780;font-size:18px}
 .ring{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;position:relative;
-  background:conic-gradient(var(--accent) calc(var(--p) * 1%), var(--line) 0);transition:.4s}
+  background:conic-gradient(var(--accent) calc(var(--p) * 1%), var(--line) 0)}
 .ring::after{content:'';position:absolute;inset:7px;border-radius:50%;background:var(--card)}
 .ring span{position:relative;font-size:12px;font-weight:780;color:var(--accent);font-variant-numeric:tabular-nums}
 
-/* ---------- 任务 ---------- */
-.task{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:16px;background:var(--soft);
+/* 任务 */
+.task{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:15px;background:var(--soft);
   margin-bottom:9px;transition:.18s;cursor:pointer;border:1px solid transparent}
 .task:last-child{margin-bottom:0}
-.task:active{transform:scale(.99)}
 .task input{width:21px;height:21px;accent-color:var(--accent);flex:0 0 auto;margin:0}
 .task .tk{flex:1;font-size:14px;min-width:0}
-.task.done{background:color-mix(in srgb, var(--ok) 10%, var(--card));
-  border-color:color-mix(in srgb, var(--ok) 24%, transparent)}
+.task.done{background:color-mix(in srgb,var(--ok) 10%,var(--card));
+  border-color:color-mix(in srgb,var(--ok) 24%,transparent)}
 .task.done .tk{color:var(--sub);text-decoration:line-through}
 
-/* ---------- 按钮 ---------- */
-.btn{border:0;border-radius:15px;padding:13px 16px;font:inherit;font-weight:680;color:#fff;width:100%;
+/* 按钮 */
+.btn{border:0;border-radius:14px;padding:13px 16px;font:inherit;font-weight:680;color:#141a22;width:100%;
   cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));
-  box-shadow:0 12px 26px -12px var(--accent);
-  transition:transform .14s cubic-bezier(.2,.8,.3,1),filter .18s,box-shadow .2s}
+  box-shadow:0 12px 26px -14px var(--accent);transition:transform .14s,filter .18s}
 .btn:active{transform:scale(.978);filter:brightness(.97)}
-.btn:disabled{opacity:.5;box-shadow:none}
-.btn.sm{padding:9px 13px;font-size:13px;width:auto;border-radius:12px;box-shadow:none}
-.btn.gray{background:var(--soft);color:var(--sub);box-shadow:none;border:1px solid var(--line)}
-.btn.green{background:linear-gradient(135deg,#2fd08a,var(--ok));box-shadow:0 12px 26px -12px var(--ok)}
-.btn.red{background:color-mix(in srgb, var(--bad) 12%, var(--card));color:var(--bad);box-shadow:none;
-  border:1px solid color-mix(in srgb, var(--bad) 24%, transparent)}
+.btn:disabled{opacity:.45;box-shadow:none}
+.btn.sm{padding:9px 13px;font-size:13px;width:auto;border-radius:11px;box-shadow:none}
+.btn.gray{background:var(--soft);color:var(--sub);border:1px solid var(--line)}
+.btn.green{background:linear-gradient(135deg,#2fbf82,var(--ok));box-shadow:0 12px 26px -14px var(--ok)}
+.btn.red{background:color-mix(in srgb,var(--bad) 14%,var(--card));color:var(--bad);
+  border:1px solid color-mix(in srgb,var(--bad) 26%,transparent)}
 
-/* ---------- 表单 ---------- */
-input,textarea,select{width:100%;border:1px solid var(--line);border-radius:14px;padding:11px 13px;
-  font:inherit;background:var(--soft);color:var(--ink);outline:none;transition:.18s}
-input::placeholder,textarea::placeholder{color:color-mix(in srgb, var(--sub) 78%, transparent)}
+/* 表单 */
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 13px;font:inherit;
+  background:var(--soft);color:var(--ink);outline:none;transition:.18s}
+select{appearance:none}
+input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--sub) 72%,transparent)}
 input:focus,textarea:focus,select:focus{border-color:var(--accent);background:var(--card);
-  box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent)}
-textarea{min-height:68px;resize:vertical;line-height:1.6}
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 13%,transparent)}
+textarea{min-height:66px;resize:vertical;line-height:1.6}
 label.fl{display:block;font-size:12px;color:var(--sub);margin:11px 0 5px;font-weight:500}
 
-/* ---------- 标签 ---------- */
-.pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;background:var(--soft);
-  color:var(--sub);border:1px solid var(--line);white-space:nowrap}
-.pill.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok);
-  border-color:color-mix(in srgb,var(--ok) 26%,transparent)}
-.pill.no{background:color-mix(in srgb,var(--bad) 11%,transparent);color:var(--bad);
-  border-color:color-mix(in srgb,var(--bad) 24%,transparent)}
+/* 标签 */
+.pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;background:var(--soft);color:var(--sub);
+  border:1px solid var(--line);white-space:nowrap}
+.pill.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok);
+  border-color:color-mix(in srgb,var(--ok) 28%,transparent)}
+.pill.no{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad);
+  border-color:color-mix(in srgb,var(--bad) 26%,transparent)}
 
-/* ---------- 进度条 ---------- */
-.bar{height:9px;border-radius:99px;background:var(--soft);overflow:hidden;margin:10px 0 7px;
-  border:1px solid var(--line)}
-.bar i{display:block;height:100%;border-radius:99px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s cubic-bezier(.2,.8,.3,1)}
+/* 进度条 */
+.bar{height:8px;border-radius:99px;background:var(--soft);overflow:hidden;margin:10px 0 7px;border:1px solid var(--line)}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .5s cubic-bezier(.2,.8,.3,1)}
 
-/* ---------- 监督卡 ---------- */
+/* 监督卡 */
 .bcard{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:13px;box-shadow:var(--sh);
-  border:1px solid var(--line);border-left:4px solid var(--accent)}
+  border:1px solid var(--line);border-left:3px solid var(--me)}
 .bcard.her{border-left-color:var(--her)}
 .bcard.me{border-left-color:var(--me)}
 .bhead{display:flex;align-items:center;gap:9px;margin-bottom:10px;font-size:15px}
@@ -156,114 +139,118 @@ label.fl{display:block;font-size:12px;color:var(--sub);margin:11px 0 5px;font-we
 .bhead b{font-weight:720}
 .bhead .pill{margin-left:auto}
 
-/* ---------- 列表 ---------- */
+/* 列表 */
 .list-item{display:flex;gap:11px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
 .list-item:last-child{border-bottom:0;padding-bottom:0}
 .list-item .g{flex:1;min-width:0}
-.list-item .q{font-weight:660;word-break:break-word;letter-spacing:-.1px}
-.list-item .a{color:color-mix(in srgb,var(--ink) 78%, transparent);font-size:13px;margin-top:4px;
-  word-break:break-word}
+.list-item .q{font-weight:660;word-break:break-word}
+.list-item .a{color:color-mix(in srgb,var(--ink) 74%,transparent);font-size:13px;margin-top:4px;word-break:break-word}
 
-/* ---------- 单词 ---------- */
+/* 单词 */
 .word{text-align:center;padding:22px 8px 8px}
-.word .en{font-size:35px;font-weight:800;word-break:break-word;letter-spacing:-.6px;line-height:1.18}
+.word .en{font-size:34px;font-weight:800;word-break:break-word;letter-spacing:-.5px;line-height:1.18}
 .word .ipa{color:var(--sub);margin-top:6px;font-size:15px}
-.reveal{font-size:19px;font-weight:700;text-align:center;margin-top:16px;
-  padding:14px;border-radius:16px;background:var(--soft);border:1px solid var(--line)}
+.word .badge{display:inline-block;margin-top:8px;font-size:11px;color:var(--accent);border:1px solid
+  color-mix(in srgb,var(--accent) 40%,transparent);padding:2px 10px;border-radius:20px}
+.reveal{font-size:18px;font-weight:700;text-align:center;margin-top:16px;padding:14px;border-radius:15px;
+  background:var(--soft);border:1px solid var(--line)}
 
-/* ---------- 三格统计 ---------- */
+/* 三格统计 */
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}
-.grid3 .n{font-size:21px;font-weight:780;color:var(--accent);font-variant-numeric:tabular-nums;
-  letter-spacing:-.4px}
+.grid3 .n{font-size:21px;font-weight:780;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:-.4px}
 .grid3 .l{font-size:11px;color:var(--sub);margin-top:2px}
 
-/* ---------- 底部导航（悬浮） ---------- */
+/* 底部导航 */
 .tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));
   width:min(688px,calc(100% - 24px));z-index:30;display:flex;gap:2px;padding:7px;
-  background:color-mix(in srgb, var(--card) 88%, transparent);backdrop-filter:blur(18px) saturate(1.6);
-  border:1px solid var(--line);border-radius:22px;box-shadow:var(--sh-lg)}
+  background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(18px);
+  border:1px solid var(--line);border-radius:21px;box-shadow:var(--sh-lg)}
 .tabs button{flex:1;border:0;background:none;font:inherit;font-size:10.5px;color:var(--sub);
-  padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;
-  border-radius:16px;transition:.18s;line-height:1.15}
+  padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border-radius:15px;
+  transition:.18s;line-height:1.15}
 .tabs button .ic{font-size:19px;line-height:1;transition:transform .18s}
 .tabs button.on{color:var(--accent);font-weight:750;background:color-mix(in srgb,var(--accent) 10%,transparent)}
-.tabs button.on.her{color:var(--her);background:color-mix(in srgb,var(--her) 12%,transparent)}
-.tabs button.on .ic{transform:translateY(-1px) scale(1.06)}
+.tabs button.on.her{color:var(--her);background:color-mix(in srgb,var(--her) 11%,transparent)}
+.tabs button.on .ic{transform:translateY(-1px) scale(1.05)}
 
-/* ---------- 空态 / 提示 ---------- */
+/* 空态 / 提示 */
 .empty{text-align:center;color:var(--sub);font-size:13px;padding:24px 12px;line-height:1.9}
-.nudge{background:linear-gradient(135deg,rgba(245,165,36,.12),rgba(245,165,36,.05));
-  border:1px solid rgba(245,165,36,.24);border-radius:16px;padding:11px 13px;font-size:13px;margin-bottom:8px}
-.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-10px);background:var(--ink);color:var(--bg);
+.nudge{background:color-mix(in srgb,var(--accent) 9%,transparent);border:1px solid
+  color-mix(in srgb,var(--accent) 26%,transparent);border-radius:15px;padding:11px 13px;font-size:13px;margin-bottom:8px}
+.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-10px);background:#1c2330;color:var(--ink);
   padding:11px 19px;border-radius:99px;font-size:13px;font-weight:600;z-index:99;opacity:0;
-  transition:.26s cubic-bezier(.2,.8,.3,1);pointer-events:none;max-width:90vw;text-align:center;
-  box-shadow:var(--sh-lg)}
+  transition:.26s;pointer-events:none;max-width:90vw;text-align:center;box-shadow:var(--sh-lg);
+  border:1px solid var(--line)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--sub);display:inline-block}
-.dot.ok{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 18%,transparent)}
-.dot.err{background:var(--bad)}.dot.wait{background:var(--warn)}
+.dot.ok{background:var(--ok)}.dot.err{background:var(--bad)}.dot.wait{background:var(--accent)}
 
-/* ---------- 日历 ---------- */
+/* 日历 */
 .calhead{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.calhead b{font-size:16px;font-weight:750;letter-spacing:-.2px}
+.calhead b{font-size:16px;font-weight:750}
 .calhead .sp{margin-left:auto;display:flex;gap:6px}
 .calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .calwd{text-align:center;font-size:11px;color:var(--sub);padding:3px 0;font-weight:600}
-.calday{position:relative;aspect-ratio:1/1;border-radius:14px;background:var(--soft);display:flex;
-  flex-direction:column;align-items:center;justify-content:center;font-size:13px;cursor:pointer;
-  transition:.16s;border:1px solid transparent;font-variant-numeric:tabular-nums}
+.calday{position:relative;aspect-ratio:1/1;border-radius:13px;background:var(--soft);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:.16s;
+  border:1px solid transparent;font-variant-numeric:tabular-nums}
 .calday:active{transform:scale(.94)}
 .calday.empty{background:transparent;cursor:default}
-.calday.both{background:linear-gradient(135deg,rgba(255,134,176,.10),rgba(91,140,255,.10))}
-.calday.onlyHer{background:rgba(255,134,176,.13)}
-.calday.onlyMe{background:rgba(91,140,255,.13)}
-.calday.today{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+.calday.both{background:linear-gradient(135deg,rgba(201,143,164,.16),rgba(232,185,90,.16))}
+.calday.onlyHer{background:rgba(201,143,164,.16)}
+.calday.onlyMe{background:rgba(232,185,90,.16)}
+.calday.today{border-color:var(--accent)}
 .calday.sel{outline:2px solid var(--accent);outline-offset:-2px}
 .calday .dn{font-weight:660;line-height:1}
 .calday .dots{display:flex;gap:3px;height:7px;margin-top:3px}
 .dotm{width:6px;height:6px;border-radius:50%;display:inline-block}
 .dotm.her{background:var(--her)}
 .dotm.me{background:var(--me)}
-.calleg{display:flex;gap:14px;font-size:11px;color:var(--sub);margin-top:12px;align-items:center;
-  flex-wrap:wrap}
+.calleg{display:flex;gap:14px;font-size:11px;color:var(--sub);margin-top:12px;align-items:center;flex-wrap:wrap}
 .statline{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;
   border-bottom:1px dashed var(--line);font-size:13px}
 .statline:last-child{border-bottom:0}
 .statline b{color:var(--accent);font-variant-numeric:tabular-nums}
 
-/* ---------- 图片 ---------- */
-.thumb{width:62px;height:62px;object-fit:cover;border-radius:12px;border:1px solid var(--line);
-  margin-top:8px;cursor:pointer;display:block;transition:.18s}
-.thumb:active{transform:scale(.96)}
-.thumb.big{width:100%;max-width:260px;height:auto;border-radius:16px}
-.imgmodal{position:fixed;inset:0;background:rgba(8,12,22,.9);display:flex;align-items:center;
-  justify-content:center;z-index:200;padding:18px;cursor:zoom-out;backdrop-filter:blur(4px)}
-.imgmodal img{max-width:100%;max-height:88vh;border-radius:16px;box-shadow:0 30px 60px -20px #000}
-
-/* ---------- 其它 ---------- */
+/* 图片 / 原因 / 科目 */
+.thumb{width:62px;height:62px;object-fit:cover;border-radius:12px;border:1px solid var(--line);margin-top:8px;
+  cursor:pointer;display:block}
+.thumb.big{width:100%;max-width:260px;height:auto;border-radius:14px}
+.imgmodal{position:fixed;inset:0;background:rgba(6,8,12,.92);display:flex;align-items:center;justify-content:center;
+  z-index:200;padding:18px;cursor:zoom-out}
+.imgmodal img{max-width:100%;max-height:88vh;border-radius:15px}
 .addtask{display:flex;gap:8px;margin-top:12px}
 .addtask input{flex:1}
 .tags{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
-.tagbtn{border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:99px;
-  padding:6px 14px;font:inherit;font-size:12px;cursor:pointer;transition:.18s}
-.tagbtn:active{transform:scale(.96)}
-.tagbtn.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;
-  color:#fff;font-weight:660;box-shadow:0 10px 22px -12px var(--accent)}
+.tagbtn{border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:99px;padding:6px 14px;
+  font:inherit;font-size:12px;cursor:pointer;transition:.18s}
+.tagbtn.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#141a22;
+  font-weight:660}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--soft);color:var(--sub);border-radius:99px;padding:5px 12px;
+  font:inherit;font-size:12px;cursor:pointer}
+.chip.on{border-color:var(--accent);color:var(--accent)}
+.reason{display:inline-block;font-size:11px;color:var(--her);border:1px solid color-mix(in srgb,var(--her) 40%,transparent);
+  padding:1px 8px;border-radius:20px;margin-top:5px}
 ::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--sub) 40%,transparent);border-radius:99px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <div class="htop"><h1>双人打卡</h1><div class="hdate" id="hdDate">2026-10-11</div></div>
+    <div class="topbar">
+      <div class="brand"><span class="logo" id="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges" width="100%" height="100%"><rect width="16" height="16" rx="3.5" fill="#141a22"></rect><path d="M1.5 5.5 L1.5 2 L4.2 4.8 Z" fill="#e8b95a"></path><path d="M14.5 5.5 L14.5 2 L11.8 4.8 Z" fill="#e8b95a"></path><rect x="2.6" y="4.6" width="10.8" height="8" rx="1.6" fill="#e8b95a"></rect><rect x="4.6" y="6.6" width="1.9" height="2.4" rx=".5" fill="#141a22"></rect><rect x="9.5" y="6.6" width="1.9" height="2.4" rx=".5" fill="#141a22"></rect><rect x="7.2" y="9.6" width="1.6" height=".9" fill="#141a22"></rect><rect x=".4" y="8.4" width="2.4" height=".5" fill="#e8b95a"></rect><rect x="13.2" y="8.4" width="2.4" height=".5" fill="#e8b95a"></rect></svg></span>
+        <div><h1>Noir Whiskers</h1><div class="tagline">双人打卡 · 互相监督</div></div></div>
+      <div class="hdate" id="hdDate">2026-10-17</div>
+    </div>
     <div class="hsub" id="hdSync"><span class="dot off"></span>本地数据</div>
     <div class="seg" id="who"></div>
   </header>
   <main id="view"></main>
 </div>
 <div class="tabs" id="tabs"></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">今日背诵完成 🎉</div>
 
 <script>
 /* ================= 词库（内嵌，离线可用） ================= */
@@ -290,13 +277,26 @@ let S = null;
 let me = localStorage.getItem('daka.who') || 'her';
 let tab = localStorage.getItem('daka.tab') || 'today';
 
+function seedGoals(){
+  if (Object.keys(S.goals||{}).length) return;
+  S.goals = {
+    car:{title:'汽车安全知识', items:[{id:'c1',t:'主动安全系统（ABS/ESC/AEB）'},{id:'c2',t:'被动安全（气囊/安全带/碰撞）'},{id:'c3',t:'雨天与夜间驾驶'},{id:'c4',t:'高速驾驶规范'},{id:'c5',t:'应急处理（爆胎/刹车失灵）'},{id:'c6',t:'儿童安全座椅与法规'}]},
+    media:{title:'自媒体运营', items:[{id:'m1',t:'账号定位与目标人群'},{id:'m2',t:'对标账号拆解'},{id:'m3',t:'建立选题库'},{id:'m4',t:'脚本结构模板'},{id:'m5',t:'拍摄与剪辑流程'},{id:'m6',t:'封面/标题/发布时间'},{id:'m7',t:'数据复盘与迭代'}]},
+    ai:{title:'AI 视频制作', items:[{id:'a1',t:'工具选型与工作流'},{id:'a2',t:'提示词写法'},{id:'a3',t:'文生图/图生视频'},{id:'a4',t:'对口型与配音'},{id:'a5',t:'剪辑合成与包装'},{id:'a6',t:'变现与分发'}]},
+    sport:{title:'锻炼', items:[{id:'s1',t:'有氧（跑步/快走）'},{id:'s2',t:'力量训练'},{id:'s3',t:'拉伸与体态'},{id:'s4',t:'作息与恢复'}]}
+  };
+  for (const k of Object.keys(S.goals)){ for (const it of S.goals[k].items){ it.done=false; } }
+}
 function defaultState(){
   return {
     v: 2, updatedAt: NOW(),
     users: { her:{id:'her',name:'蒋语璐',emoji:'🌸'}, me:{id:'me',name:'李鑫',emoji:'🚗'} },
-    words: { cursor:0, perDay:27, endDate:'2026-12-31', days:{} },
+    words: { cursor:0, perDay:27, endDate:'2026-12-31', days:{}, wrong:{} },
     daily: {}, errors: [], practice: [], logs: [], reviewLog: [],
     customTasks: { her: [], me: [] },
+    reasonOptions: {},  // { 科目: [原因...] }
+    goals: {},
+    wordsWrong: {},     // 词序 -> {s,due,n}
     knowledge: { car:{title:'汽车安全知识',items:[]}, media:{title:'自媒体运营',items:[]}, ai:{title:'AI视频制作',items:[]} },
     nudges: []
   };
@@ -351,6 +351,19 @@ function mergeState(a, b){
   out.logs = byId(out.logs, b.logs);
   out.reviewLog = byId(out.reviewLog, b.reviewLog);
   out.nudges = byId(out.nudges, b.nudges);
+  const ww = {};
+  for (const k of Object.keys(b.words&&b.words.wrong||{})) ww[k] = b.words.wrong[k];
+  for (const k of Object.keys(out.words&&out.words.wrong||{})){ const x=out.words.wrong[k];
+    if (!ww[k]) ww[k]=x; else { const y=ww[k]; if ((x.s||0)>(y.s||0)) ww[k]=x; else if ((x.n||0)>(y.n||0)) ww[k]=x; } }
+  out.words.wrong = ww;
+  out.reasonOptions = Object.assign({}, b.reasonOptions, out.reasonOptions);
+  const g = {};
+  for (const k of new Set([...Object.keys(out.goals||{}), ...Object.keys(b.goals||{})])){
+    const A=(out.goals||{})[k], B=(b.goals||{})[k];
+    if(!A) g[k]=B; else if(!B) g[k]=A;
+    else g[k]={ title:A.title||B.title, items: byId(A.items||[], B.items||[]) };
+  }
+  out.goals = g;
   out.customTasks = out.customTasks || { her:[], me:[] };
   for (const u of ['her','me']){
     out.customTasks[u] = byId(out.customTasks[u], (b.customTasks||{})[u]);
@@ -469,39 +482,93 @@ function rate30(u){
   return Math.round(done/30*100);
 }
 
-/* ================= 单词计划 ================= */
-function plan(){
-  const w = S.words; w.days = w.days||{}; w.cursor = w.cursor||0; w.perDay = w.perDay||27;
-  w.endDate = w.endDate || '2026-12-31';
-  const daysLeft = Math.max(1, Math.round((new Date(w.endDate+'T00:00:00') - new Date(TODAYS+'T00:00:00'))/86400000));
-  const remain = Math.max(0, VOCAB.total - w.cursor);
-  return { w, total: VOCAB.total, daysLeft, remain, suggest: Math.max(1, Math.ceil(remain/daysLeft)) };
+/* ================= 单词计划（百词斩式：错词回炉 + 周日周复习） ================= */
+const RINT = [1,2,4,7,15,30];
+function wrongOf(){ return S.words.wrong || (S.words.wrong = {}); }
+function dueWrong(date){
+  const w = wrongOf(), out = [];
+  for (const k of Object.keys(w)){ const x=w[k]; if (x && !x.m && x.due && x.due<=date) out.push(+k); }
+  return out;
 }
+function allWrong(){ return Object.keys(wrongOf()).filter(k=>!wrongOf()[k].m).map(Number); }
+function sessionOf(date){
+  const d = S.words.days[date]; if (!d) return null;
+  if (d.newFrom == null && d.from != null) d.newFrom = d.from, d.newTo = d.to;
+  d.known = d.known||[]; d.unknown = d.unknown||[];
+  d.reviewOk = d.reviewOk||[]; d.reviewWrong = d.reviewWrong||[]; d.log = d.log||[];
+  d.review = d.review||[];
+  return d;
+}
+function plan(){
+  const w = S.words; w.days=w.days||{}; w.cursor=w.cursor||0; w.perDay=w.perDay||27;
+  w.endDate=w.endDate||'2026-12-31'; wrongOf();
+  const daysLeft = Math.max(1, Math.round((new Date(w.endDate+'T00:00:00')-new Date(TODAYS+'T00:00:00'))/86400000));
+  const remain = Math.max(0, VOCAB.total - w.cursor);
+  return { w, total:VOCAB.total, daysLeft, remain, suggest:Math.max(1,Math.ceil(remain/daysLeft)),
+           wrongCount: Object.keys(w.wrong).length, dueCount: dueWrong(TODAYS).length };
+}
+function isSunday(d){ return new Date(d+'T00:00:00').getDay()===0; }
 function startToday(){
   const { w, total, suggest } = plan();
-  if (w.days[TODAYS]) return;
+  if (sessionOf(TODAYS)) return;
   const per = Math.max(1, Math.min(300, Number(w.perDay)||suggest));
-  const from = w.cursor, to = Math.min(total, from+per);
-  w.days[TODAYS] = { from, to, known:[], unknown:[], done:false };
-  w.cursor = to; save(); render();
-}
-function grade(idx, known){
-  const rec = S.words.days[TODAYS]; if (!rec) return;
-  const knownArr = (rec.known||[]).slice(), unkArr = (rec.unknown||[]).slice();
-  const already = knownArr.includes(idx) || unkArr.includes(idx);
-  if (known) { if(!knownArr.includes(idx)) knownArr.push(idx); }
-  else {
-    if(!unkArr.includes(idx)) unkArr.push(idx);
-    if (!already) { const wd = VOCAB.words[idx];
-      S.errors.push({ id:uid(), user:'her', subject:'英语单词', src:wd.u, at:NOW(), wi:idx,
-        q: wd.en + (wd.ipa? '  '+wd.ipa:''), a:(wd.pos?wd.pos+' ':'')+wd.cn,
-        note:'', stage:0, mastered:false, nextReview:addDays(TODAYS,1), createdAt:TODAYS });
-    }
-  }
-  rec.known = knownArr; rec.unknown = unkArr;
+  const newFrom = w.cursor, newTo = Math.min(total, newFrom+per);
+  let review = dueWrong(TODAYS);
+  if (isSunday(TODAYS)) review = Array.from(new Set(review.concat(allWrong())));
+  review.sort((a,b)=>a-b);
+  w.days[TODAYS] = { newFrom, newTo, review, known:[], unknown:[], reviewOk:[], reviewWrong:[], log:[], done:false };
+  w.cursor = newTo;
   save(); render(); schedulePush();
 }
-
+function sessionList(s){
+  const news = [];
+  for (let i=s.newFrom; i<s.newTo; i++) news.push({ wi:i, kind:'new' });
+  const rev = (s.review||[]).map(wi=>({ wi, kind:'review' }));
+  return news.concat(rev);
+}
+function grade(wi, ok, kind){
+  const s = sessionOf(TODAYS); if(!s || s.done) return;
+  const w = wrongOf();
+  const pw = w[wi] ? JSON.parse(JSON.stringify(w[wi])) : null;
+  if (kind==='review'){
+    if (ok){ s.reviewOk.push(wi);
+      const x = w[wi]||{s:0,n:0}; x.s=(x.s||0)+1;
+      if (x.s>=RINT.length) delete w[wi];
+      else { x.due = addDays(TODAYS, RINT[x.s]); w[wi]=x; }
+    } else { s.reviewWrong.push(wi);
+      const x = w[wi]||{n:0}; x.s=0; x.n=(x.n||0)+1; x.due=addDays(TODAYS,1); w[wi]=x; }
+  } else {
+    if (ok) s.known.push(wi);
+    else { s.unknown.push(wi);
+      const x = w[wi]||{n:0}; x.s=0; x.n=(x.n||0)+1; x.due=addDays(TODAYS,1); w[wi]=x; }
+  }
+  s.log.push({ wi, kind, ok, pw });
+  save(); render(); schedulePush();
+}
+function prevWord(){
+  const s = sessionOf(TODAYS); if(!s || !s.log.length) return toast('已经是第一个了');
+  const last = s.log.pop(); const w = wrongOf();
+  if (last.kind==='review'){
+    const a = last.ok ? s.reviewOk : s.reviewWrong; const i = a.lastIndexOf(last.wi); if (i>=0) a.splice(i,1);
+  } else {
+    const a = last.ok ? s.known : s.unknown; const i = a.lastIndexOf(last.wi); if (i>=0) a.splice(i,1);
+  }
+  if (last.pw === null) delete w[last.wi]; else if (last.pw) w[last.wi] = last.pw;
+  s.done = false;
+  save(); render(); schedulePush();
+}
+function revealWord(){
+  const s = sessionOf(TODAYS); if(!s) return;
+  const list = sessionList(s);
+  const answered = s.known.length + s.unknown.length + s.reviewOk.length + s.reviewWrong.length;
+  const wd = VOCAB.words[list[answered].wi];
+  $('#revealBox').innerHTML = `<div class="reveal">${esc((wd.pos?wd.pos+' ':'')+wd.cn)}</div>`;
+}
+function finishWords(){
+  const s = sessionOf(TODAYS); if(!s) return;
+  s.done = true; const r2 = usr(TODAYS,'her'); r2.tasks.words = true; r2.at = NOW();
+  save(); render(); schedulePush(); toast('今日背诵完成 🎉');
+}
 /* ================= 错题本 ================= */
 const INTERVALS = [1,2,4,7,15,30];
 const errsOf = u => S.errors.filter(e=>!u||e.user===u);
@@ -515,101 +582,106 @@ function reviewError(id){
   e.nextReview = e.mastered ? null : addDays(TODAYS, INTERVALS[Math.min(st,INTERVALS.length-1)]);
   save(); render(); schedulePush();
 }
-function addError(u){
-  const q = ($('#eQ')||{}).value; const qq = (q||'').trim();
-  if(!qq && !pendingImg) return toast('请填写题目或拍张照片');
-  S.errors.push({ id:uid(), user:u, subject:($('#eq').value||'').trim()||'未分类',
-    q: qq || '（见照片）', a:($('#eA').value||'').trim(), note:($('#eN').value||'').trim(),
-    img: pendingImg || '',
+function addError(){
+  const subj = ($('#esub')||{}).value || '英语';
+  const q = (($('#eQ')||{}).value||'').trim();
+  const reason = (($('#eR')||{}).value||'').trim();
+  if (!q && !pendingImg) return toast('请填写错误内容或拍张照片');
+  S.reasonOptions = S.reasonOptions || {};
+  const opts = S.reasonOptions[subj] || (S.reasonOptions[subj] = []);
+  if (reason && !opts.includes(reason)) opts.push(reason);
+  S.errors.push({ id:uid(), user:'her', subject:subj, q:q||'（见照片）', a:(($('#eA')||{}).value||'').trim(),
+    reason: reason, img: pendingImg || '',
     stage:0, mastered:false, nextReview:addDays(TODAYS,1), createdAt:TODAYS, at:NOW() });
   pendingImg = '';
   save(); render(); schedulePush(); toast('已加入错题本');
 }
 
 /* ================= 视图 ================= */
+const SUBJECTS = ['英语','数学','语文','政治','生物','物理'];
 const TABS = {
   her:[['today','🏠','今日'],['errors','📕','错题本'],['practice','✏️','每日一练'],
        ['calendar','📅','日历'],['board','👀','监督'],['set','⚙️','设置']],
-  me :[['today','🏠','今日'],['study','📚','学习线'],
+  me :[['today','🏠','今日'],['study','🗺','计划'],
        ['calendar','📅','日历'],['board','👀','监督'],['set','⚙️','设置']]
 };
-const ACCENT = { her:['#ff8fb1','#ffb199'], me:['#5b8cff','#7b6cff'] };
 const TRACKS = { car:['🚗','汽车安全知识'], media:['📱','自媒体运营'],
                  ai:['🎬','AI视频制作'], sport:['🏃','锻炼'] };
-const ME_HINT = {
-  car:'今天学到的汽车安全知识点（例：雨天跟车距离要加倍）',
-  media:'今天发的视频或文案（写标题就行）',
-  ai:'今天推进了什么（工具、技巧、作品都算）',
-  sport:'今天练了什么、多少分钟'
-};
+const ME_HINT = { car:'今天的知识点（例：ABS 与 ESP 的区别）',
+  media:'今天发的视频/文案（标题或链接）', ai:'今天推进的一步', sport:'练了什么、多久' };
 let calYM = TODAYS.slice(0,7);
 let calSel = TODAYS;
 let dayWordsOpen = false;
 let errView = 'todo';
+let errSubj = '英语';
 let pendingImg = '';
 let imgModal = '';
 
 /* ---------- 通用 ---------- */
+function catSVG(){
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges" width="100%" height="100%">'+
+  '<rect width="16" height="16" rx="3.5" fill="#141a22"/>'+
+  '<path d="M1.5 5.5 L1.5 2 L4.2 4.8 Z" fill="#e8b95a"/>'+
+  '<path d="M14.5 5.5 L14.5 2 L11.8 4.8 Z" fill="#e8b95a"/>'+
+  '<rect x="2.6" y="4.6" width="10.8" height="8" rx="1.6" fill="#e8b95a"/>'+
+  '<rect x="4.6" y="6.6" width="1.9" height="2.4" rx=".5" fill="#141a22"/>'+
+  '<rect x="9.5" y="6.6" width="1.9" height="2.4" rx=".5" fill="#141a22"/>'+
+  '<rect x="7.2" y="9.6" width="1.6" height=".9" fill="#141a22"/>'+
+  '<rect x=".4" y="8.4" width="2.4" height=".5" fill="#e8b95a"/>'+
+  '<rect x="13.2" y="8.4" width="2.4" height=".5" fill="#e8b95a"/></svg>';
+}
 function weekRange(d){
   const dt = new Date(d+'T00:00:00'); const wd = (dt.getDay()+6)%7;
   const mon = new Date(dt); mon.setDate(dt.getDate()-wd);
   const sun = new Date(mon); sun.setDate(mon.getDate()+6);
   return [dstr(mon), dstr(sun)];
 }
-function logsOf(date, track){
-  return (S.logs||[]).filter(l=>l.user==='me' && l.date===date && (!track||l.track===track));
-}
-function customOf(u){ S.customTasks = S.customTasks || {her:[],me:[]}; return S.customTasks[u] || []; }
+function logsOf(date, track){ return (S.logs||[]).filter(l=>l.user==='me' && l.date===date && (!track||l.track===track)); }
+function customOf(u){ S.customTasks = S.customTasks||{her:[],me:[]}; return S.customTasks[u]||[]; }
 function addCustomTask(u){
-  const el = $('#ct_'+u); const tx = (el.value||'').trim(); if(!tx) return;
-  S.customTasks[u] = customOf(u).concat([{ id:uid(), k:'c_'+uid(), title:tx, at:NOW() }]);
-  save(); render(); schedulePush(); toast('已添加任务');
+  const el=$('#ct_'+u); const tx=(el.value||'').trim(); if(!tx) return;
+  S.customTasks[u]=customOf(u).concat([{id:uid(), k:'c_'+uid(), title:tx, at:NOW()}]);
+  save(); render(); schedulePush(); toast('已添加');
 }
-function delCustomTask(u,id){
-  S.customTasks[u] = customOf(u).filter(x=>x.id!==id);
-  save(); render(); schedulePush();
-}
+function delCustomTask(u,id){ S.customTasks[u]=customOf(u).filter(x=>x.id!==id); save(); render(); schedulePush(); }
 function taskListOf(u){
   const base = u==='me'
-    ? Object.keys(TRACKS).map(k=>({k, t:TRACKS[k][1], fixed:true}))
-    : HER_TASKS.map(x=>({k:x.k, t:x.t, fixed:true}));
-  return base.concat(customOf(u).map(c=>({k:c.k, t:c.title, custom:true, id:c.id})));
+    ? Object.keys(TRACKS).map(k=>({k,t:TRACKS[k][1],fixed:true}))
+    : HER_TASKS.map(x=>({k:x.k,t:x.t,fixed:true}));
+  return base.concat(customOf(u).map(c=>({k:c.k,t:c.title,custom:true,id:c.id})));
 }
 function taskState(date,u){
   const st = {};
-  if (u==='me'){ const logs = logsOf(date); for (const k of Object.keys(TRACKS)) st[k]=logs.some(l=>l.track===k); }
+  if (u==='me'){ const logs=logsOf(date); for (const k of Object.keys(TRACKS)) st[k]=logs.some(l=>l.track===k); }
   else { Object.assign(st, usr(date,u).tasks||{}); }
   const rec = usr(date,u);
   for (const c of customOf(u)) st[c.k] = !!(rec.tasks||{})[c.k];
   return st;
 }
 function tasksDone(date,u){
-  const st = taskState(date,u), list = taskListOf(u);
-  return { st, list, n: list.filter(x=>st[x.k]).length, total: list.length };
+  const st=taskState(date,u), list=taskListOf(u);
+  return { st, list, n:list.filter(x=>st[x.k]).length, total:list.length };
 }
 function timeAgo(iso){
-  if (!iso) return '—';
-  const s = (Date.now() - new Date(iso).getTime())/1000;
-  if (s < 60) return '刚刚';
-  if (s < 3600) return Math.floor(s/60)+' 分钟前';
-  if (s < 86400) return Math.floor(s/3600)+' 小时前';
-  return Math.floor(s/86400)+' 天前';
+  if(!iso) return '—';
+  const s=(Date.now()-new Date(iso).getTime())/1000;
+  if(s<60) return '刚刚'; if(s<3600) return Math.floor(s/60)+' 分钟前';
+  if(s<86400) return Math.floor(s/3600)+' 小时前'; return Math.floor(s/86400)+' 天前';
 }
 function lastActive(u){
-  let last = '';
-  Object.keys(S.daily||{}).forEach(d=>{ const r=S.daily[d][u]; if(r&&r.at&&r.at>last) last=r.at; });
-  (S.logs||[]).forEach(l=>{ if(l.user===u&&l.at>last) last=l.at; });
-  (S.practice||[]).forEach(p=>{ if(p.user===u&&p.at>last) last=p.at; });
-  (S.errors||[]).forEach(e=>{ if(e.user===u&&e.at>last) last=e.at; });
+  let last='';
+  Object.keys(S.daily||{}).forEach(d=>{const r=S.daily[d][u]; if(r&&r.at&&r.at>last) last=r.at;});
+  (S.logs||[]).forEach(l=>{if(l.user===u&&l.at>last) last=l.at;});
+  (S.practice||[]).forEach(p=>{if(p.user===u&&p.at>last) last=p.at;});
+  (S.errors||[]).forEach(e=>{if(e.user===u&&e.at>last) last=e.at;});
   return last;
 }
 
+/* ---------- 渲染 ---------- */
 function render(){
   const list = TABS[me] || TABS.her;
-  if (!list.some(x=>x[0]===tab)) tab = 'today';
-  const ac = ACCENT[me] || ACCENT.me;
-  document.documentElement.style.setProperty('--accent', ac[0]);
-  document.documentElement.style.setProperty('--accent2', ac[1]);
+  if (!list.some(x=>x[0]===tab)) tab='today';
+  const lg = $('#logo'); if (lg && !lg.innerHTML) lg.innerHTML = catSVG();
   $('#hdDate').textContent = TODAYS;
   drawSync();
   $('#who').innerHTML = Object.values(S.users).map(u=>{
@@ -627,19 +699,19 @@ function render(){
       <span class="ic">${ic}</span>${tx}</button>`).join('');
 }
 function drawSync(){
-  const el = $('#hdSync'); if(!el) return;
-  const map = { off:['off','本地数据'], syncing:['wait','同步中…'], ok:['ok','云端已同步'], err:['err','同步失败'] };
-  const [cls,txt] = map[cloudState]||map.off;
-  el.innerHTML = `<span class="dot ${cls}"></span>${txt}`;
+  const el=$('#hdSync'); if(!el) return;
+  const map={off:['off','本地数据'],syncing:['wait','同步中…'],ok:['ok','云端已同步'],err:['err','同步失败']};
+  const [cls,txt]=map[cloudState]||map.off;
+  el.innerHTML=`<span class="dot ${cls}"></span>${txt}`;
 }
 function switchWho(k){ me=k; localStorage.setItem('daka.who',k); window.scrollTo(0,0); render(); }
 function switchTab(k){ tab=k; localStorage.setItem('daka.tab',k); window.scrollTo(0,0); render(); }
-function closeImg(){ imgModal = ''; render(); }
-function showImg(id){ const e = S.errors.find(x=>x.id===id); if(e&&e.img){ imgModal = e.img; render(); } }
+function closeImg(){ imgModal=''; render(); }
+function showImg(id){ const e=S.errors.find(x=>x.id===id); if(e&&e.img){ imgModal=e.img; render(); } }
 
 /* ---------- 今日 ---------- */
 function viewToday(){
-  const u = S.users[me], rec = usr(TODAYS,me);
+  const u=S.users[me], rec=usr(TODAYS,me);
   const { st, n, total } = tasksDone(TODAYS,me);
   const pct = Math.round(n/total*100);
   const totalDays = Object.keys(S.daily).filter(d=>S.daily[d][me]&&S.daily[d][me].checkin).length;
@@ -669,68 +741,74 @@ function customTaskCard(u, st){
       <input type="checkbox" ${st[c.k]?'checked':''} onchange="toggleTask('${u}','${c.k}',this.checked)">
       <span class="tk">${esc(c.title)}</span>
       <button class="btn sm gray" onclick="delCustomTask('${u}','${c.id}')">删</button></div>`).join('')
-    : '<div class="mut">还没有自定义任务，下面加一个（比如「练字 20 分钟」）。</div>'}
+    : '<div class="mut">还没有自定义任务，下面加一个（如「练字 20 分钟」）。</div>'}
     <div class="addtask"><input id="ct_${u}" placeholder="新增一个每天要做的任务">
       <button class="btn sm" style="flex:0 0 68px" onclick="addCustomTask('${u}')">添加</button></div></div>`;
 }
-function toggleWordCfg(){
-  const el = $('#wcfg'); if(!el) return;
-  el.style.display = el.style.display==='none' ? 'flex' : 'none';
-}
+function toggleWordCfg(){ const el=$('#wcfg'); if(el) el.style.display = el.style.display==='none'?'flex':'none'; }
 function herWordsCard(){
-  const { w, total, daysLeft, suggest } = plan();
-  const rec = w.days[TODAYS];
+  const { w, total, daysLeft, suggest, wrongCount, dueCount } = plan();
+  const s = sessionOf(TODAYS);
   const learned = w.cursor, pct = total? Math.round(learned/total*100):0;
   let inner;
-  if (!rec){
+  if (!s){
     const n = Math.min(total-w.cursor, Number(w.perDay)||suggest);
     inner = `<div class="empty">今天还没开始<br><br>
-      <button class="btn" style="max-width:240px;margin:0 auto" onclick="startToday()">开始今日背诵（${n} 词）</button></div>`;
+      <button class="btn" style="max-width:240px;margin:0 auto" onclick="startToday()">开始今日背诵</button>
+      <div class="mut" style="margin-top:10px">新词 ${n} 个${dueCount?'　·　复习错词 '+dueCount+' 个':''}${isSunday(TODAYS)?'　·　今日是周日，含本周全部错词周复习':''}</div></div>`;
   } else {
-    const words = VOCAB.words.slice(rec.from, rec.to);
-    const known = rec.known||[], unknown = rec.unknown||[];
-    const answered = known.length + unknown.length;
-    const cur = rec.from + answered;
-    if (answered < words.length && !rec.done){
-      const wd = VOCAB.words[cur];
-      inner = `<div class="word"><div class="en">${esc(wd.en)}</div>
-          <div class="ipa">${esc(wd.ipa||'')}</div><div class="mut">${esc(wd.u||'')}</div></div>
-        <div class="mut" style="text-align:center">${answered+1} / ${words.length}</div>
-        <div class="bar"><i style="width:${Math.round(answered/words.length*100)}%"></i></div>
+    const list = sessionList(s);
+    const answered = s.known.length+s.unknown.length+s.reviewOk.length+s.reviewWrong.length;
+    const totalQ = list.length;
+    if (answered < totalQ && !s.done){
+      const it = list[answered]; const wd = VOCAB.words[it.wi];
+      inner = `<div class="word">
+          ${it.kind==='review'?'<div class="badge">复习 · 之前的错词</div>':''}
+          <div class="en">${esc(wd.en)}</div>
+          <div class="ipa">${esc(wd.ipa||'')}</div></div>
+        <div class="mut" style="text-align:center">${answered+1} / ${totalQ}　·　新词 ${s.newTo-s.newFrom} + 复习 ${(s.review||[]).length}</div>
+        <div class="bar"><i style="width:${Math.round(answered/totalQ*100)}%"></i></div>
         <div class="row" style="margin-top:14px">
-          <button class="btn gray" onclick="grade(${cur},false)">😵 不认识</button>
-          <button class="btn green" onclick="grade(${cur},true)">😀 认识</button></div>
+          <button class="btn red" onclick="grade(${it.wi},false,'${it.kind}')">不认识</button>
+          <button class="btn green" onclick="grade(${it.wi},true,'${it.kind}')">认识</button></div>
         <div class="row" style="margin-top:10px">
           <button class="btn gray" onclick="prevWord()">↩︎ 上一个</button>
-          <button class="btn gray" onclick="reveal()">👀 看释义</button></div>
+          <button class="btn gray" onclick="revealWord()">👀 看释义</button></div>
         <div id="revealBox"></div>`;
     } else {
-      const rows = words.map((x,i)=>{
-        const k = known.includes(rec.from+i), u2 = unknown.includes(rec.from+i);
-        return `<div class="list-item"><div class="g">
-          <div class="q">${esc(x.en)} ${x.ipa?`<span class="mut">${esc(x.ipa)}</span>`:''}
-            ${u2?'<span class="pill no">错</span>':(k?'<span class="pill ok">对</span>':'')}</div>
-          <div class="a">${esc((x.pos?x.pos+' ':'')+x.cn)}</div>
-          <div class="mut">${esc(x.u||'')}</div></div></div>`;
-      }).join('');
+      const rows = [];
+      for (let i=s.newFrom;i<s.newTo;i++){ const wd=VOCAB.words[i];
+        const ok=s.known.includes(i), bad=s.unknown.includes(i);
+        rows.push(`<div class="list-item"><div class="g">
+          <div class="q">${esc(wd.en)} ${wd.ipa?`<span class="mut">${esc(wd.ipa)}</span>`:''}
+            ${bad?'<span class="pill no">错</span>':(ok?'<span class="pill ok">对</span>':'')}</div>
+          <div class="a">${esc((wd.pos?wd.pos+' ':'')+wd.cn)}</div></div></div>`); }
+      for (const wi of (s.review||[])){ const wd=VOCAB.words[wi];
+        const ok=s.reviewOk.includes(wi), bad=s.reviewWrong.includes(wi);
+        rows.push(`<div class="list-item"><div class="g">
+          <div class="q">${esc(wd.en)} <span class="mut">${esc(wd.ipa||'')}</span>
+            <span class="pill">复习</span>
+            ${bad?'<span class="pill no">又错了</span>':(ok?'<span class="pill ok">过了</span>':'')}</div>
+          <div class="a">${esc((wd.pos?wd.pos+' ':'')+wd.cn)}</div></div></div>`); }
       inner = `<div class="grid3" style="margin-bottom:12px">
-          <div><div class="n">${words.length}</div><div class="l">今日词数</div></div>
-          <div><div class="n" style="color:#28b485">${known.length}</div><div class="l">认识</div></div>
-          <div><div class="n" style="color:#f06a72">${unknown.length}</div><div class="l">不认识</div></div></div>
-        ${unknown.length?'<div class="mut" style="margin-bottom:8px">不认识的已自动进错题本，明天复习。</div>':''}
+          <div><div class="n">${s.newTo-s.newFrom}</div><div class="l">新词</div></div>
+          <div><div class="n">${(s.review||[]).length}</div><div class="l">复习</div></div>
+          <div><div class="n" style="color:var(--bad)">${s.unknown.length+s.reviewWrong.length}</div><div class="l">又错了</div></div></div>
+        <div class="mut" style="margin-bottom:8px">不认识的词会排进明天的复习里；周日自动做整周错词周复习。</div>
         ${rows}
         <div class="row" style="margin-top:14px">
           <button class="btn gray" onclick="prevWord()">↩︎ 上一个</button>
-          ${rec.done? '<button class="btn gray" disabled>✅ 今日已完成</button>'
-            : '<button class="btn green" onclick="finishToday()">完成今日背诵</button>'}</div>`;
+          ${s.done? '<button class="btn gray" disabled>✅ 今日已完成</button>'
+            : '<button class="btn green" onclick="finishWords()">完成今日背诵</button>'}</div>`;
     }
   }
-  return `<div class="card"><h2>📖 今日单词 <span class="tag">${rec?`第 ${rec.from+1}–${rec.to} 词`:'未开始'}</span></h2>
+  return `<div class="card"><h2>📖 今日单词 <span class="tag">${s?`新词 ${s.newFrom+1}–${s.newTo} + 复习 ${(s.review||[]).length}`:'未开始'}</span></h2>
     <div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="mut">首轮 ${learned}/${total}（${pct}%）· 距 ${MM(w.endDate)} 还有 ${daysLeft} 天 · 每天 <b>${w.perDay}</b> 个
+    <div class="mut">首轮 ${learned}/${total}（${pct}%）· 距 ${MM(w.endDate)} 还有 ${daysLeft} 天 · 每天 <b>${w.perDay}</b> 新词
       <button class="btn sm gray" style="margin-left:6px" onclick="toggleWordCfg()">调整</button></div>
+    <div class="mut" style="margin-top:4px">📌 错词池 ${wrongCount} 个 · 今天到期复习 ${dueCount} 个</div>
     <div id="wcfg" style="display:none;margin-top:9px" class="row">
-      <div><label class="fl">每天几个</label><input type="number" min="5" max="300" value="${w.perDay}" onchange="setPer(this.value)"></div>
+      <div><label class="fl">每天新词数</label><input type="number" min="5" max="300" value="${w.perDay}" onchange="setPer(this.value)"></div>
       <div><label class="fl">首轮完成日</label><input type="date" value="${w.endDate}" onchange="setEnd(this.value)"></div></div>
     <div style="margin-top:14px">${inner}</div></div>`;
 }
@@ -742,174 +820,158 @@ function herTasksCard(st){
 }
 function meLogsCards(){
   return Object.keys(TRACKS).map(k=>{
-    const [ic,name] = TRACKS[k];
-    const mine = logsOf(TODAYS,k);
-    const done = mine.length>0;
-    return `<div class="card"><h2>${ic} ${name}
+    const [ic,name]=TRACKS[k];
+    const g=S.goals[k]||{title:name,items:[]};
+    const pending=(g.items||[]).filter(i=>!i.done);
+    const mine=logsOf(TODAYS,k);
+    const done=mine.length>0;
+    return `<div class="card"><h2>${ic} ${esc(g.title||name)}
         <span class="tag">${done?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}</span></h2>
       ${mine.map(l=>`<div class="list-item"><div class="g">
-          <div class="a" style="font-size:14px;color:var(--ink)">${esc(l.text)}</div></div>
+          <div class="a" style="color:var(--ink)">${esc(l.text)}</div></div>
         <button class="btn sm gray" onclick="delLog('${l.id}')">删</button></div>`).join('')}
-      <textarea id="log_${k}" placeholder="${ME_HINT[k]}" style="min-height:54px"></textarea>
+      ${pending.length? `<select id="goal_${k}" style="margin-top:9px"><option value="">— 今天推进哪一项（可空）—</option>
+        ${pending.map(i=>`<option value="${i.id}">${esc(i.t)}</option>`).join('')}</select>`:''}
+      <textarea id="log_${k}" placeholder="${ME_HINT[k]}" style="min-height:52px;margin-top:9px"></textarea>
       <button class="btn ${done?'gray':''}" style="margin-top:9px" onclick="addLog('${k}')">
         ${done?'再记一条':'打卡完成'}</button></div>`;
   }).join('');
 }
 function addLog(track){
-  const el = $('#log_'+track); const tx = (el.value||'').trim();
-  if (!tx) return toast('先写一句今天做了什么');
-  S.logs.push({ id:uid(), user:'me', track, date:TODAYS, text:tx, at:NOW() });
-  const rec = usr(TODAYS,'me'); rec.at = NOW();
-  const st = taskState(TODAYS,'me');
-  const all = Object.keys(TRACKS).every(k=>st[k]) && customOf('me').every(c=>st[c.k]);
-  if (all && !rec.checkin){ rec.checkin = true; toast('全部完成，自动打卡 🎉'); } else toast('已记录');
+  const note=(($('#log_'+track)||{}).value||'').trim();
+  const sel=$('#goal_'+track); const gid = sel && sel.value;
+  const goal = gid ? (S.goals[track].items.find(i=>i.id===gid)) : null;
+  if (!note && !goal) return toast('写一句或选一项今天推进的');
+  let text = note;
+  if (goal){ goal.done=true; goal.at=NOW(); text = '✅ '+goal.t + (note? ' —— '+note : ''); }
+  S.logs.push({ id:uid(), user:'me', track, date:TODAYS, text:text||goal.t, at:NOW() });
+  const rec=usr(TODAYS,'me'); rec.at=NOW();
+  const st=taskState(TODAYS,'me');
+  if (Object.keys(TRACKS).every(k=>st[k]) && customOf('me').every(c=>st[c.k]) && !rec.checkin){
+    rec.checkin=true; toast('全部完成，自动打卡 🎉');
+  } else toast('已记录');
   save(); render(); schedulePush();
 }
-function delLog(id){ S.logs = (S.logs||[]).filter(l=>l.id!==id); save(); render(); schedulePush(); }
+function delLog(id){ S.logs=(S.logs||[]).filter(l=>l.id!==id); save(); render(); schedulePush(); }
 function toggleTask(u,k,v){
-  const rec = usr(TODAYS,u); rec.tasks[k]=v; rec.at=NOW();
+  const rec=usr(TODAYS,u); rec.tasks[k]=v; rec.at=NOW();
   const { st } = tasksDone(TODAYS,u);
-  const all = taskListOf(u).every(x=>st[x.k]);
-  if (all && !rec.checkin) { rec.checkin = true; toast('任务全部完成，自动打卡 🎉'); }
+  if (taskListOf(u).every(x=>st[x.k]) && !rec.checkin){ rec.checkin=true; toast('任务全部完成，自动打卡 🎉'); }
   save(); render(); schedulePush();
 }
-function doCheckin(){
-  const rec = usr(TODAYS,me); rec.note = $('#noteBox').value; rec.checkin = true; rec.at = NOW();
-  save(); render(); schedulePush(); toast('打卡成功');
-}
-function sendNudge(){
-  const tx = ($('#nudgeTxt').value||'').trim(); if(!tx) return;
-  S.nudges.push({ id:uid(), from:me, to: me==='her'?'me':'her', text:tx, ts:TODAYS, at:NOW() });
-  save(); render(); schedulePush(); toast('已发送');
-}
-function setPer(v){ S.words.perDay = Math.max(1, Number(v)||27); S.words.metaAt = NOW(); save(); render(); schedulePush(); }
-function setEnd(v){ S.words.endDate = v; S.words.metaAt = NOW(); save(); render(); schedulePush(); }
-function reveal(){
-  const rec = S.words.days[TODAYS]; if(!rec) return;
-  const answered = (rec.known||[]).length + (rec.unknown||[]).length;
-  const wd = VOCAB.words[rec.from+answered]; if(!wd) return;
-  $('#revealBox').innerHTML = `<div class="reveal">${esc((wd.pos?wd.pos+' ':'')+wd.cn)}</div>`;
-}
-function prevWord(){
-  const rec = S.words.days[TODAYS]; if(!rec) return;
-  const known = (rec.known||[]).slice(), unknown = (rec.unknown||[]).slice();
-  const n = known.length + unknown.length;
-  if (n === 0) return toast('已经是第一个了');
-  const last = rec.from + n - 1;
-  const ki = known.indexOf(last), ui = unknown.indexOf(last);
-  if (ki >= 0) known.splice(ki,1);
-  if (ui >= 0){ unknown.splice(ui,1); S.errors = (S.errors||[]).filter(e=>e.wi !== last); }
-  rec.known = known; rec.unknown = unknown; rec.done = false;
-  save(); render(); schedulePush();
-}
-function finishToday(){
-  const rec = S.words.days[TODAYS]; if(!rec) return;
-  rec.done = true; const r2 = usr(TODAYS,'her'); r2.tasks.words = true; r2.at = NOW();
-  save(); render(); schedulePush(); toast('今日背诵完成 🎉');
-}
+function doCheckin(){ const rec=usr(TODAYS,me); rec.note=$('#noteBox').value; rec.checkin=true; rec.at=NOW();
+  save(); render(); schedulePush(); toast('打卡成功'); }
+function sendNudge(){ const tx=($('#nudgeTxt').value||'').trim(); if(!tx) return;
+  S.nudges.push({id:uid(),from:me,to:me==='her'?'me':'her',text:tx,ts:TODAYS,at:NOW()});
+  save(); render(); schedulePush(); toast('已发送'); }
+function setPer(v){ S.words.perDay=Math.max(1,Number(v)||27); S.words.metaAt=NOW(); save(); render(); schedulePush(); }
+function setEnd(v){ S.words.endDate=v; S.words.metaAt=NOW(); save(); render(); schedulePush(); }
 
-/* ---------- 学习线 ---------- */
+/* ---------- 计划（李鑫） ---------- */
+function addGoal(k){ const el=$('#g_'+k); const tx=(el.value||'').trim(); if(!tx) return;
+  S.goals[k]=S.goals[k]||{title:TRACKS[k][1],items:[]};
+  S.goals[k].items.push({id:uid(),t:tx,done:false,at:NOW()}); save(); render(); schedulePush(); }
+function toggleGoal(k,id,v){ const it=(S.goals[k].items||[]).find(i=>i.id===id); if(it){it.done=v;it.at=NOW();}
+  save(); render(); schedulePush(); }
+function delGoal(k,id){ S.goals[k].items=(S.goals[k].items||[]).filter(i=>i.id!==id); save(); render(); schedulePush(); }
 function viewStudy(){
-  const [a,b] = weekRange(calSel);
-  const all = (S.logs||[]).filter(l=>l.user==='me');
-  const cards = Object.keys(TRACKS).map(k=>{
-    const [ic,name] = TRACKS[k];
-    const items = all.filter(l=>l.track===k);
-    const wk = items.filter(l=>l.date>=a && l.date<=b).length;
-    return `<div class="card"><h2>${ic} ${name}
-        <span class="tag">本周 ${wk} 条 · 累计 ${items.length} 条</span></h2>
-      ${items.length? items.slice().sort((x,y)=>(y.at||'')>(x.at||'')?1:-1).slice(0,8).map(l=>
-        `<div class="list-item"><div class="g"><div class="mut">${MM(l.date)}</div>
-          <div class="a">${esc(l.text)}</div></div>
-          <button class="btn sm gray" onclick="delLog('${l.id}')">删</button></div>`).join('')
-      : '<div class="empty">还没有记录，去「今日」打卡</div>'}</div>`;
+  const [a,b]=weekRange(calSel);
+  const all=(S.logs||[]).filter(l=>l.user==='me');
+  const cards=Object.keys(TRACKS).map(k=>{
+    const [ic,name]=TRACKS[k];
+    const g=S.goals[k]||{title:name,items:[]};
+    const items=g.items||[];
+    const done=items.filter(i=>i.done).length;
+    const pct=items.length?Math.round(done/items.length*100):0;
+    const wk=all.filter(l=>l.track===k&&l.date>=a&&l.date<=b).length;
+    return `<div class="card"><h2>${ic} ${esc(g.title||name)} <span class="tag">${done}/${items.length}</span></h2>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      ${items.length? items.map(i=>`<label class="task ${i.done?'done':''}">
+          <input type="checkbox" ${i.done?'checked':''} onchange="toggleGoal('${k}','${i.id}',this.checked)">
+          <span class="tk">${esc(i.t)}</span>
+          <button class="btn sm gray" onclick="delGoal('${k}','${i.id}')">删</button></label>`).join('')
+        : '<div class="empty">还没有计划条目，加一条路线图</div>'}
+      <div class="addtask"><input id="g_${k}" placeholder="加一个阶段/里程碑">
+        <button class="btn sm" style="flex:0 0 68px" onclick="addGoal('${k}')">添加</button></div>
+      <div class="mut" style="margin-top:8px">本周记录 ${wk} 条 · 累计 ${all.filter(l=>l.track===k).length} 条</div></div>`;
   }).join('');
-  return `<div class="card"><h2>📚 我的学习线 <span class="tag">李鑫</span></h2>
-    <div class="mut">每天三件事 + 锻炼，在「今日」里打卡；这里是历史存档与累计统计。</div></div>${cards}`;
+  return `<div class="card"><h2>🗺 我的计划 <span class="tag">李鑫</span></h2>
+    <div class="mut">先把路线图里的条目逐个完成；每天在「今日」里选今天推进的那一项，就不会盲目瞎记了。</div></div>${cards}`;
 }
 
-/* ---------- 错题本（拍照 + 历史） ---------- */
+/* ---------- 错题本（分科 + 照片 + 原因） ---------- */
+function setErrSubj(s){ errSubj=s; errView='todo'; render(); }
+function setReason(r){ $('#eR').value=r; }
 function errPickImg(inp){
-  const f = inp.files && inp.files[0]; if(!f) return;
+  const f=inp.files&&inp.files[0]; if(!f) return;
   toast('正在压缩图片…');
-  const rd = new FileReader();
-  rd.onload = ()=>{
-    const im = new Image();
-    im.onload = ()=>{
-      const max = 900;
-      let w = im.width, h = im.height;
-      if (w > max){ h = Math.round(h*max/w); w = max; }
-      const c = document.createElement('canvas'); c.width = w; c.height = h;
-      c.getContext('2d').drawImage(im, 0, 0, w, h);
-      pendingImg = c.toDataURL('image/jpeg', 0.6);
-      render(); toast('图片已就绪');
-    };
-    im.onerror = ()=>toast('这张图读不出来');
-    im.src = rd.result;
-  };
+  const rd=new FileReader();
+  rd.onload=()=>{ const im=new Image();
+    im.onload=()=>{ const max=900; let w=im.width,h=im.height;
+      if(w>max){h=Math.round(h*max/w);w=max;}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(im,0,0,w,h);
+      pendingImg=c.toDataURL('image/jpeg',0.6); render(); toast('图片已就绪'); };
+    im.onerror=()=>toast('这张图读不出来');
+    im.src=rd.result; };
   rd.readAsDataURL(f);
 }
-function setErrView(v){ errView = v; render(); }
 function viewErrors(){
-  const u = me, name = esc(S.users[u].name);
-  const all = errsOf(u);
+  const subjs = SUBJECTS.map(s=>{
+    const n = errsOf('her').filter(e=>e.subject===s).length;
+    return `<button class="tagbtn ${errSubj===s?'on':''}" onclick="setErrSubj('${s}')">${s} ${n}</button>`;
+  }).join('');
+  const opts = (S.reasonOptions||{})[errSubj] || [];
+  const all = errsOf('her').filter(e=>e.subject===errSubj);
   const todo = all.filter(e=>!e.mastered);
-  const due = dueErrs(u);
-  const list = (errView==='all' ? all : todo).slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1);
-  const row = (e, showBtn)=>`<div class="list-item"><div class="g">
-      <div class="mut">${MM(e.createdAt||e.at||'')} · ${esc(e.subject||'')}
+  const due = dueErrs('her').filter(e=>e.subject===errSubj);
+  const list = (errView==='all'?all:todo).slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1);
+  const row = e => `<div class="list-item"><div class="g">
+      <div class="mut">${MM(e.createdAt||e.at||'')}
         ${e.mastered?'<span class="pill ok">已掌握</span>':`<span class="pill">第${(e.stage||0)+1}轮</span>`}
         ${e.nextReview?`<span class="pill">下次 ${MM(e.nextReview)}</span>`:''}</div>
       <div class="q">${esc(e.q)}</div>
       ${e.a?`<div class="a">✅ ${esc(e.a)}</div>`:''}
-      ${e.note?`<div class="mut">📝 ${esc(e.note)}</div>`:''}
+      ${e.reason?`<div class="reason">原因：${esc(e.reason)}</div>`:''}
       ${e.img?`<img class="thumb" src="${e.img}" onclick="showImg('${e.id}')">`:''}</div>
-    ${showBtn?`<button class="btn sm green" onclick="reviewError('${e.id}')">已复习</button>`:''}</div>`;
+    ${e.mastered?'':`<button class="btn sm green" onclick="reviewError('${e.id}')">已复习</button>`}</div>`;
   return `
-  <div class="card"><h2>➕ 添加错题 <span class="tag">${name}</span></h2>
-    <label class="fl">科目 / 来源</label><input id="eq" placeholder="英语 / 数学 / 物理">
-    <label class="fl">题目（原题或知识点）</label><textarea id="eQ" placeholder="也可以只拍照，题目写个标题就行"></textarea>
-    <label class="fl">正确答案 / 解析</label><textarea id="eA"></textarea>
-    <label class="fl">备注（为什么错）</label><input id="eN" placeholder="选填">
+  <div class="card"><h2>📚 错题本 <span class="tag">蒋语璐</span></h2>
+    <div class="tags">${subjs}</div></div>
+  <div class="card"><h2>➕ 添加错题 <span class="tag">${errSubj}</span></h2>
     <input type="file" accept="image/*" capture="environment" id="eImg" style="display:none" onchange="errPickImg(this)">
-    <div class="row" style="margin-top:11px">
-      <button class="btn gray" onclick="document.getElementById('eImg').click()">📷 拍照 / 选图</button>
-      ${pendingImg?'<button class="btn gray" onclick="pendingImg=\'\';render()">✕ 去掉图片</button>':''}
-    </div>
+    <div class="row" style="margin-top:2px">
+      <button class="btn gray" onclick="document.getElementById('eImg').click()">📷 拍错题图</button>
+      ${pendingImg?'<button class="btn gray" onclick="pendingImg=\'\';render()">✕ 去掉</button>':''}</div>
     ${pendingImg?`<img class="thumb big" src="${pendingImg}">`:''}
-    <button class="btn" style="margin-top:11px" onclick="addError('${u}')">加入错题本</button>
-    <div class="mut" style="margin-top:6px">照片只存在本机（会压缩），题目/答案会同步给对方。</div></div>
-
-  <div class="card"><h2>🔔 今天要复习 <span class="tag">${due.length} 条</span></h2>
-    ${due.length? due.slice(0,10).map(e=>`<div class="list-item"><div class="g">
-      <div class="q">${esc(e.q)}</div>${e.a?`<div class="a">✅ ${esc(e.a)}</div>`:''}
-      ${e.img?`<img class="thumb" src="${e.img}" onclick="showImg('${e.id}')">`:''}
-      <div class="mut" style="margin-top:3px"><span class="pill">${esc(e.subject||'')}</span></div></div>
-      <button class="btn sm green" onclick="reviewError('${e.id}')">已复习</button></div>`).join('')
-    : '<div class="empty">今天没有到期的错题，很棒 👏</div>'}</div>
-
-  <div class="card"><h2>📚 错题记录 <span class="tag">共 ${all.length} 条</span></h2>
+    <label class="fl">错误内容（错在哪道题 / 哪一步）</label>
+    <textarea id="eQ" placeholder="把做错的地方写下来"></textarea>
+    <label class="fl">错误原因（几个字就好）</label>
+    <input id="eR" placeholder="如：粗心 / 公式记错 / 审题不清">
+    ${opts.length?`<div class="chips">${opts.map(o=>`<button class="chip" onclick="setReason('${esc(o)}')">${esc(o)}</button>`).join('')}</div>`:''}
+    <label class="fl">正确答案 / 解析（选填）</label>
+    <input id="eA" placeholder="选填">
+    <button class="btn" style="margin-top:12px" onclick="addError()">加入错题本</button></div>
+  <div class="card"><h2>🔔 今天要复习（${errSubj}）<span class="tag">${due.length} 条</span></h2>
+    ${due.length? due.slice(0,8).map(row).join('') : '<div class="empty">该科今天没有到期错题</div>'}</div>
+  <div class="card"><h2>${errSubj} 错题集 <span class="tag">共 ${all.length} 条</span></h2>
     <div class="tags">
-      <button class="tagbtn ${errView==='todo'?'on':''}" onclick="setErrView('todo')">未掌握 ${todo.length}</button>
-      <button class="tagbtn ${errView==='all'?'on':''}" onclick="setErrView('all')">全部记录 ${all.length}</button>
-    </div>
-    ${list.length? list.slice(0,80).map(e=>row(e, !e.mastered)).join('')
-      : '<div class="empty">还没有错题</div>'}
-    ${list.length>80?'<div class="mut" style="text-align:center;padding-top:8px">只显示最近 80 条</div>':''}</div>`;
+      <button class="tagbtn ${errView==='todo'?'on':''}" onclick="errView='todo';render()">未掌握 ${todo.length}</button>
+      <button class="tagbtn ${errView==='all'?'on':''}" onclick="errView='all';render()">全部记录 ${all.length}</button></div>
+    ${list.length? list.slice(0,60).map(row).join('') : '<div class="empty">该科还没有错题</div>'}</div>`;
 }
 
 /* ---------- 每日一练 ---------- */
 function viewPractice(){
-  const u = me;
-  const today = S.practice.filter(p=>p.user===u && p.date===TODAYS);
-  const recent = S.practice.filter(p=>p.user===u).sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,15);
-  return `
-  <div class="card"><h2>✏️ 今天练了什么 <span class="tag">${esc(S.users[u].name)}</span></h2>
+  const u=me;
+  const today=S.practice.filter(p=>p.user===u&&p.date===TODAYS);
+  const recent=S.practice.filter(p=>p.user===u).sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,15);
+  return `<div class="card"><h2>✏️ 今天练了什么 <span class="tag">${esc(S.users[u].name)}</span></h2>
     <textarea id="pBox" placeholder="例如：函数单调性判断，还是容易漏定义域"></textarea>
     <button class="btn" style="margin-top:11px" onclick="addPractice()">记录下来</button></div>
   <div class="card"><h2>📋 今天（${today.length}）</h2>
     ${today.length? today.map(p=>`<div class="list-item"><div class="g">
-      <div class="a" style="font-size:14px;color:var(--ink)">${esc(p.text)}</div>
+      <div class="a" style="color:var(--ink)">${esc(p.text)}</div>
       <div class="mut" style="margin-top:3px">${p.done?'<span class="pill ok">已完成</span>':'<span class="pill">待完成</span>'}</div></div>
       ${p.done?'':`<button class="btn sm green" onclick="donePractice('${p.id}')">完成</button>`}</div>`).join('')
     : '<div class="empty">今天还没有记录</div>'}</div>
@@ -918,164 +980,140 @@ function viewPractice(){
       <div class="mut">${MM(p.date)}</div><div class="a">${esc(p.text)}</div></div></div>`).join('')
     : '<div class="empty">暂无</div>'}</div>`;
 }
-function addPractice(){
-  const tx = ($('#pBox').value||'').trim(); if(!tx) return toast('请填写内容');
-  S.practice.push({ id:uid(), user:me, date:TODAYS, text:tx, done:false, at:NOW() });
-  save(); render(); schedulePush(); toast('已记录');
-}
-function donePractice(id){
-  const p = S.practice.find(x=>x.id===id); if(!p) return;
-  p.done = true; p.at = NOW();
-  if (p.user==='her') { const r = usr(TODAYS,'her'); r.tasks.practice = true; r.at = NOW(); }
-  save(); render(); schedulePush();
-}
+function addPractice(){ const tx=($('#pBox').value||'').trim(); if(!tx) return toast('请填写内容');
+  S.practice.push({id:uid(),user:me,date:TODAYS,text:tx,done:false,at:NOW()});
+  save(); render(); schedulePush(); toast('已记录'); }
+function donePractice(id){ const p=S.practice.find(x=>x.id===id); if(!p) return;
+  p.done=true; p.at=NOW();
+  if(p.user==='her'){ const r=usr(TODAYS,'her'); r.tasks.practice=true; r.at=NOW(); }
+  save(); render(); schedulePush(); }
 
-/* ---------- 日历 + 一周小结 ---------- */
-function calPick(ds){ calSel = ds; dayWordsOpen = false; if (ds.slice(0,7)!==calYM) calYM = ds.slice(0,7); render(); }
-function calMove(n){
-  const [y,m] = calYM.split('-').map(Number);
-  const d = new Date(y, m-1+n, 1);
-  calYM = d.getFullYear()+'-'+pad(d.getMonth()+1);
-  render();
-}
-function toggleDayWords(){ dayWordsOpen = !dayWordsOpen; render(); }
+/* ---------- 日历 ---------- */
+function calPick(ds){ calSel=ds; dayWordsOpen=false; if(ds.slice(0,7)!==calYM) calYM=ds.slice(0,7); render(); }
+function calMove(n){ const [y,m]=calYM.split('-').map(Number); const d=new Date(y,m-1+n,1);
+  calYM=d.getFullYear()+'-'+pad(d.getMonth()+1); render(); }
+function toggleDayWords(){ dayWordsOpen=!dayWordsOpen; render(); }
 function dayDetail(ds){
-  const her = S.daily[ds] && S.daily[ds].her, him = S.daily[ds] && S.daily[ds].me;
-  const hw = S.words.days[ds];
+  const her=S.daily[ds]&&S.daily[ds].her, him=S.daily[ds]&&S.daily[ds].me;
+  const s = sessionOf(ds);
   const himLogs = logsOf(ds);
-  let wordsBlock = '';
-  if (hw){
-    const ws = VOCAB.words.slice(hw.from, hw.to);
-    const unk = new Set(hw.unknown||[]);
+  let wordsBlock='';
+  if (s){
+    const list = sessionList(s);
     wordsBlock = `<div style="margin-top:9px">
-      <button class="btn sm gray" onclick="toggleDayWords()">${dayWordsOpen?'收起':'查看当天单词（'+ws.length+' 个）'}</button>
-      ${dayWordsOpen? `<div style="margin-top:9px">${ws.map((x,i)=>{
-          const gi = hw.from + i;
-          return `<div class="list-item"><div class="g">
-            <div class="q">${esc(x.en)} ${x.ipa?`<span class="mut">${esc(x.ipa)}</span>`:''}
-              ${unk.has(gi)?'<span class="pill no">错</span>':'<span class="pill ok">对</span>'}</div>
-            <div class="a">${esc((x.pos?x.pos+' ':'')+x.cn)}</div></div></div>`;
-        }).join('')}</div>`:''}</div>`;
+      <button class="btn sm gray" onclick="toggleDayWords()">${dayWordsOpen?'收起':'查看当天单词（'+list.length+' 个）'}</button>
+      ${dayWordsOpen? `<div style="margin-top:9px">${list.map(({wi,kind})=>{
+        const wd=VOCAB.words[wi];
+        const ok = kind==='new'? s.known.includes(wi) : s.reviewOk.includes(wi);
+        const bad = kind==='new'? s.unknown.includes(wi) : s.reviewWrong.includes(wi);
+        return `<div class="list-item"><div class="g">
+          <div class="q">${esc(wd.en)} ${wd.ipa?`<span class="mut">${esc(wd.ipa)}</span>`:''}
+            ${bad?'<span class="pill no">错</span>':(ok?'<span class="pill ok">对</span>':(kind==='review'?'<span class="pill">复习</span>':''))}</div>
+          <div class="a">${esc((wd.pos?wd.pos+' ':'')+wd.cn)}</div></div></div>`;
+      }).join('')}</div>`:''}</div>`;
   }
   return `<div class="card"><h2>📌 ${ds} 详情</h2>
     <div class="statline"><span>🌸 ${esc(S.users.her.name)}</span>
       <span>${her&&her.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}
-      ${hw?`　单词 ${hw.from+1}–${hw.to}`:''}</span></div>
+      ${s?`　单词 ${s.newFrom+1}–${s.newTo} + 复习 ${(s.review||[]).length}`:''}</span></div>
     ${her&&her.note?`<div class="mut" style="margin:-2px 0 6px">💬 ${esc(her.note)}</div>`:''}
     <div class="statline"><span>🚗 ${esc(S.users.me.name)}</span>
       <span>${him&&him.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}
       　记录 ${himLogs.length} 条</span></div>
     ${him&&him.note?`<div class="mut" style="margin:-2px 0 6px">💬 ${esc(him.note)}</div>`:''}
     ${himLogs.length? himLogs.map(l=>`<div class="mut">· ${TRACKS[l.track]?TRACKS[l.track][0]+' ':''}${esc(l.text)}</div>`).join('') : ''}
-    ${wordsBlock}
-  </div>`;
+    ${wordsBlock}</div>`;
 }
 function weekSummary(){
-  const [a,b] = weekRange(calSel);
-  const days = []; for (let d=a; d<=b; d=addDays(d,1)) days.push(d);
-  const ck = u => days.filter(d=>S.daily[d]&&S.daily[d][u]&&S.daily[d][u].checkin).length;
-  const herWords = days.reduce((s,d)=>{ const r=S.words.days[d]; return s + (r? Math.max(0, r.to-r.from):0); },0);
-  const herErr = (S.reviewLog||[]).filter(r=>r.user==='her' && r.date>=a && r.date<=b).length;
-  const herPr = S.practice.filter(p=>p.user==='her' && p.date>=a && p.date<=b).length;
-  const ml = (S.logs||[]).filter(l=>l.user==='me' && l.date>=a && l.date<=b);
-  const cnt = k => ml.filter(l=>l.track===k).length;
-  const sportDays = new Set(ml.filter(l=>l.track==='sport').map(l=>l.date)).size;
-  const line = (l,r)=>`<div class="statline"><span>${l}</span><b>${r}</b></div>`;
+  const [a,b]=weekRange(calSel);
+  const days=[]; for(let d=a;d<=b;d=addDays(d,1)) days.push(d);
+  const ck=u=>days.filter(d=>S.daily[d]&&S.daily[d][u]&&S.daily[d][u].checkin).length;
+  const herWords=days.reduce((s2,d)=>{ const s=sessionOf(d); return s2+(s?(s.newTo-s.newFrom)+(s.review||[]).length:0); },0);
+  const herErr=(S.reviewLog||[]).filter(r=>r.user==='her'&&r.date>=a&&r.date<=b).length;
+  const herPr=S.practice.filter(p=>p.user==='her'&&p.date>=a&&p.date<=b).length;
+  const ml=(S.logs||[]).filter(l=>l.user==='me'&&l.date>=a&&l.date<=b);
+  const cnt=k=>ml.filter(l=>l.track===k).length;
+  const sportDays=new Set(ml.filter(l=>l.track==='sport').map(l=>l.date)).size;
+  const line=(l,r)=>`<div class="statline"><span>${l}</span><b>${r}</b></div>`;
   return `<div class="card"><h2>🗓 一周小结 <span class="tag">${MM(a)} ~ ${MM(b)}</span></h2>
     <div class="mut" style="margin-bottom:6px">🌸 ${esc(S.users.her.name)}</div>
-    ${line('打卡天数', ck('her')+' / 7 天')}
-    ${line('背单词', herWords+' 词')}
-    ${line('错题复习', herErr+' 条')}
-    ${line('每日一练', herPr+' 条')}
+    ${line('打卡天数',ck('her')+' / 7')}
+    ${line('背单词',herWords+' 词')}
+    ${line('错题复习',herErr+' 条')}
+    ${line('每日一练',herPr+' 条')}
     <div class="mut" style="margin:10px 0 6px">🚗 ${esc(S.users.me.name)}</div>
-    ${line('打卡天数', ck('me')+' / 7 天')}
-    ${line('🚗 汽车安全知识', cnt('car')+' 条')}
-    ${line('📱 自媒体（视频/文案）', cnt('media')+' 条')}
-    ${line('🎬 AI视频制作', cnt('ai')+' 条')}
-    ${line('🏃 锻炼', sportDays+' 天 / '+cnt('sport')+' 次')}
-  </div>`;
+    ${line('打卡天数',ck('me')+' / 7')}
+    ${line('🚗 汽车安全',cnt('car')+' 条')}
+    ${line('📱 自媒体',cnt('media')+' 条')}
+    ${line('🎬 AI视频',cnt('ai')+' 条')}
+    ${line('🏃 锻炼',sportDays+' 天')}</div>`;
 }
 function viewCalendar(){
-  const [y,m] = calYM.split('-').map(Number);
-  const offset = (new Date(y, m-1, 1).getDay()+6)%7;
-  const dim = new Date(y, m, 0).getDate();
-  let cells = [];
-  for (let i=0;i<offset;i++) cells.push(null);
-  for (let d=1; d<=dim; d++){
-    const ds = calYM+'-'+pad(d);
-    const her = !!(S.daily[ds]&&S.daily[ds].her&&S.daily[ds].her.checkin);
-    const him = !!(S.daily[ds]&&S.daily[ds].me&&S.daily[ds].me.checkin);
-    cells.push({d, ds, her, him});
+  const [y,m]=calYM.split('-').map(Number);
+  const offset=(new Date(y,m-1,1).getDay()+6)%7;
+  const dim=new Date(y,m,0).getDate();
+  let cells=[];
+  for(let i=0;i<offset;i++) cells.push(null);
+  for(let d=1;d<=dim;d++){
+    const ds=calYM+'-'+pad(d);
+    const her=!!(S.daily[ds]&&S.daily[ds].her&&S.daily[ds].her.checkin);
+    const him=!!(S.daily[ds]&&S.daily[ds].me&&S.daily[ds].me.checkin);
+    cells.push({d,ds,her,him});
   }
-  const grid = cells.map(c=> c
+  const grid=cells.map(c=> c
     ? `<div class="calday ${c.her&&c.him?'both':(c.her?'onlyHer':(c.him?'onlyMe':''))} ${c.ds===TODAYS?'today':''} ${c.ds===calSel?'sel':''}" onclick="calPick('${c.ds}')">
-         <span class="dn">${c.d}</span>
-         <span class="dots">${c.her?'<i class="dotm her"></i>':''}${c.him?'<i class="dotm me"></i>':''}</span>
-       </div>`
+         <span class="dn">${c.d}</span><span class="dots">${c.her?'<i class="dotm her"></i>':''}${c.him?'<i class="dotm me"></i>':''}</span></div>`
     : '<div class="calday empty"></div>').join('');
-  const wd = ['一','二','三','四','五','六','日'].map(x=>`<div class="calwd">${x}</div>`).join('');
-  const monthCk = Object.keys(S.daily).filter(d=>d.slice(0,7)===calYM);
-  const herM = monthCk.filter(d=>S.daily[d].her&&S.daily[d].her.checkin).length;
-  const himM = monthCk.filter(d=>S.daily[d].me&&S.daily[d].me.checkin).length;
-  return `
-  <div class="card"><div class="calhead">
+  const wd=['一','二','三','四','五','六','日'].map(x=>`<div class="calwd">${x}</div>`).join('');
+  const mc=Object.keys(S.daily).filter(d=>d.slice(0,7)===calYM);
+  const herM=mc.filter(d=>S.daily[d].her&&S.daily[d].her.checkin).length;
+  const himM=mc.filter(d=>S.daily[d].me&&S.daily[d].me.checkin).length;
+  return `<div class="card"><div class="calhead">
       <b>${y} 年 ${m} 月</b>
-      <div class="sp">
-        <button class="btn sm gray" onclick="calMove(-1)">‹</button>
+      <div class="sp"><button class="btn sm gray" onclick="calMove(-1)">‹</button>
         <button class="btn sm gray" onclick="calYM='${TODAYS.slice(0,7)}';calPick('${TODAYS}')">今天</button>
         <button class="btn sm gray" onclick="calMove(1)">›</button></div></div>
     <div class="calgrid">${wd}${grid}</div>
     <div class="calleg"><span><i class="dotm her"></i> ${esc(S.users.her.name)}</span>
       <span><i class="dotm me"></i> ${esc(S.users.me.name)}</span>
-      <span style="margin-left:auto">本月 ${herM} / ${himM} 天</span></div>
-  </div>
-  ${dayDetail(calSel)}
-  ${weekSummary()}`;
+      <span style="margin-left:auto">本月 ${herM} / ${himM} 天</span></div></div>
+  ${dayDetail(calSel)}${weekSummary()}`;
 }
 
 /* ---------- 监督 ---------- */
 function viewBoard(){
-  const card = (k)=>{
-    const u = S.users[k], rec = usr(TODAYS,k);
-    const { n, total } = tasksDone(TODAYS,k);
-    const pct = Math.round(n/total*100);
-    const extra = k==='her'
-      ? `单词进度 ${S.words.cursor}/${VOCAB.total}（${Math.round(S.words.cursor/VOCAB.total*100)}%）`
-      : `今日记录 ${logsOf(TODAYS).length} 条 · 累计 ${(S.logs||[]).filter(l=>l.user==='me').length} 条`;
+  const card=(k)=>{
+    const u=S.users[k], rec=usr(TODAYS,k);
+    const { n, total }=tasksDone(TODAYS,k);
+    const pct=Math.round(n/total*100);
+    const extra=k==='her'
+      ? `单词进度 ${S.words.cursor}/${VOCAB.total} · 错词池 ${Object.keys(S.words.wrong||{}).length} 个`
+      : `今日记录 ${logsOf(TODAYS).length} 条 · 计划累计 ${(S.logs||[]).filter(l=>l.user==='me').length} 条`;
     return `<div class="bcard ${k}">
       <div class="bhead"><span class="av">${u.emoji}</span><b>${esc(u.name)}</b>
         ${rec.checkin?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}</div>
       <div class="bar"><i style="width:${pct}%"></i></div>
-      <div class="mut">今日任务 ${n}/${total}　·　🔥 连续 ${streak(k)} 天　·　近30天 ${rate30(k)}%</div>
+      <div class="mut">今日任务 ${n}/${total} · 🔥连续 ${streak(k)} 天 · 近30天 ${rate30(k)}%</div>
       <div class="mut" style="margin-top:2px">${extra}</div>
-      <div class="mut" style="margin-top:2px">待复习错题 ${dueErrs(k).length} 条 · 错题累计 ${errsOf(k).length} 条</div>
-      <div class="mut" style="margin-top:2px">最后一次编辑：${timeAgo(lastActive(k))}</div>
-      ${rec.note?`<div class="mut" style="margin-top:6px">💬 ${esc(rec.note)}</div>`:''}
-    </div>`;
+      <div class="mut" style="margin-top:2px">待复习错题 ${dueErrs(k).length} 条 · 最后一次编辑 ${timeAgo(lastActive(k))}</div>
+      ${rec.note?`<div class="mut" style="margin-top:6px">💬 ${esc(rec.note)}</div>`:''}</div>`;
   };
-  const nudges = S.nudges.slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,12);
-  const other = me==='her' ? 'me' : 'her';
-  const otherRec = usr(TODAYS, other);
-  return `
-  <div class="card"><h2>👀 今日互相监督 <span class="tag">${TODAYS}</span></h2>
-    <div class="mut">${otherRec.checkin
-      ? esc(S.users[other].name)+' 今天已经打卡了 👍'
-      : esc(S.users[other].name)+' 今天还没打卡，可以催一催 👇'}</div>
+  const nudges=S.nudges.slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,12);
+  const other=me==='her'?'me':'her';
+  const otherRec=usr(TODAYS,other);
+  return `<div class="card"><h2>👀 今日互相监督 <span class="tag">${TODAYS}</span></h2>
+    <div class="mut">${otherRec.checkin? esc(S.users[other].name)+' 今天已经打卡 👍':esc(S.users[other].name)+' 今天还没打卡，可以催一催 👇'}</div>
     <div class="row" style="margin-top:11px">
       <button class="btn gray" onclick="cloudSync(true)">🔄 立即同步对方数据</button></div>
-    <div class="mut" style="margin-top:6px">${cloud.gistId
-      ? '已连接云端，打开 App 会自动同步；对方改动约 1 分钟内可见。'
-      : '还没连接云端 —— 去「设置 → 云同步」填 Token 和 Gist ID。'}</div>
-  </div>
+    <div class="mut" style="margin-top:6px">${cloud.gistId?'已连接云端，改动约 1 分钟内同步。':'还没连接云端 —— 去「设置 → 云同步」填 Token 和 Gist ID。'}</div></div>
   ${card('her')}${card('me')}
   <div class="card"><h2>📣 催一催 / 夸一夸</h2>
     <div class="row"><input id="nudgeTxt" placeholder="给 ${esc(S.users[other].name)} 留一句话">
       <button class="btn sm" style="flex:0 0 78px" onclick="sendNudge()">发送</button></div>
     <div style="margin-top:12px">${nudges.length? nudges.map(n=>`<div class="nudge">
       <b>${esc(S.users[n.from]?S.users[n.from].name:n.from)}</b>
-      <span class="mut">→ ${esc(S.users[n.to]?S.users[n.to].name:n.to)} · ${MM(n.at||n.ts)}</span>
-      <br>${esc(n.text)}</div>`).join('') : '<div class="empty">还没有留言，先给对方说句加油吧</div>'}</div>
-  </div>`;
+      <span class="mut">→ ${esc(S.users[n.to]?S.users[n.to].name:n.to)} · ${MM(n.at||n.ts)}</span><br>${esc(n.text)}</div>`).join('')
+      : '<div class="empty">还没有留言</div>'}</div></div>`;
 }
 
 /* ================= 设置 ================= */
@@ -1168,20 +1206,25 @@ async function ghApi(path, method, body){
   return { ok:r.ok, status:r.status, data:j };
 }
 function makeIcon(size){
-  const c = document.createElement('canvas'); c.width = c.height = size;
-  const g = c.getContext('2d');
-  const grad = g.createLinearGradient(0,0,size,size);
-  grad.addColorStop(0,'#4f6ef7'); grad.addColorStop(1,'#8b5cf6');
-  g.fillStyle = grad; g.fillRect(0,0,size,size);
-  g.strokeStyle = '#fff'; g.lineWidth = size*0.075; g.lineCap='round'; g.lineJoin='round';
-  g.beginPath();
-  g.moveTo(size*0.26,size*0.53); g.lineTo(size*0.43,size*0.70); g.lineTo(size*0.76,size*0.31);
-  g.stroke();
+  const c=document.createElement('canvas'); c.width=c.height=size;
+  const g=c.getContext('2d'); const s=size/16;
+  const rr=(x,y,w,h,r)=>{ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r);
+    g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); };
+  g.fillStyle='#141a22'; rr(0,0,size,size,size*0.2); g.fill();
+  g.fillStyle='#e8b95a';
+  g.beginPath(); g.moveTo(1.5*s,5.5*s); g.lineTo(1.5*s,2*s); g.lineTo(4.2*s,4.8*s); g.closePath(); g.fill();
+  g.beginPath(); g.moveTo(14.5*s,5.5*s); g.lineTo(14.5*s,2*s); g.lineTo(11.8*s,4.8*s); g.closePath(); g.fill();
+  rr(2.6*s,4.6*s,10.8*s,8*s,1.6*s); g.fill();
+  g.fillStyle='#141a22';
+  g.fillRect(4.6*s,6.6*s,1.9*s,2.4*s); g.fillRect(9.5*s,6.6*s,1.9*s,2.4*s);
+  g.fillRect(7.2*s,9.6*s,1.6*s,0.9*s);
+  g.fillStyle='#e8b95a';
+  g.fillRect(0.4*s,8.4*s,2.4*s,0.5*s); g.fillRect(13.2*s,8.4*s,2.4*s,0.5*s);
   return c.toDataURL('image/png').split(',')[1];
 }
 function manifestSource(){
   return JSON.stringify({
-    name:'双人打卡 · 互相监督', short_name:'双人打卡', start_url:'./', scope:'./',
+    name:'Noir Whiskers', short_name:'Noir Whiskers', start_url:'./', scope:'./',
     display:'standalone', background_color:'#f4f6fb', theme_color:'#4f6ef7', lang:'zh-CN',
     icons:[{src:'icon-192.png',sizes:'192x192',type:'image/png',purpose:'any'},
            {src:'icon-512.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}]
@@ -1204,7 +1247,7 @@ function configXml(){
   return '<?xml version="1.0" encoding="utf-8"?>\n' +
   '<widget id="com.daka.supervise" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" ' +
   'xmlns:android="http://schemas.android.com/apk/res/android">\n' +
-  '  <name>双人打卡</name>\n  <description>双人打卡 · 互相监督</description>\n' +
+  '  <name>Noir Whiskers</name>\n  <description>双人打卡 · 互相监督</description>\n' +
   '  <content src="index.html" />\n  <access origin="*" />\n' +
   '  <allow-intent href="http://*/*" />\n  <allow-intent href="https://*/*" />\n' +
   '  <preference name="AndroidInsecureFileModeEnabled" value="true" />\n' +
@@ -1358,6 +1401,9 @@ document.addEventListener('visibilitychange', ()=>{ if (document.visibilityState
 /* ================= 启动 ================= */
 S = load(); S.logs = S.logs || []; S.reviewLog = S.reviewLog || [];
 S.customTasks = S.customTasks || { her:[], me:[] };
+S.reasonOptions = S.reasonOptions || {};
+S.words = S.words || {}; S.words.wrong = S.words.wrong || {};
+S.goals = S.goals || {}; seedGoals();
 render();
 if (cloud.auto && cloud.token) cloudSync(false);
 if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
