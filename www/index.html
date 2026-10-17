@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4f6ef7">
-<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'&gt;&lt;rect width='16' height='16' rx='4' fill='%230F5132'/&gt;&lt;rect x='1' y='1' width='3' height='3' fill='%23B7D9C1'/&gt;&lt;rect x='12' y='1' width='3' height='3' fill='%23B7D9C1'/&gt;&lt;rect x='2' y='4' width='12' height='8' fill='%23B7D9C1'/&gt;&lt;rect x='5' y='6' width='2' height='2' fill='%230F5132'/&gt;&lt;rect x='9' y='6' width='2' height='2' fill='%230F5132'/&gt;&lt;rect x='6' y='9' width='4' height='1' fill='%230F5132'/&gt;&lt;/svg&gt;"></head><body><rect width="16" height="16" rx="4" fill="%232b2926"><rect x="1" y="1" width="3" height="3" fill="%23c8a27a"><rect x="12" y="1" width="3" height="3" fill="%23c8a27a"><rect x="2" y="4" width="12" height="8" fill="%23c8a27a"><rect x="5" y="6" width="2" height="2" fill="%232b2926"><rect x="9" y="6" width="2" height="2" fill="%232b2926"><rect x="6" y="9" width="4" height="1" fill="%232b2926">"&gt;<rect width="16" height="16" rx="4" fill="%23141a22"><rect x="1" y="1" width="3" height="3" fill="%23e8b95a"><rect x="12" y="1" width="3" height="3" fill="%23e8b95a"><rect x="2" y="4" width="12" height="8" fill="%23e8b95a"><rect x="5" y="6" width="2" height="2" fill="%23141a22"><rect x="9" y="6" width="2" height="2" fill="%23141a22"><rect x="6" y="9" width="4" height="1" fill="%23141a22">"&gt;
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'&gt;&lt;rect width='16' height='16' rx='4' fill='%230F5132'/&gt;&lt;rect x='1' y='1' width='3' height='3' fill='%23B7D9C1'/&gt;&lt;rect x='12' y='1' width='3' height='3' fill='%23B7D9C1'/&gt;&lt;rect x='2' y='4' width='12' height='8' fill='%23B7D9C1'/&gt;&lt;rect x='5' y='6' width='2' height='2' fill='%230F5132'/&gt;&lt;rect x='9' y='6' width='2' height='2' fill='%230F5132'/&gt;&lt;rect x='6' y='9' width='4' height='1' fill='%230F5132'/&gt;&lt;/svg&gt;"></head><body class=""><rect width="16" height="16" rx="4" fill="%232b2926"><rect x="1" y="1" width="3" height="3" fill="%23c8a27a"><rect x="12" y="1" width="3" height="3" fill="%23c8a27a"><rect x="2" y="4" width="12" height="8" fill="%23c8a27a"><rect x="5" y="6" width="2" height="2" fill="%232b2926"><rect x="9" y="6" width="2" height="2" fill="%232b2926"><rect x="6" y="9" width="4" height="1" fill="%232b2926">"&gt;<rect width="16" height="16" rx="4" fill="%23141a22"><rect x="1" y="1" width="3" height="3" fill="%23e8b95a"><rect x="12" y="1" width="3" height="3" fill="%23e8b95a"><rect x="2" y="4" width="12" height="8" fill="%23e8b95a"><rect x="5" y="6" width="2" height="2" fill="%23141a22"><rect x="9" y="6" width="2" height="2" fill="%23141a22"><rect x="6" y="9" width="4" height="1" fill="%23141a22">"&gt;
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Noir Whiskers">
@@ -374,24 +374,77 @@ body.switching #view{opacity:0;transform:translateY(14px) scale(.99)}
   18%{opacity:1;transform:translate(-50%,0) scale(1)}
   72%{opacity:1;transform:translate(-50%,0) scale(1)}
   100%{opacity:0;transform:translate(-50%,-10px) scale(.98)}}
+
+/* ---- v13 修正 ---- */
+.logo{width:44px;height:44px;border-radius:14px;padding:0}
+.brand{gap:7px}
+.brand h1{font-size:20px;letter-spacing:4.6px;text-indent:4.6px}
+.brand .tagline{gap:8px;justify-content:center}
+.brand .tagline span{letter-spacing:3px;margin-right:-3px}
+.brand .tagline::before,.brand .tagline::after{width:18px}
+.spl-logo{width:86px;height:86px;border-radius:28px;padding:9px}
+.spl-inner h1{letter-spacing:5px;text-indent:5px}
+.spl-sub span{letter-spacing:3px;margin-right:-3px}
+
+/* 底栏不溢字 */
+.tabs{overflow:hidden}
+.tabs button{flex:1 1 0;min-width:0;padding:9px 0;white-space:nowrap;overflow:hidden}
+.tabs button .lbl{font-size:10px;letter-spacing:0;line-height:1.1}
+
+/* 判词按钮 */
+.wacts{display:grid;grid-template-columns:1fr 1.2fr .82fr;gap:9px;margin-top:16px}
+.wbtn{border:0;border-radius:22px;padding:17px 4px;font:inherit;font-size:15px;font-weight:600;
+  letter-spacing:.6px;white-space:nowrap;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,box-shadow .2s,filter .2s}
+.wbtn:active{transform:scale(.965)}
+.wbtn.bad{background:rgba(255,255,255,.72);color:var(--bad);border:1px solid #EAD9D2;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.wbtn.ok{background:linear-gradient(135deg,var(--forest2),var(--forest));color:#fff;
+  box-shadow:0 14px 26px -16px rgba(15,81,50,.85)}
+.wbtn.ghost{background:rgba(255,255,255,.6);color:var(--sub);border:1px solid var(--line);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.wacts2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+.wbtn2{background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:99px;padding:12px 6px;
+  font:inherit;font-size:13px;color:var(--sub);white-space:nowrap;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;gap:5px;transition:.16s;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.wbtn2:active{transform:scale(.97)}
+
+/* 更多毛玻璃 */
+header{background:rgba(241,240,234,.66);backdrop-filter:blur(20px) saturate(1.6);
+  -webkit-backdrop-filter:blur(20px) saturate(1.6);border-bottom:1px solid rgba(230,227,218,.6)}
+.segbtn{background:rgba(255,255,255,.62);backdrop-filter:blur(14px) saturate(1.4);
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);border-color:rgba(255,255,255,.7)}
+.segbtn.on{background:linear-gradient(135deg,rgba(23,121,90,.96),rgba(14,75,47,.96));border-color:transparent}
+.hero{background:linear-gradient(135deg,rgba(255,255,255,.86),rgba(243,247,243,.72));
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3)}
+.segc-wrap{background:rgba(214,211,200,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.tagbtn.on{background:linear-gradient(135deg,var(--forest2),var(--forest))}
+.toast{background:rgba(255,255,255,.86);backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4)}
+.heat{background:rgba(255,255,255,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+
+/* v14：无横滑 */
+.card{overflow:hidden}
+.slider{display:none !important}
 </style>
 
 
-<div id="splash"><div class="spl-inner">
-  <div class="spl-logo" id="splLogo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#17805A"></stop><stop offset="1" stop-color="#0F5132"></stop></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#bwg)"></rect><path d="M7.4 12.6 L7.6 5.4 L13.4 10.2 Z" fill="#B7D9C1"></path><path d="M24.6 12.6 L24.4 5.4 L18.6 10.2 Z" fill="#B7D9C1"></path><rect x="7" y="9.6" width="18" height="13.4" rx="5.2" fill="#B7D9C1"></rect><circle cx="12.6" cy="15.6" r="1.75" fill="#0F5132"></circle><circle cx="19.4" cy="15.6" r="1.75" fill="#0F5132"></circle><circle cx="13.15" cy="15.05" r=".5" fill="#EAF6EE"></circle><circle cx="19.95" cy="15.05" r=".5" fill="#EAF6EE"></circle><path d="M14.9 18.6 h2.2 l-1.1 1.35 z" fill="#0F5132"></path><path d="M16 20.4 v1.15" stroke="#0F5132" stroke-width=".85" stroke-linecap="round"></path><path d="M3.6 16.2 h3.1 M3.6 18.8 h3.1" stroke="#B7D9C1" stroke-width="1.1" stroke-linecap="round"></path><path d="M28.4 16.2 h-3.1 M28.4 18.8 h-3.1" stroke="#B7D9C1" stroke-width="1.1" stroke-linecap="round"></path><rect x=".6" y=".6" width="30.8" height="30.8" rx="8.6" fill="none" stroke="rgba(255,255,255,.20)" stroke-width="1.1"></rect></svg></div>
+<div id="splash" class=""><div class="spl-inner">
+  <div class="spl-logo" id="splLogo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#17795A"></stop><stop offset="1" stop-color="#0E4B2F"></stop></linearGradient></defs><rect width="32" height="32" rx="8.5" fill="url(#bwg)"></rect><rect x=".55" y=".55" width="30.9" height="30.9" rx="8" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.1"></rect><path d="M10.6 12.2 L11.4 6.9 L15.6 10.4 Z" fill="#B7D9C1"></path><path d="M21.4 12.2 L20.6 6.9 L16.4 10.4 Z" fill="#B7D9C1"></path><rect x="9.2" y="10.4" width="13.6" height="11.6" rx="4.4" fill="#B7D9C1"></rect><circle cx="13.6" cy="15.9" r="1.45" fill="#0E4B2F"></circle><circle cx="18.4" cy="15.9" r="1.45" fill="#0E4B2F"></circle><path d="M15.2 18.7 h1.6 l-.8 1.05 z" fill="#0E4B2F"></path><path d="M16 20.6 v1.05" stroke="#0E4B2F" stroke-width=".8" stroke-linecap="round"></path><path d="M4.2 15.6 h2.4 M4.2 18.2 h2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path><path d="M27.8 15.6 h-2.4 M27.8 18.2 h-2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path></svg></div>
   <h1>Noir Whiskers</h1>
-  <div class="spl-sub">双人打卡 · 互相监督</div>
-  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">蜘蛛丝比同粗细的钢丝更坚韧。</div></div>
+  <div class="spl-sub"><span>双人打卡 · 互相监督</span></div>
+  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">手机上的细菌大约比马桶圈多 10 倍。</div></div>
   <div class="row spl-actions"><button class="btn gray" onclick="nextFact()">换一条</button><button class="btn" onclick="enterApp()">进入</button></div>
 </div></div>
 <div id="app">
   <header>
     <div class="topbar">
-      <div class="brand"><span class="logo" id="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#17805A"></stop><stop offset="1" stop-color="#0F5132"></stop></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#bwg)"></rect><path d="M7.4 12.6 L7.6 5.4 L13.4 10.2 Z" fill="#B7D9C1"></path><path d="M24.6 12.6 L24.4 5.4 L18.6 10.2 Z" fill="#B7D9C1"></path><rect x="7" y="9.6" width="18" height="13.4" rx="5.2" fill="#B7D9C1"></rect><circle cx="12.6" cy="15.6" r="1.75" fill="#0F5132"></circle><circle cx="19.4" cy="15.6" r="1.75" fill="#0F5132"></circle><circle cx="13.15" cy="15.05" r=".5" fill="#EAF6EE"></circle><circle cx="19.95" cy="15.05" r=".5" fill="#EAF6EE"></circle><path d="M14.9 18.6 h2.2 l-1.1 1.35 z" fill="#0F5132"></path><path d="M16 20.4 v1.15" stroke="#0F5132" stroke-width=".85" stroke-linecap="round"></path><path d="M3.6 16.2 h3.1 M3.6 18.8 h3.1" stroke="#B7D9C1" stroke-width="1.1" stroke-linecap="round"></path><path d="M28.4 16.2 h-3.1 M28.4 18.8 h-3.1" stroke="#B7D9C1" stroke-width="1.1" stroke-linecap="round"></path><rect x=".6" y=".6" width="30.8" height="30.8" rx="8.6" fill="none" stroke="rgba(255,255,255,.20)" stroke-width="1.1"></rect></svg></span>
-        <div><h1>Noir Whiskers</h1><div class="tagline">双人打卡 · 互相监督</div></div></div>
+      <div class="brand"><span class="logo" id="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#17795A"></stop><stop offset="1" stop-color="#0E4B2F"></stop></linearGradient></defs><rect width="32" height="32" rx="8.5" fill="url(#bwg)"></rect><rect x=".55" y=".55" width="30.9" height="30.9" rx="8" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.1"></rect><path d="M10.6 12.2 L11.4 6.9 L15.6 10.4 Z" fill="#B7D9C1"></path><path d="M21.4 12.2 L20.6 6.9 L16.4 10.4 Z" fill="#B7D9C1"></path><rect x="9.2" y="10.4" width="13.6" height="11.6" rx="4.4" fill="#B7D9C1"></rect><circle cx="13.6" cy="15.9" r="1.45" fill="#0E4B2F"></circle><circle cx="18.4" cy="15.9" r="1.45" fill="#0E4B2F"></circle><path d="M15.2 18.7 h1.6 l-.8 1.05 z" fill="#0E4B2F"></path><path d="M16 20.6 v1.05" stroke="#0E4B2F" stroke-width=".8" stroke-linecap="round"></path><path d="M4.2 15.6 h2.4 M4.2 18.2 h2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path><path d="M27.8 15.6 h-2.4 M27.8 18.2 h-2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path></svg></span>
+        <div><h1>Noir Whiskers</h1><div class="tagline"><span>双人打卡 · 互相监督</span></div></div></div>
       <div class="hdate" id="hdDate">2026-10-17</div>
     </div>
-    <div class="hsub" id="hdSync"><span class="dot ok"></span>云端已同步</div>
+    <div class="hsub" id="hdSync"><span class="dot off"></span>本地数据</div>
     <div class="seg" id="who"></div>
   </header>
   <main id="view"></main>
@@ -483,9 +536,20 @@ function mergeState(a, b){
   for (const d of Object.keys(wb.days||{})){
     const x = wa.days[d], y = wb.days[d];
     if (!x) { wa.days[d] = y; continue; }
-    const known = Array.from(new Set([...(x.known||[]), ...(y.known||[])])).sort((p,q)=>p-q);
-    const unknown = Array.from(new Set([...(x.unknown||[]), ...(y.unknown||[])])).sort((p,q)=>p-q);
-    wa.days[d] = { from:Math.min(x.from,y.from), to:Math.max(x.to,y.to), known, unknown, done: !!(x.done||y.done) };
+    const gx = v => (v.newFrom!=null? v.newFrom : (v.from!=null? v.from : 0));
+    const gt = v => (v.newTo!=null? v.newTo : (v.to!=null? v.to : 0));
+    const un = (a,b2) => Array.from(new Set([...(a||[]), ...(b2||[])]));
+    wa.days[d] = {
+      newFrom: Math.min(gx(x), gx(y)),
+      newTo: Math.max(gt(x), gt(y)),
+      review: un(x.review, y.review),
+      known: un(x.known, y.known).sort((p,q)=>p-q),
+      unknown: un(x.unknown, y.unknown).sort((p,q)=>p-q),
+      reviewOk: un(x.reviewOk, y.reviewOk),
+      reviewWrong: un(x.reviewWrong, y.reviewWrong),
+      log: (x.log||[]).concat(y.log||[]),
+      done: !!(x.done||y.done)
+    };
   }
   // 列表类：按 id 去重
   const byId = (x, y) => {
@@ -790,7 +854,7 @@ const ICONS = {
 };
 const SUBJECTS = ['英语','数学','语文','政治','生物','物理'];
 const TABS = {
-  her:[['today','home','今日'],['errors','book','错题本'],['practice','pen','每日一练'],
+  her:[['today','home','今日'],['errors','book','错题本'],['practice','pen','练习'],
        ['calendar','cal','日历'],['board','eye','监督'],['set','gear','设置']],
   me :[['today','home','今日'],['study','map','计划'],
        ['calendar','cal','日历'],['board','eye','监督'],['set','gear','设置']]
@@ -812,21 +876,19 @@ let wordDir = 'r';
 /* ---------- 通用 ---------- */
 function brandSVG(){
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">'
-   + '<defs><linearGradient id="bwg" x1="0" y1="0" x2="0.3" y2="1">'
-   + '<stop offset="0" stop-color="#17805A"/><stop offset="1" stop-color="#0F5132"/></linearGradient></defs>'
-   + '<rect width="32" height="32" rx="9" fill="url(#bwg)"/>'
-   + '<path d="M7.4 12.6 L7.6 5.4 L13.4 10.2 Z" fill="#B7D9C1"/>'
-   + '<path d="M24.6 12.6 L24.4 5.4 L18.6 10.2 Z" fill="#B7D9C1"/>'
-   + '<rect x="7" y="9.6" width="18" height="13.4" rx="5.2" fill="#B7D9C1"/>'
-   + '<circle cx="12.6" cy="15.6" r="1.75" fill="#0F5132"/>'
-   + '<circle cx="19.4" cy="15.6" r="1.75" fill="#0F5132"/>'
-   + '<circle cx="13.15" cy="15.05" r=".5" fill="#EAF6EE"/>'
-   + '<circle cx="19.95" cy="15.05" r=".5" fill="#EAF6EE"/>'
-   + '<path d="M14.9 18.6 h2.2 l-1.1 1.35 z" fill="#0F5132"/>'
-   + '<path d="M16 20.4 v1.15" stroke="#0F5132" stroke-width=".85" stroke-linecap="round"/>'
-   + '<path d="M3.6 16.2 h3.1 M3.6 18.8 h3.1" stroke="#B7D9C1" stroke-width="1.1" stroke-linecap="round"/>'
-   + '<path d="M28.4 16.2 h-3.1 M28.4 18.8 h-3.1" stroke="#B7D9C1" stroke-width="1.1" stroke-linecap="round"/>'
-   + '<rect x=".6" y=".6" width="30.8" height="30.8" rx="8.6" fill="none" stroke="rgba(255,255,255,.20)" stroke-width="1.1"/>'
+   + '<defs><linearGradient id="bwg" x1="0" y1="0" x2="0.25" y2="1">'
+   + '<stop offset="0" stop-color="#17795A"/><stop offset="1" stop-color="#0E4B2F"/></linearGradient></defs>'
+   + '<rect width="32" height="32" rx="8.5" fill="url(#bwg)"/>'
+   + '<rect x=".55" y=".55" width="30.9" height="30.9" rx="8" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.1"/>'
+   + '<path d="M10.6 12.2 L11.4 6.9 L15.6 10.4 Z" fill="#B7D9C1"/>'
+   + '<path d="M21.4 12.2 L20.6 6.9 L16.4 10.4 Z" fill="#B7D9C1"/>'
+   + '<rect x="9.2" y="10.4" width="13.6" height="11.6" rx="4.4" fill="#B7D9C1"/>'
+   + '<circle cx="13.6" cy="15.9" r="1.45" fill="#0E4B2F"/>'
+   + '<circle cx="18.4" cy="15.9" r="1.45" fill="#0E4B2F"/>'
+   + '<path d="M15.2 18.7 h1.6 l-.8 1.05 z" fill="#0E4B2F"/>'
+   + '<path d="M16 20.6 v1.05" stroke="#0E4B2F" stroke-width=".8" stroke-linecap="round"/>'
+   + '<path d="M4.2 15.6 h2.4 M4.2 18.2 h2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"/>'
+   + '<path d="M27.8 15.6 h-2.4 M27.8 18.2 h-2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"/>'
    + '</svg>';
 }
 function catSVG(v){
@@ -937,7 +999,7 @@ function render(){
     ? `<div class="imgmodal" onclick="closeImg()"><img src="${imgModal}"></div>` : '');
   $('#tabs').innerHTML = list.map(([k,ic,tx])=>
     `<button class="${tab===k?'on '+me:''}" onclick="switchTab('${k}')">
-      <span class="ic">${ICONS[ic]||''}</span>${tx}</button>`).join('');
+      <span class="ic">${ICONS[ic]||''}</span><span class="lbl">${tx}</span></button>`).join('');
   setTimeout(()=>{ initSliders(); countUp(); }, 0);
 }
 function drawSync(){
@@ -978,9 +1040,7 @@ function viewToday(){
   const { st, n, total } = tasksDone(TODAYS,me);
   const pct = Math.round(n/total*100);
   const totalDays = Object.keys(S.daily).filter(d=>S.daily[d][me]&&S.daily[d][me].checkin).length;
-  const body = me==='her' ? herWordsCard()
-      + '<div class="slider two"><div class="slide">' + herTasksCard(st)
-      + '</div><div class="slide">' + customTaskCard('her',st) + '</div></div>'
+  const body = me==='her' ? herWordsCard() + herTasksCard(st) + customTaskCard('her',st)
                           : meLogsCards() + customTaskCard('me',st);
   return `
   <div class="hero ${me}">
@@ -1033,13 +1093,13 @@ function herWordsCard(){
           <div class="ipa">${esc(wd.ipa||'')}</div></div>
         <div class="mut" style="text-align:center">${answered+1} / ${totalQ}　·　新词 ${s.newTo-s.newFrom} + 复习 ${(s.review||[]).length}</div>
         <div class="bar"><i style="width:${Math.round(answered/totalQ*100)}%"></i></div>
-        <div class="row" style="margin-top:14px">
-          <button class="btn red" onclick="grade(${it.wi},false,'${it.kind}')">不认识</button>
-          <button class="btn green" onclick="grade(${it.wi},true,'${it.kind}')">认识</button>
-          <button class="btn gray" style="flex:0 0 74px" onclick="zhan(${it.wi},'${it.kind}')">⚔️ 斩</button></div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn gray" onclick="prevWord()">↩︎ 上一个</button>
-          <button class="btn gray" onclick="revealWord()">👀 看释义</button></div>
+        <div class="wacts">
+          <button class="wbtn bad" onclick="grade(${it.wi},false,'${it.kind}')">不认识</button>
+          <button class="wbtn ok" onclick="grade(${it.wi},true,'${it.kind}')">认识</button>
+          <button class="wbtn ghost" onclick="zhan(${it.wi},'${it.kind}')">斩</button></div>
+        <div class="wacts2">
+          <button class="wbtn2" onclick="prevWord()">↩ 上一个</button>
+          <button class="wbtn2" onclick="revealWord()">看释义</button></div>
         <div id="revealBox"></div>`;
     } else {
       const rows = [];
@@ -1085,13 +1145,13 @@ function herTasksCard(st){
       <span class="tk">${x.t}</span></label>`).join('')}</div>`;
 }
 function meLogsCards(){
-  return '<div class="slider four">' + Object.keys(TRACKS).map(k=>{
+  return Object.keys(TRACKS).map(k=>{
     const [ic,name]=TRACKS[k];
     const g=S.goals[k]||{title:name,items:[]};
     const pending=(g.items||[]).filter(i=>!i.done);
     const mine=logsOf(TODAYS,k);
     const done=mine.length>0;
-    return `<div class="slide"><div class="card"><h2>${ic} ${esc(g.title||name)}
+    return `<div class="card"><h2>${ic} ${esc(g.title||name)}
         <span class="tag">${done?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}</span></h2>
       ${mine.map(l=>`<div class="list-item"><div class="g">
           <div class="a" style="color:var(--ink)">${esc(l.text)}</div></div>
@@ -1100,8 +1160,8 @@ function meLogsCards(){
         ${pending.map(i=>`<option value="${i.id}">${esc(i.t)}</option>`).join('')}</select>`:''}
       <textarea id="log_${k}" placeholder="${ME_HINT[k]}" style="min-height:52px;margin-top:9px"></textarea>
       <button class="btn ${done?'gray':''}" style="margin-top:9px" onclick="addLog('${k}')">
-        ${done?'再记一条':'打卡完成'}</button></div></div>`;
-  }).join('') + '</div>';
+        ${done?'再记一条':'打卡完成'}</button></div>`;
+  }).join('');
 }
 function addLog(track){
   const note=(($('#log_'+track)||{}).value||'').trim();
@@ -1160,10 +1220,10 @@ function viewStudy(){
       <div class="addtask"><input id="g_${k}" placeholder="加一个阶段/里程碑">
         <button class="btn sm" style="flex:0 0 68px" onclick="addGoal('${k}')">添加</button></div>
       <div class="mut" style="margin-top:8px">本周记录 ${wk} 条 · 累计 ${all.filter(l=>l.track===k).length} 条</div></div>`;
-  }).map(x=>'<div class="slide">'+x+'</div>').join('');
+  }).join('');
   return `<div class="card"><h2>🗺 我的计划 <span class="tag">李鑫</span></h2>
     <div class="mut">先把路线图里的条目逐个完成；每天在「今日」里选今天推进的那一项。</div></div>
-    <div class="slider four">${cards}</div>`;
+    ${cards}`;
 }
 
 /* ---------- 错题本（分科 + 照片 + 原因） ---------- */
