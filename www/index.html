@@ -498,6 +498,76 @@ body.switching #view{opacity:0;transform:none}
   box-shadow:inset 0 0 0 1px var(--line)}
 .segbtn.on .av{background:rgba(255,255,255,.92) !important}
 .av.big{padding:7px}
+
+/* ===== v19 ===== */
+html,body{overflow-x:hidden}
+.card{position:relative}
+#app{padding-bottom:calc(142px + env(safe-area-inset-bottom))}
+
+/* 底栏毛玻璃（恢复可见的玻璃感） */
+.tabs{
+  background:rgba(255,255,255,.72);
+  background:color-mix(in srgb,#FFFFFF 72%,transparent);
+  -webkit-backdrop-filter:blur(24px) saturate(1.8);
+  backdrop-filter:blur(24px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.55);
+  transform:translateX(-50%) translateZ(0);
+}
+/* 顶栏稳定合成 */
+header{transform:translateZ(0);will-change:background;-webkit-backdrop-filter:blur(20px) saturate(1.6);
+  backdrop-filter:blur(20px) saturate(1.6)}
+
+/* 同步状态指示器 */
+.sync{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--sub);letter-spacing:.3px}
+.sd{width:12px;height:12px;border-radius:50%;display:inline-grid;place-items:center;font-size:8.5px;
+  font-weight:700;line-height:1;flex:0 0 auto;font-style:normal}
+.sd-off{background:var(--stone)}
+.sd-ok{background:var(--mint);color:var(--forest)}
+.sd-err{background:#F6EDE9;color:var(--bad);border:1px solid #EAD9D2}
+.sd-spin{border:1.6px solid var(--stone);border-top-color:var(--forest);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sync.err span{color:var(--bad)}
+.sync.ok span{color:#5f7d61}
+
+/* 未读红点 */
+.tabs button{position:relative}
+.tdot{position:absolute;top:5px;right:calc(50% - 17px);width:7px;height:7px;border-radius:50%;
+  background:#C9533F;box-shadow:0 0 0 2px #fff;animation:tdot .3s ease}
+@keyframes tdot{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* 滑动判词：边缘实时透色 */
+#view .word{position:relative;z-index:2;touch-action:pan-y;will-change:transform}
+.swl,.swr{position:absolute;top:0;bottom:0;width:48%;pointer-events:none;opacity:0;z-index:1;
+  transition:opacity .1s linear;border-radius:inherit}
+.swl{left:0;background:linear-gradient(90deg,rgba(214,211,200,.95),rgba(214,211,200,0))}
+.swr{right:0;background:linear-gradient(270deg,rgba(183,217,193,.95),rgba(183,217,193,0))}
+
+/* 统一交互：hover 提亮 1.015 / 按压 0.97，去掉弹跳 */
+@media (hover:hover){
+  .btn:hover,.btn.sm:hover,.wbtn:hover,.wbtn2:hover,.tagbtn:hover,.chip:hover,.segbtn:hover,.bcard:hover{
+    filter:brightness(1.06);transform:scale(1.015)}
+}
+.btn:active,.btn.sm:active,.wbtn:active,.wbtn2:active,.tagbtn:active,.chip:active,
+.segbtn:active,.task:active,.tabs button:active,.card:active{transform:scale(.97)}
+.task.done{animation:none}
+
+/* 日历：圆点更清楚 / 非本月更淡 */
+.cdot{width:6px;height:6px;border-radius:50%}
+.cdot.her{background:#5E9F78}
+.cdot.me{background:var(--forest)}
+.cdot.both{background:linear-gradient(90deg,#5E9F78 0 44%,#FFFFFF 44% 56%,var(--forest) 56% 100%)}
+.cdot.none{background:var(--stone)}
+.cday.dim{opacity:.4}
+
+/* 空状态 */
+.empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:26px 12px}
+.empty-cat{opacity:.5;border-radius:12px;overflow:hidden;flex:0 0 auto}
+.empty-txt{font-size:13px;color:var(--sub);line-height:1.7;text-align:center;max-width:240px}
+
+/* 图片占位 */
+.thumb-ph{display:inline-grid;place-items:center;width:66px;height:66px;border-radius:16px;
+  border:1px solid var(--line);background:var(--stone-soft);opacity:.75;margin-top:9px}
+.thumb-ph svg{width:60%;height:60%;opacity:.8}
 </style>
 
 
@@ -505,7 +575,7 @@ body.switching #view{opacity:0;transform:none}
   <div class="spl-logo" id="splLogo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#17795A"></stop><stop offset="1" stop-color="#0E4B2F"></stop></linearGradient></defs><rect width="32" height="32" rx="8.5" fill="url(#bwg)"></rect><rect x=".55" y=".55" width="30.9" height="30.9" rx="8" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.1"></rect><path d="M10.6 12.2 L11.4 6.9 L15.6 10.4 Z" fill="#B7D9C1"></path><path d="M21.4 12.2 L20.6 6.9 L16.4 10.4 Z" fill="#B7D9C1"></path><rect x="9.2" y="10.4" width="13.6" height="11.6" rx="4.4" fill="#B7D9C1"></rect><circle cx="13.6" cy="15.9" r="1.45" fill="#0E4B2F"></circle><circle cx="18.4" cy="15.9" r="1.45" fill="#0E4B2F"></circle><path d="M15.2 18.7 h1.6 l-.8 1.05 z" fill="#0E4B2F"></path><path d="M16 20.6 v1.05" stroke="#0E4B2F" stroke-width=".8" stroke-linecap="round"></path><path d="M4.2 15.6 h2.4 M4.2 18.2 h2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path><path d="M27.8 15.6 h-2.4 M27.8 18.2 h-2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path></svg></div>
   <h1>Noir Whiskers</h1>
   <div class="spl-sub"><span>双人打卡 · 互相监督</span></div>
-  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">银河系约有 1000 亿～4000 亿颗恒星。</div></div>
+  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact"></div></div>
   <div class="row spl-actions"><button class="btn gray" onclick="nextFact()">换一条</button><button class="btn" onclick="enterApp()">进入</button></div>
 </div></div>
 <div id="app">
@@ -517,7 +587,7 @@ body.switching #view{opacity:0;transform:none}
         <div class="tagline"><span>双人打卡 · 互相监督</span></div>
       </div>
     </div>
-    <div class="hsub" id="hdSync"><span class="dot off"></span>本地数据</div>
+    <div class="hsub" id="hdSync"><span class="sync off"><span>本地模式</span></span></div>
     <div class="seg" id="who"></div>
   </header>
   <main id="view" style="transition: opacity 0.14s; opacity: 1;"></main>
@@ -557,7 +627,7 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const LKEY = 'daka.v2';
 let S = null;
 let me = localStorage.getItem('daka.who') || 'her';
-let tab = localStorage.getItem('daka.tab') || 'today';
+let tab = localStorage.getItem('daka.tab.'+(localStorage.getItem('daka.who')||'her')) || 'today';
 
 function seedGoals(){
   if (Object.keys(S.goals||{}).length) return;
@@ -575,6 +645,7 @@ function defaultState(){
     users: { her:{id:'her',name:'蒋语璐',emoji:'🌸'}, me:{id:'me',name:'李鑫',emoji:'🚗'} },
     words: { cursor:0, perDay:27, endDate:'2026-12-31', days:{}, wrong:{}, killed:{} },
     daily: {}, errors: [], practice: [], logs: [], reviewLog: [],
+    meta: { lastRead: { her:'', me:'' } },
     customTasks: { her: [], me: [] },
     reasonOptions: {},  // { 科目: [原因...] }
     goals: {},
@@ -644,6 +715,13 @@ function mergeState(a, b){
   out.logs = byId(out.logs, b.logs);
   out.reviewLog = byId(out.reviewLog, b.reviewLog);
   out.nudges = byId(out.nudges, b.nudges);
+  out.meta = out.meta || { lastRead:{} };
+  out.meta.lastRead = out.meta.lastRead || {};
+  const lrB = (b.meta&&b.meta.lastRead)||{};
+  for (const u of ['her','me']){
+    const x = out.meta.lastRead[u]||'', y = lrB[u]||'';
+    out.meta.lastRead[u] = x > y ? x : y;
+  }
   const ww = {};
   for (const k of Object.keys(b.words&&b.words.wrong||{})) ww[k] = b.words.wrong[k];
   for (const k of Object.keys(out.words&&out.words.wrong||{})){ const x=out.words.wrong[k];
@@ -747,7 +825,11 @@ async function cloudSync(manual){
     if (manual) toast('同步成功');
   } catch(e){
     cloudState = 'err';
-    if (manual) toast('同步失败：' + e.message);
+    const now = Date.now();
+    if (manual || (now - (window._syncToastAt||0) > 60000)){
+      window._syncToastAt = now;
+      toast('同步失败：请检查网络、Gist Token / Gist ID');
+    }
   }
   render();
 }
@@ -884,7 +966,7 @@ function grade(wi, ok, kind){
   setTimeout(render, 205);
 }
 function prevWord(){
-  const s = sessionOf(TODAYS); if(!s || !s.log.length) return toast('已经是第一个了');
+  const s = sessionOf(TODAYS); if(!s || !s.log.length) return toast('当前状态不可撤销');
   const last = s.log.pop(); const w = wrongOf();
   if (last.kind==='review'){
     const a = last.ok ? s.reviewOk : s.reviewWrong; const i = a.lastIndexOf(last.wi); if (i>=0) a.splice(i,1);
@@ -893,7 +975,7 @@ function prevWord(){
   }
   if (last.pw === null) delete w[last.wi]; else if (last.pw) w[last.wi] = last.pw;
   s.done = false; wordDir='l';
-  save(); render(); schedulePush();
+  save(); render(); schedulePush(); toast('撤销成功');
 }
 function revealWord(){
   const s = sessionOf(TODAYS); if(!s) return;
@@ -926,6 +1008,8 @@ function addError(){
   const reason = (($('#eR')||{}).value||'').trim();
   if (!q && !pendingImg) return toast('请填写错误内容或拍张照片');
   S.reasonOptions = S.reasonOptions || {};
+S.meta = S.meta || { lastRead:{} };
+S.meta.lastRead = S.meta.lastRead || { her:'', me:'' };
   const opts = S.reasonOptions[subj] || (S.reasonOptions[subj] = []);
   if (reason && !opts.includes(reason)) opts.push(reason);
   S.errors.push({ id:uid(), user:'her', subject:subj, q:q||'（见照片）', a:(($('#eA')||{}).value||'').trim(),
@@ -1079,23 +1163,33 @@ function render(){
               calendar:viewCalendar, board:viewBoard, set:viewSet };
   $('#view').innerHTML = (V[tab]||viewToday)() + (imgModal
     ? `<div class="imgmodal" onclick="closeImg()"><img src="${imgModal}"></div>` : '');
+  const _un = unreadNudges(me);
   $('#tabs').innerHTML = list.map(([k,ic,tx])=>
     `<button class="${tab===k?'on '+me:''}" onclick="switchTab('${k}')">
-      <span class="ic">${ICONS[ic]||''}</span><span class="lbl">${tx}</span></button>`).join('');
-  setTimeout(()=>{ initSliders(); countUp(); }, 0);
+      <span class="ic">${ICONS[ic]||''}</span><span class="lbl">${tx}</span>${k==='board'&&_un?'<i class="tdot"></i>':''}</button>`).join('');
+  setTimeout(()=>{ initSliders(); countUp(); initSwipe(); }, 0);
 }
 function drawSync(){
   const el=$('#hdSync'); if(!el) return;
-  const map={off:['off','本地数据'],syncing:['wait','同步中…'],ok:['ok','云端已同步'],err:['err','同步失败']};
-  const [cls,txt]=map[cloudState]||map.off;
-  el.innerHTML=`<span class="dot ${cls}"></span>${txt}`;
+  const map = {
+    off:     ['off','','本地模式'],
+    syncing: ['wait','<i class="sd sd-spin"></i>','同步中'],
+    ok:      ['ok','<i class="sd sd-ok">✓</i>','已同步'],
+    err:     ['err','<i class="sd sd-err">!</i>','同步失败']
+  };
+  const m = map[cloudState] || map.off;
+  el.innerHTML = `<span class="sync ${m[0]}">${m[1]}<span>${m[2]}</span></span>`;
 }
-function switchWho(k){ if (k===me) return; me=k; localStorage.setItem('daka.who',k);
+function switchWho(k){ if (k===me) return;
+  localStorage.setItem('daka.tab.'+me, tab);
+  me=k; localStorage.setItem('daka.who',k);
+  tab = localStorage.getItem('daka.tab.'+k) || 'today';
   document.body.classList.add('switching');
   setTimeout(()=>{ render(); document.body.classList.remove('switching'); window.scrollTo(0,0); }, 140); }
 function switchTab(k){
   if (k === tab) return;
-  tab = k; localStorage.setItem('daka.tab', k);
+  tab = k; localStorage.setItem('daka.tab.'+me, k);
+  if (k === 'board') markRead(me);
   const v = document.getElementById('view');
   if (!v){ render(); return; }
   v.style.transition = 'opacity .14s ease';
@@ -1109,6 +1203,65 @@ function switchTab(k){
       requestAnimationFrame(()=>{ v2.style.transition = 'opacity .14s ease'; v2.style.opacity = '1'; });
     }
   }, 140);
+}
+function initSwipe(){
+  const wordEl = document.querySelector('#view .word[data-wi]');
+  if (!wordEl || wordEl._sw) return;
+  const card = wordEl.closest('.card');
+  if (!card || card._sw) return;
+  wordEl._sw = 1; card._sw = 1;
+  const swL = document.createElement('div'); swL.className = 'swl';
+  const swR = document.createElement('div'); swR.className = 'swr';
+  card.appendChild(swL); card.appendChild(swR);
+  let sx=0, sy=0, dx=0, dragging=false, lock=null;
+  const TH = Math.min(110, Math.max(72, card.clientWidth*0.22));
+  const pt = e => (e.touches && e.touches[0]) ? e.touches[0] : e;
+  const relax = () => {
+    card.style.transition = 'transform .28s cubic-bezier(.2,.8,.3,1), opacity .2s';
+    card.style.transform = 'translateX(0) rotate(0)';
+    card.style.opacity = '1';
+    swL.style.opacity = 0; swR.style.opacity = 0;
+  };
+  const down = e => {
+    if (window._zhanBusy) return;
+    const p = pt(e); sx = p.clientX; sy = p.clientY; dx = 0; dragging = true; lock = null;
+    card.style.transition = 'none';
+  };
+  const move = e => {
+    if (!dragging) return;
+    const p = pt(e), mx = p.clientX - sx, my = p.clientY - sy;
+    if (lock === null){
+      if (Math.abs(mx) > Math.abs(my) + 4) lock = 'x';
+      else if (Math.abs(my) > Math.abs(mx) + 4) lock = 'y';
+    }
+    if (lock !== 'x') return;
+    if (e.cancelable) e.preventDefault();
+    dx = mx;
+    card.style.transform = 'translateX('+dx+'px) rotate('+(dx/34)+'deg)';
+    const k = Math.min(1, Math.abs(dx)/TH);
+    swR.style.opacity = dx > 0 ? k.toFixed(2) : 0;
+    swL.style.opacity = dx < 0 ? k.toFixed(2) : 0;
+  };
+  const up = () => {
+    if (!dragging) return;
+    dragging = false;
+    if (Math.abs(dx) > TH){
+      const ok = dx > 0;
+      card.style.transition = 'transform .24s ease-out, opacity .24s';
+      card.style.transform = 'translateX('+(ok?460:-460)+'px) rotate('+(ok?20:-20)+'deg)';
+      card.style.opacity = '0';
+      swL.style.opacity = 0; swR.style.opacity = 0;
+      const wi = Number(wordEl.dataset.wi), kind = wordEl.dataset.kind;
+      setTimeout(()=>{ const ss = sessionOf(TODAYS); if (ss && !ss.done) grade(wi, ok, kind); }, 200);
+    } else { relax(); }
+  };
+  card.addEventListener('touchstart', down, {passive:true});
+  card.addEventListener('touchmove', move, {passive:false});
+  card.addEventListener('touchend', up);
+  card.addEventListener('touchcancel', up);
+  card.addEventListener('mousedown', e=>{ if(e.button===0) down(e); });
+  window.addEventListener('mousemove', e=>{ if(dragging) move(e); });
+  window.addEventListener('mouseup', ()=>{ if(dragging) up(); });
 }
 function initSliders(){
   document.querySelectorAll('.slider').forEach(sl=>{
@@ -1138,6 +1291,22 @@ function countUp(){
     const tm=setInterval(()=>{ n+=step; if(n>=to){ n=to; clearInterval(tm); } el.textContent=n; },24);
   });
 }
+function emptyBox(text, size){
+  return '<div class="empty">'
+    + '<div class="empty-cat" style="width:'+(size||44)+'px;height:'+(size||44)+'px">'+catSVG('brand')+'</div>'
+    + '<div class="empty-txt">'+text+'</div></div>';
+}
+function num(v, fallback){
+  const n = Number(v);
+  return Number.isFinite(n) ? n : (fallback===undefined ? '暂无数据' : fallback);
+}
+function imgFail(el){
+  const sp = document.createElement('span');
+  sp.className = 'thumb-ph';
+  sp.innerHTML = catSVG('brand');
+  sp.title = '图片加载失败';
+  if (el && el.parentNode) el.parentNode.replaceChild(sp, el);
+}
 function closeImg(){ imgModal=''; render(); }
 function showImg(id){ const e=S.errors.find(x=>x.id===id); if(e&&e.img){ imgModal=e.img; render(); } }
 
@@ -1164,9 +1333,9 @@ function viewToday(){
     <button class="btn ${rec.checkin?'gray':''}" style="margin-top:11px" onclick="doCheckin()">
       ${rec.checkin?'更新留言':'打卡'}</button></div>
   <div class="card mini"><div class="grid3">
-    <div><div class="n" data-cu="${streak(me)}">0</div><div class="l">连续打卡</div></div>
-    <div><div class="n"><span data-cu="${rate30(me)}">0</span>%</div><div class="l">近30天</div></div>
-    <div><div class="n" data-cu="${totalDays}">0</div><div class="l">累计天数</div></div></div></div>`;
+    <div><div class="n" data-cu="${num(streak(me))}">0</div><div class="l">连续打卡</div></div>
+    <div><div class="n"><span data-cu="${num(rate30(me))}">0</span>%</div><div class="l">近30天</div></div>
+    <div><div class="n" data-cu="${num(totalDays)}">0</div><div class="l">累计天数</div></div></div></div>`;
 }
 function customTaskCard(u, st){
   const list = customOf(u);
@@ -1196,7 +1365,7 @@ function herWordsCard(){
     const totalQ = list.length;
     if (answered < totalQ && !s.done){
       const it = list[answered]; const wd = VOCAB.words[it.wi];
-      inner = `<div class="word slide-${wordDir}">
+      inner = `<div class="word slide-${wordDir}" data-wi="${it.wi}" data-kind="${it.kind}">
           ${it.kind==='review'?'<div class="badge">复习 · 之前的错词</div>':''}
           <div class="en">${esc(wd.en)}</div>
           <div class="ipa">${esc(wd.ipa||'')}</div></div>
@@ -1241,7 +1410,7 @@ function herWordsCard(){
     <div class="bar"><i style="width:${pct}%"></i></div>
     <div class="mut">首轮 ${learned}/${total}（${pct}%）· 距 ${MM(w.endDate)} 还有 ${daysLeft} 天 · 每天 <b>${w.perDay}</b> 新词
       <button class="btn sm gray" style="margin-left:6px" onclick="toggleWordCfg()">调整</button></div>
-    <div class="mut" style="margin-top:4px">📌 错词池 ${wrongCount} 个 · 今天到期复习 ${dueCount} 个</div>
+    <div class="mut" style="margin-top:4px">错词池 ${wrongCount} 个 · 今天到期复习 ${dueCount} 个${wrongCount===0?'（空）':''}</div>
     <div id="wcfg" style="display:none;margin-top:9px" class="row">
       <div><label class="fl">每天新词数</label><input type="number" min="5" max="300" value="${w.perDay}" onchange="setPer(this.value)"></div>
       <div><label class="fl">首轮完成日</label><input type="date" value="${w.endDate}" onchange="setEnd(this.value)"></div></div>
@@ -1298,7 +1467,25 @@ function doCheckin(){ const rec=usr(TODAYS,me); rec.note=$('#noteBox').value; re
   save(); render(); schedulePush(); toast('打卡成功'); }
 function sendNudge(){ const tx=($('#nudgeTxt').value||'').trim(); if(!tx) return;
   S.nudges.push({id:uid(),from:me,to:me==='her'?'me':'her',text:tx,ts:TODAYS,at:NOW()});
-  save(); render(); schedulePush(); toast('已发送'); }
+  save(); render(); schedulePush(); toast('留言已发送'); }
+const NUDGE_TTL = 7*24*3600*1000;
+function nudgesLive(){
+  const now = Date.now();
+  return (S.nudges||[]).filter(n=>{
+    const ts = new Date(n.at||n.ts||'').getTime();
+    return !isNaN(ts) && (now - ts) < NUDGE_TTL;
+  });
+}
+function unreadNudges(u){
+  const lr = (S.meta && S.meta.lastRead && S.meta.lastRead[u]) || '';
+  return nudgesLive().filter(n=>n.to===u && (n.at||'') > lr).length;
+}
+function markRead(u){
+  S.meta = S.meta || { lastRead:{} };
+  S.meta.lastRead = S.meta.lastRead || {};
+  S.meta.lastRead[u] = NOW();
+  save(); schedulePush();
+}
 function setPer(v){ S.words.perDay=Math.max(1,Number(v)||27); S.words.metaAt=NOW(); save(); render(); schedulePush(); }
 function setEnd(v){ S.words.endDate=v; S.words.metaAt=NOW(); save(); render(); schedulePush(); }
 
@@ -1371,7 +1558,7 @@ function viewErrors(){
       <div class="q">${esc(e.q)}</div>
       ${e.a?`<div class="a">✅ ${esc(e.a)}</div>`:''}
       ${e.reason?`<div class="reason">原因：${esc(e.reason)}</div>`:''}
-      ${e.img?`<img class="thumb" src="${e.img}" onclick="showImg('${e.id}')">`:''}</div>
+      ${e.img?`<img class="thumb" src="${e.img}" onclick="showImg('${e.id}')" onerror="imgFail(this)">`:''}</div>
     ${e.mastered?'':`<button class="btn sm green" onclick="reviewError('${e.id}')">已复习</button>`}</div>`;
   return `
   <div class="card"><h2>📚 错题本 <span class="tag">蒋语璐</span></h2>
@@ -1396,7 +1583,7 @@ function viewErrors(){
     <div class="tags">
       <button class="tagbtn ${errView==='todo'?'on':''}" onclick="errView='todo';render()">未掌握 ${todo.length}</button>
       <button class="tagbtn ${errView==='all'?'on':''}" onclick="errView='all';render()">全部记录 ${all.length}</button></div>
-    ${list.length? list.slice(0,60).map(row).join('') : '<div class="empty">该科还没有错题</div>'}</div>`;
+    ${list.length? list.slice(0,60).map(row).join('') : emptyBox('该科还没有错题，去上面记一道吧', 46)}</div>`;
 }
 
 /* ---------- 每日一练 ---------- */
@@ -1470,6 +1657,7 @@ function agendaHtml(ds){
   });
   if (her&&her.note) items.push({cls:'soft', l1:'💬', l2:'留言', title:esc(her.note), sub:esc(S.users.her.name)+' 的留言', now:false, who:'her', extra:''});
   if (him&&him.note) items.push({cls:'soft', l1:'💬', l2:'留言', title:esc(him.note), sub:esc(S.users.me.name)+' 的留言', now:false, who:'me', extra:''});
+  if (!items.length) return emptyBox('这一天还没有任何记录', 44);
   return items.map(it=>`<div class="agenda">
     <div class="tblock ${it.cls}"><b>${it.l1}</b><span>${it.l2}</span></div>
     <div class="agbody">
@@ -1607,7 +1795,8 @@ function viewBoard(){
       <div class="mut" style="margin-top:2px">待复习错题 ${dueErrs(k).length} 条 · 最后一次编辑 ${timeAgo(lastActive(k))}</div>
       ${rec.note?`<div class="mut" style="margin-top:6px">💬 ${esc(rec.note)}</div>`:''}</div>`;
   };
-  const nudges=S.nudges.slice().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,12);
+  const nudges=nudgesLive().sort((a,b)=>(b.at||'')>(a.at||'')?1:-1).slice(0,12);
+  const unread = unreadNudges(me);
   const other=me==='her'?'me':'her';
   const otherRec=usr(TODAYS,other);
   return `<div class="card"><h2>👀 今日互相监督 <span class="tag">${TODAYS}</span></h2>
@@ -1622,7 +1811,7 @@ function viewBoard(){
     <div style="margin-top:12px">${nudges.length? nudges.map(n=>`<div class="nudge">
       <b>${esc(S.users[n.from]?S.users[n.from].name:n.from)}</b>
       <span class="mut">→ ${esc(S.users[n.to]?S.users[n.to].name:n.to)} · ${MM(n.at||n.ts)}</span><br>${esc(n.text)}</div>`).join('')
-      : '<div class="empty">还没有留言</div>'}</div></div>`;
+      : emptyBox('还没有留言，先给 TA 说句加油吧', 42)}</div></div>`;
 }
 
 /* ================= 设置 ================= */
