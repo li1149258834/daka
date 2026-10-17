@@ -190,10 +190,13 @@ label.fl{display:block;font-size:11px;color:var(--sub);margin:13px 0 6px;font-we
 .grid3 .l{font-size:10.5px;color:var(--sub);margin-top:2px;letter-spacing:.8px;text-transform:uppercase}
 
 /* ---------- 底部导航 ---------- */
-.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));
+.tabs{position:fixed;left:0;right:0;margin:0 auto;bottom:calc(12px + env(safe-area-inset-bottom));
   width:min(688px,calc(100% - 24px));z-index:30;display:flex;gap:3px;padding:7px;
-  background:color-mix(in srgb,#FFFFFF 90%,transparent);backdrop-filter:blur(22px) saturate(1.5);
-  border:1px solid var(--line);border-radius:99px;box-shadow:var(--sh-lg)}
+  background:rgba(255,255,255,.62);
+  -webkit-backdrop-filter:blur(22px) saturate(1.8);
+  backdrop-filter:blur(22px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.7);border-radius:99px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 -8px 28px -18px rgba(25,45,35,.30),0 14px 30px -20px rgba(25,45,35,.35)}
 .tabs button{flex:1;border:0;background:none;font:inherit;font-size:10.5px;color:var(--sub);
   padding:9px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
   border-radius:99px;transition:.24s;line-height:1.15}
@@ -387,7 +390,7 @@ body.switching #view{opacity:0;transform:translateY(14px) scale(.99)}
 .spl-sub span{letter-spacing:3px;margin-right:-3px}
 
 /* 底栏不溢字 */
-.tabs{overflow:hidden}
+.tabs{overflow:visible}
 .tabs button{flex:1 1 0;min-width:0;padding:9px 0;white-space:nowrap;overflow:hidden}
 .tabs button .lbl{font-size:10px;letter-spacing:0;line-height:1.1}
 
@@ -504,18 +507,22 @@ html,body{overflow-x:hidden}
 .card{position:relative}
 #app{padding-bottom:calc(142px + env(safe-area-inset-bottom))}
 
-/* 底栏毛玻璃（恢复可见的玻璃感） */
+/* 底栏毛玻璃（关键：不能有任何 transform，否则 WebView 下 backdrop-filter 失效） */
 .tabs{
-  background:rgba(255,255,255,.72);
-  background:color-mix(in srgb,#FFFFFF 72%,transparent);
-  -webkit-backdrop-filter:blur(24px) saturate(1.8);
-  backdrop-filter:blur(24px) saturate(1.8);
-  border:1px solid rgba(255,255,255,.55);
-  transform:translateX(-50%) translateZ(0);
+  transform:none;
+  background:rgba(255,255,255,.62);
+  -webkit-backdrop-filter:blur(22px) saturate(1.8);
+  backdrop-filter:blur(22px) saturate(1.8);
 }
-/* 顶栏稳定合成 */
-header{transform:translateZ(0);will-change:background;-webkit-backdrop-filter:blur(20px) saturate(1.6);
+/* 顶栏同样不能有 transform */
+header{transform:none;will-change:backdrop-filter;
+  -webkit-backdrop-filter:blur(20px) saturate(1.6);
   backdrop-filter:blur(20px) saturate(1.6)}
+/* 不支持 backdrop-filter 的旧引擎：退回高不透明底，保证可读 */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .tabs{background:rgba(255,255,255,.94)}
+  header{background:rgba(241,240,234,.96)}
+}
 
 /* 同步状态指示器 */
 .sync{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--sub);letter-spacing:.3px}
@@ -587,7 +594,7 @@ header{transform:translateZ(0);will-change:background;-webkit-backdrop-filter:bl
         <div class="tagline"><span>双人打卡 · 互相监督</span></div>
       </div>
     </div>
-    <div class="hsub" id="hdSync"><span class="sync off"><span>本地模式</span></span></div>
+    <div class="hsub" id="hdSync"><span class="sync ok"><i class="sd sd-ok">✓</i><span>已同步</span></span></div>
     <div class="seg" id="who"></div>
   </header>
   <main id="view" style="transition: opacity 0.14s; opacity: 1;"></main>
