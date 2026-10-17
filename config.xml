@@ -17,6 +17,5 @@
     <icon src="icon-96.png" density="xhdpi" />
     <icon src="icon-144.png" density="xxhdpi" />
     <icon src="icon-192.png" density="xxxhdpi" />
-    <icon src="icon-512.png" density="xxxhdpi" />
   </platform>
 </widget>
