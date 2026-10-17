@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4f6ef7">
-<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'&gt;&lt;rect width='16' height='16' rx='4' fill='%230F5132'/&gt;&lt;rect x='1' y='1' width='3' height='3' fill='%23B7D9C1'/&gt;&lt;rect x='12' y='1' width='3' height='3' fill='%23B7D9C1'/&gt;&lt;rect x='2' y='4' width='12' height='8' fill='%23B7D9C1'/&gt;&lt;rect x='5' y='6' width='2' height='2' fill='%230F5132'/&gt;&lt;rect x='9' y='6' width='2' height='2' fill='%230F5132'/&gt;&lt;rect x='6' y='9' width='4' height='1' fill='%230F5132'/&gt;&lt;/svg&gt;"></head><body class=""><rect width="16" height="16" rx="4" fill="%232b2926"><rect x="1" y="1" width="3" height="3" fill="%23c8a27a"><rect x="12" y="1" width="3" height="3" fill="%23c8a27a"><rect x="2" y="4" width="12" height="8" fill="%23c8a27a"><rect x="5" y="6" width="2" height="2" fill="%232b2926"><rect x="9" y="6" width="2" height="2" fill="%232b2926"><rect x="6" y="9" width="4" height="1" fill="%232b2926">"&gt;<rect width="16" height="16" rx="4" fill="%23141a22"><rect x="1" y="1" width="3" height="3" fill="%23e8b95a"><rect x="12" y="1" width="3" height="3" fill="%23e8b95a"><rect x="2" y="4" width="12" height="8" fill="%23e8b95a"><rect x="5" y="6" width="2" height="2" fill="%23141a22"><rect x="9" y="6" width="2" height="2" fill="%23141a22"><rect x="6" y="9" width="4" height="1" fill="%23141a22">"&gt;
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'&gt;&lt;rect width='16' height='16' rx='4' fill='%230F5132'/&gt;&lt;rect x='1' y='1' width='3' height='3' fill='%23B7D9C1'/&gt;&lt;rect x='12' y='1' width='3' height='3' fill='%23B7D9C1'/&gt;&lt;rect x='2' y='4' width='12' height='8' fill='%23B7D9C1'/&gt;&lt;rect x='5' y='6' width='2' height='2' fill='%230F5132'/&gt;&lt;rect x='9' y='6' width='2' height='2' fill='%230F5132'/&gt;&lt;rect x='6' y='9' width='4' height='1' fill='%230F5132'/&gt;&lt;/svg&gt;"></head><body><rect width="16" height="16" rx="4" fill="%232b2926"><rect x="1" y="1" width="3" height="3" fill="%23c8a27a"><rect x="12" y="1" width="3" height="3" fill="%23c8a27a"><rect x="2" y="4" width="12" height="8" fill="%23c8a27a"><rect x="5" y="6" width="2" height="2" fill="%232b2926"><rect x="9" y="6" width="2" height="2" fill="%232b2926"><rect x="6" y="9" width="4" height="1" fill="%232b2926">"&gt;<rect width="16" height="16" rx="4" fill="%23141a22"><rect x="1" y="1" width="3" height="3" fill="%23e8b95a"><rect x="12" y="1" width="3" height="3" fill="%23e8b95a"><rect x="2" y="4" width="12" height="8" fill="%23e8b95a"><rect x="5" y="6" width="2" height="2" fill="%23141a22"><rect x="9" y="6" width="2" height="2" fill="%23141a22"><rect x="6" y="9" width="4" height="1" fill="%23141a22">"&gt;
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Noir Whiskers">
@@ -436,6 +436,68 @@ header{background:rgba(241,240,234,.66);backdrop-filter:blur(20px) saturate(1.6)
 .sdots{display:flex;gap:5px;justify-content:center;margin:2px 0 12px}
 .sdots i{width:5px;height:5px;border-radius:50%;background:var(--stone);transition:.28s}
 .sdots i.on{background:var(--forest);width:16px;border-radius:5px}
+
+/* ===== v16 ===== */
+/* 标题栏（日期并入） */
+.topbar{position:relative;display:flex;align-items:center;justify-content:center;gap:12px}
+.ttlwrap{min-width:0;text-align:center}
+.ptitle{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:0 2px;
+  font-family:var(--serif);font-size:18px;font-weight:600;color:var(--forest);line-height:1.32}
+.ptitle .bname{text-transform:uppercase;letter-spacing:3.8px;margin-right:-3.8px}
+.ptitle .psep{color:var(--stone);font-weight:400;margin:0 4px}
+.ptitle .pdate{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--sub);
+  letter-spacing:.3px;white-space:nowrap}
+.tagline{font-size:9.5px;color:var(--sub);text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:8px;margin-top:5px}
+.tagline span{letter-spacing:3px;margin-right:-3px}
+.tagline::before,.tagline::after{content:'';width:18px;height:1px;background:var(--stone)}
+.brand,.hdate{display:none}
+@media (max-width:360px){
+  .ptitle{font-size:16px}
+  .ptitle .bname{letter-spacing:2.6px;margin-right:-2.6px}
+  .ptitle .pdate{font-size:11px}
+}
+
+/* Tab 激活：薄荷胶囊 + scale 1.03 */
+.tabs button.on{background:var(--mint);color:var(--forest);
+  transform:scale(1.03);box-shadow:0 8px 18px -12px rgba(15,81,50,.55)}
+.tabs button.on .ic{color:var(--forest)}
+.tabs button{transition:background .22s,color .22s,transform .22s,box-shadow .22s;will-change:transform}
+#view{will-change:opacity}
+body.switching #view{opacity:0;transform:none}
+
+/* 斩：抖动 → 绿蒙版 → 缩小右滑（0.4s ease-out） */
+.word.zhan-anim{animation:zhanOut .4s ease-out forwards;will-change:transform,opacity}
+@keyframes zhanOut{
+  0%{transform:translateX(0) scale(1);opacity:1}
+  10%{transform:translateX(-6px) scale(1)}
+  20%{transform:translateX(6px) scale(1)}
+  30%{transform:translateX(-4px) scale(.995)}
+  45%{transform:translateX(2px) scale(.975)}
+  72%{transform:translateX(34px) scale(.93);opacity:.85}
+  100%{transform:translateX(92px) scale(.86);opacity:0}
+}
+.zhan-holder{position:relative}
+.zhan-ov{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+  display:grid;place-items:center;opacity:0;
+  background:linear-gradient(160deg,rgba(15,81,50,.94),rgba(15,81,50,.70));
+  animation:zov .4s ease-out forwards}
+@keyframes zov{0%{opacity:0}22%{opacity:1}70%{opacity:1}100%{opacity:.82}}
+.zhan-check{width:46px;height:46px;border-radius:99px;background:#fff;color:var(--forest);
+  display:grid;place-items:center;font-size:21px;font-weight:700;
+  box-shadow:0 10px 24px -12px rgba(0,0,0,.5);animation:zchk .4s ease-out forwards}
+@keyframes zchk{0%{opacity:0;transform:scale(.55)}38%{opacity:1;transform:scale(1)}100%{opacity:1;transform:scale(1)}}
+
+/* 像素猫：hover 微高亮 + 尺寸自适应 */
+.cat{display:block;width:100%;height:100%;transition:filter .2s ease}
+.cat:hover{filter:brightness(1.08) saturate(1.05)}
+@media (hover:none){ .cat:hover{filter:none} }
+
+/* v17：头像底改白，猫更清楚 */
+.segbtn .av,.av.big,.bhead .av,.agicon,.wav{background:#FFFFFF !important;
+  box-shadow:inset 0 0 0 1px var(--line)}
+.segbtn.on .av{background:rgba(255,255,255,.92) !important}
+.av.big{padding:7px}
 </style>
 
 
@@ -443,20 +505,22 @@ header{background:rgba(241,240,234,.66);backdrop-filter:blur(20px) saturate(1.6)
   <div class="spl-logo" id="splLogo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#17795A"></stop><stop offset="1" stop-color="#0E4B2F"></stop></linearGradient></defs><rect width="32" height="32" rx="8.5" fill="url(#bwg)"></rect><rect x=".55" y=".55" width="30.9" height="30.9" rx="8" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.1"></rect><path d="M10.6 12.2 L11.4 6.9 L15.6 10.4 Z" fill="#B7D9C1"></path><path d="M21.4 12.2 L20.6 6.9 L16.4 10.4 Z" fill="#B7D9C1"></path><rect x="9.2" y="10.4" width="13.6" height="11.6" rx="4.4" fill="#B7D9C1"></rect><circle cx="13.6" cy="15.9" r="1.45" fill="#0E4B2F"></circle><circle cx="18.4" cy="15.9" r="1.45" fill="#0E4B2F"></circle><path d="M15.2 18.7 h1.6 l-.8 1.05 z" fill="#0E4B2F"></path><path d="M16 20.6 v1.05" stroke="#0E4B2F" stroke-width=".8" stroke-linecap="round"></path><path d="M4.2 15.6 h2.4 M4.2 18.2 h2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path><path d="M27.8 15.6 h-2.4 M27.8 18.2 h-2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path></svg></div>
   <h1>Noir Whiskers</h1>
   <div class="spl-sub"><span>双人打卡 · 互相监督</span></div>
-  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">巧克力里的可可碱对狗有毒，千万别喂。</div></div>
+  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">银河系约有 1000 亿～4000 亿颗恒星。</div></div>
   <div class="row spl-actions"><button class="btn gray" onclick="nextFact()">换一条</button><button class="btn" onclick="enterApp()">进入</button></div>
 </div></div>
 <div id="app">
   <header>
     <div class="topbar">
-      <div class="brand"><span class="logo" id="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#17795A"></stop><stop offset="1" stop-color="#0E4B2F"></stop></linearGradient></defs><rect width="32" height="32" rx="8.5" fill="url(#bwg)"></rect><rect x=".55" y=".55" width="30.9" height="30.9" rx="8" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.1"></rect><path d="M10.6 12.2 L11.4 6.9 L15.6 10.4 Z" fill="#B7D9C1"></path><path d="M21.4 12.2 L20.6 6.9 L16.4 10.4 Z" fill="#B7D9C1"></path><rect x="9.2" y="10.4" width="13.6" height="11.6" rx="4.4" fill="#B7D9C1"></rect><circle cx="13.6" cy="15.9" r="1.45" fill="#0E4B2F"></circle><circle cx="18.4" cy="15.9" r="1.45" fill="#0E4B2F"></circle><path d="M15.2 18.7 h1.6 l-.8 1.05 z" fill="#0E4B2F"></path><path d="M16 20.6 v1.05" stroke="#0E4B2F" stroke-width=".8" stroke-linecap="round"></path><path d="M4.2 15.6 h2.4 M4.2 18.2 h2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path><path d="M27.8 15.6 h-2.4 M27.8 18.2 h-2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path></svg></span>
-        <div><h1>Noir Whiskers</h1><div class="tagline"><span>双人打卡 · 互相监督</span></div></div></div>
-      <div class="hdate" id="hdDate">2026-10-17</div>
+      <span class="logo" id="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#17795A"></stop><stop offset="1" stop-color="#0E4B2F"></stop></linearGradient></defs><rect width="32" height="32" rx="8.5" fill="url(#bwg)"></rect><rect x=".55" y=".55" width="30.9" height="30.9" rx="8" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.1"></rect><path d="M10.6 12.2 L11.4 6.9 L15.6 10.4 Z" fill="#B7D9C1"></path><path d="M21.4 12.2 L20.6 6.9 L16.4 10.4 Z" fill="#B7D9C1"></path><rect x="9.2" y="10.4" width="13.6" height="11.6" rx="4.4" fill="#B7D9C1"></rect><circle cx="13.6" cy="15.9" r="1.45" fill="#0E4B2F"></circle><circle cx="18.4" cy="15.9" r="1.45" fill="#0E4B2F"></circle><path d="M15.2 18.7 h1.6 l-.8 1.05 z" fill="#0E4B2F"></path><path d="M16 20.6 v1.05" stroke="#0E4B2F" stroke-width=".8" stroke-linecap="round"></path><path d="M4.2 15.6 h2.4 M4.2 18.2 h2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path><path d="M27.8 15.6 h-2.4 M27.8 18.2 h-2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path></svg></span>
+      <div class="ttlwrap">
+        <h1 class="ptitle"><span class="bname">Noir Whiskers</span><span class="psep">｜</span><span class="pdate" id="hdDate">10月17日 周六</span></h1>
+        <div class="tagline"><span>双人打卡 · 互相监督</span></div>
+      </div>
     </div>
     <div class="hsub" id="hdSync"><span class="dot off"></span>本地数据</div>
     <div class="seg" id="who"></div>
   </header>
-  <main id="view"></main>
+  <main id="view" style="transition: opacity 0.14s; opacity: 1;"></main>
 </div>
 <div class="tabs" id="tabs"></div>
 <div class="toast" id="toast"></div>
@@ -757,6 +821,27 @@ function sessionList(s){
   return news.concat(rev);
 }
 function zhan(wi, kind){
+  if (window._zhanBusy) return;
+  const s = sessionOf(TODAYS); if(!s || s.done) return;
+  const el = document.querySelector('.word');
+  if (!el){ zhanApply(wi, kind); return; }
+  const card = el.closest('.card') || el.parentNode;
+  window._zhanBusy = true;
+  if (card) card.classList.add('zhan-holder');
+  el.classList.add('zhan-anim');
+  const ov = document.createElement('div');
+  ov.className = 'zhan-ov';
+  ov.innerHTML = '<span class="zhan-check">✓</span>';
+  (card || el.parentNode).appendChild(ov);
+  setTimeout(()=>{
+    window._zhanBusy = false;
+    if (ov && ov.parentNode) ov.parentNode.removeChild(ov);
+    el.classList.remove('zhan-anim');
+    if (card) card.classList.remove('zhan-holder');
+    zhanApply(wi, kind);
+  }, 400);
+}
+function zhanApply(wi, kind){
   const s = sessionOf(TODAYS); if(!s || s.done) return;
   S.words.killed = S.words.killed || {}; S.words.killed[wi] = true;
   const pw = wrongOf()[wi] ? JSON.parse(JSON.stringify(wrongOf()[wi])) : null;
@@ -765,8 +850,7 @@ function zhan(wi, kind){
   else { if(!s.known.includes(wi)) s.known.push(wi); }
   s.log.push({ wi, kind, ok:true, pw, kill:true });
   wordDir='r';
-  save(); schedulePush(); feedback(true);
-  setTimeout(render, 205); toast('已斩，此词不再出现');
+  save(); render(); schedulePush(); toast('已斩，此词不再出现');
 }
 function feedback(ok){
   const b=document.createElement('div');
@@ -901,45 +985,32 @@ function brandSVG(){
    + '</svg>';
 }
 function catSVG(v){
-  const tile = (v==='brand'||!v) ? '<rect width="16" height="16" rx="4" fill="#0F5132"/>' : '';
-  let body='';
-  if (v==='her'){
-    // 奶油白猫：短圆耳、蓝灰眼、粉鼻、腮红、额头浅斑
-    body =
-      '<path d="M2.2 6.4 L2.8 2.4 L5.6 5.2 Z" fill="#D6D3C8"/>'+
-      '<path d="M13.8 6.4 L13.2 2.4 L10.4 5.2 Z" fill="#D6D3C8"/>'+
-      '<rect x="2.5" y="4.9" width="11" height="8" rx="2.6" fill="#D6D3C8"/>'+
-      '<rect x="7.4" y="5.3" width="1.2" height="2.2" rx=".4" fill="#EFEDE6"/>'+
-      '<rect x="4.9" y="7" width="1.7" height="2.3" rx=".8" fill="#0F5132"/>'+
-      '<rect x="9.4" y="7" width="1.7" height="2.3" rx=".8" fill="#0F5132"/>'+
-      '<rect x="3.4" y="9.5" width="1.9" height="1" rx=".5" fill="#B7D9C1"/>'+
-      '<rect x="10.7" y="9.5" width="1.9" height="1" rx=".5" fill="#B7D9C1"/>'+
-      '<rect x="7.4" y="9.7" width="1.2" height=".8" rx=".3" fill="#8FBF9F"/>';
-  } else if (v==='me'){
-    // 黑咖啡猫：尖高耳、琥珀眼、奶白胡须
-    body =
-      '<path d="M1.4 5.6 L1.4 1.4 L4.6 4.6 Z" fill="#0F5132"/>'+
-      '<path d="M14.6 5.6 L14.6 1.4 L11.4 4.6 Z" fill="#0F5132"/>'+
-      '<path d="M2.4 5.2 L2.6 2.6 L4.4 4.8 Z" fill="#8FBF9F"/>'+
-      '<path d="M13.6 5.2 L13.4 2.6 L11.6 4.8 Z" fill="#8FBF9F"/>'+
-      '<rect x="2.7" y="4.7" width="10.6" height="8.2" rx="2" fill="#0F5132"/>'+
-      '<rect x="4.7" y="6.8" width="2" height="2.5" rx=".7" fill="#B7D9C1"/>'+
-      '<rect x="9.3" y="6.8" width="2" height="2.5" rx=".7" fill="#B7D9C1"/>'+
-      '<rect x="7.3" y="9.7" width="1.4" height=".8" rx=".3" fill="#8FBF9F"/>'+
-      '<rect x=".3" y="8.3" width="2.4" height=".45" fill="#FAF9F4"/>'+
-      '<rect x="13.3" y="8.3" width="2.4" height=".45" fill="#FAF9F4"/>';
+  const isHer = v==='her';
+  const B = isHer ? '#D6D3C8' : '#0F5132';   /* 身体：李鑫森林绿 / 蒋语璐石灰 */
+  const E = isHer ? '#0F5132' : '#B7D9C1';   /* 眼/鼻/胡须：与身体反色 */
+  const OL = '#BEB9AC';                       /* 石灰猫的描边，仅用于提升白底可读性 */
+  const rects = [];
+  if (isHer){
+    rects.push([11,10,7,8],[30,10,7,8]);      /* 圆耳：矮宽方块 */
   } else {
-    body =
-      '<path d="M1.5 5.6 L1.5 1.8 L4.4 4.8 Z" fill="#B7D9C1"/>'+
-      '<path d="M14.5 5.6 L14.5 1.8 L11.6 4.8 Z" fill="#B7D9C1"/>'+
-      '<rect x="2.6" y="4.7" width="10.8" height="8" rx="2" fill="#B7D9C1"/>'+
-      '<rect x="4.6" y="6.7" width="1.9" height="2.4" rx=".7" fill="#0F5132"/>'+
-      '<rect x="9.5" y="6.7" width="1.9" height="2.4" rx=".7" fill="#0F5132"/>'+
-      '<rect x="7.2" y="9.7" width="1.6" height=".9" fill="#0F5132"/>'+
-      '<rect x=".4" y="8.4" width="2.4" height=".5" fill="#B7D9C1"/>'+
-      '<rect x="13.2" y="8.4" width="2.4" height=".5" fill="#B7D9C1"/>';
+    rects.push([11,7,4,11],[15,12,4,6],[33,7,4,11],[29,12,4,6]);  /* 尖耳：竖直阶梯 */
   }
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges" width="100%" height="100%">'+tile+body+'</svg>';
+  rects.push([10,17,28,24]);                  /* 脸 */
+  let p = '';
+  if (v==='brand') p += '<rect width="48" height="48" rx="12" fill="#0F5132"/>';
+  if (isHer){
+    p += rects.map(r=>'<rect x="'+(r[0]-1)+'" y="'+(r[1]-1)+'" width="'+(r[2]+2)+'" height="'+(r[3]+2)+'" fill="'+OL+'"/>').join('');
+  }
+  p += rects.map(r=>'<rect x="'+r[0]+'" y="'+r[1]+'" width="'+r[2]+'" height="'+r[3]+'" fill="'+B+'"/>').join('');
+  p += '<rect x="15" y="25" width="7" height="8" fill="'+E+'"/>'
+    +  '<rect x="26" y="25" width="7" height="8" fill="'+E+'"/>'
+    +  '<rect x="22" y="36" width="4" height="3" fill="'+E+'"/>'
+    +  '<rect x="2" y="26" width="7" height="2" fill="'+E+'" opacity=".85"/>'
+    +  '<rect x="2" y="32" width="7" height="2" fill="'+E+'" opacity=".85"/>'
+    +  '<rect x="39" y="26" width="7" height="2" fill="'+E+'" opacity=".85"/>'
+    +  '<rect x="39" y="32" width="7" height="2" fill="'+E+'" opacity=".85"/>';
+  return '<svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="100%" height="100%" '
+    + 'shape-rendering="crispEdges" aria-hidden="true">'+p+'</svg>';
 }
 function weekRange(d){
   const dt = new Date(d+'T00:00:00'); const wd = (dt.getDay()+6)%7;
@@ -994,7 +1065,9 @@ function render(){
   if (!list.some(x=>x[0]===tab)) tab='today';
   const lg = $('#logo'); if (lg && !lg.innerHTML) lg.innerHTML = brandSVG();
   const sl = $('#splLogo'); if (sl && !sl.innerHTML) sl.innerHTML = brandSVG();
-  $('#hdDate').textContent = TODAYS;
+  const _wk=['周日','周一','周二','周三','周四','周五','周六'];
+  $('#hdDate').textContent = Number(TODAYS.slice(5,7))+'月'+Number(TODAYS.slice(8,10))+'日 '
+    + _wk[new Date(TODAYS+'T00:00:00').getDay()];
   drawSync();
   $('#who').innerHTML = Object.values(S.users).map(u=>{
     const ok = usr(TODAYS,u.id).checkin;
@@ -1017,9 +1090,26 @@ function drawSync(){
   const [cls,txt]=map[cloudState]||map.off;
   el.innerHTML=`<span class="dot ${cls}"></span>${txt}`;
 }
-function switchWho(k){ me=k; localStorage.setItem('daka.who',k); document.body.classList.add('switching');
-  setTimeout(()=>{ render(); document.body.classList.remove('switching'); window.scrollTo(0,0); }, 180); }
-function switchTab(k){ tab=k; localStorage.setItem('daka.tab',k); window.scrollTo(0,0); render(); }
+function switchWho(k){ if (k===me) return; me=k; localStorage.setItem('daka.who',k);
+  document.body.classList.add('switching');
+  setTimeout(()=>{ render(); document.body.classList.remove('switching'); window.scrollTo(0,0); }, 140); }
+function switchTab(k){
+  if (k === tab) return;
+  tab = k; localStorage.setItem('daka.tab', k);
+  const v = document.getElementById('view');
+  if (!v){ render(); return; }
+  v.style.transition = 'opacity .14s ease';
+  v.style.opacity = '0';
+  setTimeout(()=>{
+    window.scrollTo(0,0);
+    render();
+    const v2 = document.getElementById('view');
+    if (v2){
+      v2.style.transition = 'none'; v2.style.opacity = '0';
+      requestAnimationFrame(()=>{ v2.style.transition = 'opacity .14s ease'; v2.style.opacity = '1'; });
+    }
+  }, 140);
+}
 function initSliders(){
   document.querySelectorAll('.slider').forEach(sl=>{
     const items=[...sl.children]; if(!items.length) return;
