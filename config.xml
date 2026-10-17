@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <widget id="com.daka.supervise" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android">
-  <name>双人打卡</name>
+  <name>Noir Whiskers</name>
   <description>双人打卡 · 互相监督</description>
   <content src="index.html" />
   <access origin="*" />
@@ -8,8 +8,15 @@
   <allow-intent href="https://*/*" />
   <preference name="AndroidInsecureFileModeEnabled" value="true" />
   <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+  <preference name="BackgroundColor" value="0xfff1f0ea" />
   <platform name="android">
     <preference name="android-minSdkVersion" value="24" />
     <preference name="android-targetSdkVersion" value="34" />
+    <icon src="icon-48.png" density="mdpi" />
+    <icon src="icon-72.png" density="hdpi" />
+    <icon src="icon-96.png" density="xhdpi" />
+    <icon src="icon-144.png" density="xxhdpi" />
+    <icon src="icon-192.png" density="xxxhdpi" />
+    <icon src="icon-512.png" density="xxxhdpi" />
   </platform>
 </widget>
