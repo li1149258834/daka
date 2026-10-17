@@ -598,6 +598,27 @@ header{transform:none;will-change:backdrop-filter;
 @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
   .tabs{background:rgba(255,255,255,.95) !important}
 }
+
+/* ===== v22：底栏胶囊滑动指示器 ===== */
+.tab-ind{
+  position:absolute;top:7px;bottom:7px;left:0;width:60px;border-radius:99px;z-index:0;
+  background:linear-gradient(160deg,var(--mint),#A9CFB6);
+  box-shadow:0 8px 18px -12px rgba(15,81,50,.55),inset 0 1px 0 rgba(255,255,255,.7);
+  pointer-events:none;
+  transition:transform .3s cubic-bezier(.32,.72,.28,1), width .3s cubic-bezier(.32,.72,.28,1);
+  will-change:transform,width;
+}
+.tabs{position:fixed}
+.tabs button.on{
+  background:transparent !important;box-shadow:none !important;
+  transform:none !important;color:var(--forest) !important;
+}
+.tabs button{transition:color .22s ease}
+.tabs button .ic{transition:transform .26s cubic-bezier(.32,.72,.28,1),color .22s}
+.tabs button.on .ic{transform:scale(1.08)}
+.tabs button .lbl{transition:opacity .22s,transform .26s cubic-bezier(.32,.72,.28,1)}
+.tabs button.on .lbl{transform:translateY(-.5px)}
+.tabs button .tdot{z-index:2}
 </style>
 
 
@@ -1193,11 +1214,49 @@ function render(){
               calendar:viewCalendar, board:viewBoard, set:viewSet };
   $('#view').innerHTML = (V[tab]||viewToday)() + (imgModal
     ? `<div class="imgmodal" onclick="closeImg()"><img src="${imgModal}"></div>` : '');
-  const _un = unreadNudges(me);
-  $('#tabs').innerHTML = list.map(([k,ic,tx])=>
-    `<button class="${tab===k?'on '+me:''}" onclick="switchTab('${k}')">
-      <span class="ic">${ICONS[ic]||''}</span><span class="lbl">${tx}</span>${k==='board'&&_un?'<i class="tdot"></i>':''}</button>`).join('');
+  renderTabs(list);
   setTimeout(()=>{ initSliders(); countUp(); initSwipe(); }, 0);
+}
+
+/* 底栏：一次构建，之后只切 class —— 让过渡真正生效 + 胶囊滑动跟随 */
+function renderTabs(list){
+  const el = $('#tabs'); if (!el) return;
+  const sig = me + '|' + list.map(x=>x[0]).join(',');
+  if (el._sig !== sig){
+    el._sig = sig;
+    el.innerHTML = '<span class="tab-ind"></span>' + list.map(([k,ic,tx])=>
+      `<button data-k="${k}" onclick="switchTab('${k}')">
+        <span class="ic">${ICONS[ic]||''}</span><span class="lbl">${tx}</span>
+        <i class="tdot" data-k="${k}" style="display:none"></i></button>`).join('');
+    el._btns = Array.from(el.querySelectorAll('button'));
+    el._placed = false;
+  }
+  const un = unreadNudges(me);
+  el._btns.forEach(b=>{
+    const k = b.dataset.k;
+    b.classList.toggle('on', k === tab);
+    const dot = b.querySelector('.tdot');
+    if (dot) dot.style.display = (k === 'board' && un) ? 'block' : 'none';
+  });
+  moveInd();
+}
+window.addEventListener('resize', ()=>moveInd());
+window.addEventListener('orientationchange', ()=>setTimeout(moveInd, 120));
+function moveInd(){
+  const el = $('#tabs'); if (!el || !el._btns) return;
+  const ind = el.querySelector('.tab-ind'); if (!ind) return;
+  const b = el._btns.find(x=>x.classList.contains('on')); if (!b) return;
+  const r = b.getBoundingClientRect(), rb = el.getBoundingClientRect();
+  const x = r.left - rb.left - el.clientLeft;
+  if (!el._placed){
+    ind.style.transition = 'none';
+    el._placed = true;
+  }
+  ind.style.width = r.width + 'px';
+  ind.style.transform = 'translateX(' + x + 'px)';
+  if (ind.style.transition === 'none'){
+    requestAnimationFrame(()=>{ ind.style.transition = ''; });
+  }
 }
 function drawSync(){
   const el=$('#hdSync'); if(!el) return;
@@ -1220,6 +1279,11 @@ function switchTab(k){
   if (k === tab) return;
   tab = k; localStorage.setItem('daka.tab.'+me, k);
   if (k === 'board') markRead(me);
+  const _tel = document.getElementById('tabs');
+  if (_tel && _tel._btns){
+    _tel._btns.forEach(b=>b.classList.toggle('on', b.dataset.k === k));
+    moveInd();
+  }
   const v = document.getElementById('view');
   if (!v){ render(); return; }
   v.style.transition = 'opacity .14s ease';
