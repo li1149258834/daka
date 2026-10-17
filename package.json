@@ -1,8 +1,8 @@
 {
-  "name": "daka-supervise",
+  "name": "noir-whiskers",
   "version": "1.0.0",
   "private": true,
-  "displayName": "双人打卡",
+  "displayName": "Noir Whiskers",
   "devDependencies": {
     "cordova": "^12.0.0",
     "cordova-android": "^13.0.0"
