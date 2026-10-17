@@ -424,9 +424,18 @@ header{background:rgba(241,240,234,.66);backdrop-filter:blur(20px) saturate(1.6)
   -webkit-backdrop-filter:blur(18px) saturate(1.4)}
 .heat{background:rgba(255,255,255,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 
-/* v14：无横滑 */
+/* v15：规范横向滑块 */
 .card{overflow:hidden}
-.slider{display:none !important}
+.slider{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  margin:0 -16px 6px;padding:2px 16px 4px}
+.slider::-webkit-scrollbar{display:none}
+.slider>.slide{flex:0 0 87%;scroll-snap-align:start;transition:opacity .3s,transform .3s}
+.slider>.slide:not(.active){opacity:.52}
+.slider>.slide>.card{height:100%;margin-bottom:0}
+.sdots{display:flex;gap:5px;justify-content:center;margin:2px 0 12px}
+.sdots i{width:5px;height:5px;border-radius:50%;background:var(--stone);transition:.28s}
+.sdots i.on{background:var(--forest);width:16px;border-radius:5px}
 </style>
 
 
@@ -434,7 +443,7 @@ header{background:rgba(241,240,234,.66);backdrop-filter:blur(20px) saturate(1.6)
   <div class="spl-logo" id="splLogo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%"><defs><linearGradient id="bwg" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#17795A"></stop><stop offset="1" stop-color="#0E4B2F"></stop></linearGradient></defs><rect width="32" height="32" rx="8.5" fill="url(#bwg)"></rect><rect x=".55" y=".55" width="30.9" height="30.9" rx="8" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.1"></rect><path d="M10.6 12.2 L11.4 6.9 L15.6 10.4 Z" fill="#B7D9C1"></path><path d="M21.4 12.2 L20.6 6.9 L16.4 10.4 Z" fill="#B7D9C1"></path><rect x="9.2" y="10.4" width="13.6" height="11.6" rx="4.4" fill="#B7D9C1"></rect><circle cx="13.6" cy="15.9" r="1.45" fill="#0E4B2F"></circle><circle cx="18.4" cy="15.9" r="1.45" fill="#0E4B2F"></circle><path d="M15.2 18.7 h1.6 l-.8 1.05 z" fill="#0E4B2F"></path><path d="M16 20.6 v1.05" stroke="#0E4B2F" stroke-width=".8" stroke-linecap="round"></path><path d="M4.2 15.6 h2.4 M4.2 18.2 h2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path><path d="M27.8 15.6 h-2.4 M27.8 18.2 h-2.4" stroke="#B7D9C1" stroke-width="1" stroke-linecap="round" opacity=".9"></path></svg></div>
   <h1>Noir Whiskers</h1>
   <div class="spl-sub"><span>双人打卡 · 互相监督</span></div>
-  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">手机上的细菌大约比马桶圈多 10 倍。</div></div>
+  <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact">巧克力里的可可碱对狗有毒，千万别喂。</div></div>
   <div class="row spl-actions"><button class="btn gray" onclick="nextFact()">换一条</button><button class="btn" onclick="enterApp()">进入</button></div>
 </div></div>
 <div id="app">
@@ -1014,10 +1023,18 @@ function switchTab(k){ tab=k; localStorage.setItem('daka.tab',k); window.scrollT
 function initSliders(){
   document.querySelectorAll('.slider').forEach(sl=>{
     const items=[...sl.children]; if(!items.length) return;
+    let dots = sl.nextElementSibling;
+    if(!dots || !dots.classList.contains('sdots')){
+      dots = document.createElement('div'); dots.className='sdots';
+      dots.innerHTML = items.map(()=>'<i></i>').join('');
+      sl.parentNode.insertBefore(dots, sl.nextSibling);
+    }
     const upd=()=>{
-      const c=sl.scrollLeft+sl.clientWidth/2; let best=null,bd=1e9;
-      items.forEach(it=>{ const mid=it.offsetLeft+it.offsetWidth/2; const d=Math.abs(mid-c); if(d<bd){bd=d;best=it;} });
-      items.forEach(it=>it.classList.toggle('active', it===best));
+      const c = sl.scrollLeft + sl.clientWidth/2;
+      let best=0, bd=1e9;
+      items.forEach((it,i)=>{ const mid=it.offsetLeft+it.offsetWidth/2; const d=Math.abs(mid-c); if(d<bd){bd=d;best=i;} });
+      items.forEach((it,i)=>it.classList.toggle('active', i===best));
+      [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===best));
     };
     if(!sl._b){ sl._b=1; sl.addEventListener('scroll',()=>requestAnimationFrame(upd),{passive:true}); }
     upd();
@@ -1040,7 +1057,9 @@ function viewToday(){
   const { st, n, total } = tasksDone(TODAYS,me);
   const pct = Math.round(n/total*100);
   const totalDays = Object.keys(S.daily).filter(d=>S.daily[d][me]&&S.daily[d][me].checkin).length;
-  const body = me==='her' ? herWordsCard() + herTasksCard(st) + customTaskCard('her',st)
+  const body = me==='her' ? herWordsCard()
+      + '<div class="slider"><div class="slide">' + herTasksCard(st)
+      + '</div><div class="slide">' + customTaskCard('her',st) + '</div></div>'
                           : meLogsCards() + customTaskCard('me',st);
   return `
   <div class="hero ${me}">
@@ -1145,13 +1164,13 @@ function herTasksCard(st){
       <span class="tk">${x.t}</span></label>`).join('')}</div>`;
 }
 function meLogsCards(){
-  return Object.keys(TRACKS).map(k=>{
+  return '<div class="slider">' + Object.keys(TRACKS).map(k=>{
     const [ic,name]=TRACKS[k];
     const g=S.goals[k]||{title:name,items:[]};
     const pending=(g.items||[]).filter(i=>!i.done);
     const mine=logsOf(TODAYS,k);
     const done=mine.length>0;
-    return `<div class="card"><h2>${ic} ${esc(g.title||name)}
+    return `<div class="slide"><div class="card"><h2>${ic} ${esc(g.title||name)}
         <span class="tag">${done?'<span class="pill ok">已打卡</span>':'<span class="pill no">未打卡</span>'}</span></h2>
       ${mine.map(l=>`<div class="list-item"><div class="g">
           <div class="a" style="color:var(--ink)">${esc(l.text)}</div></div>
@@ -1160,8 +1179,8 @@ function meLogsCards(){
         ${pending.map(i=>`<option value="${i.id}">${esc(i.t)}</option>`).join('')}</select>`:''}
       <textarea id="log_${k}" placeholder="${ME_HINT[k]}" style="min-height:52px;margin-top:9px"></textarea>
       <button class="btn ${done?'gray':''}" style="margin-top:9px" onclick="addLog('${k}')">
-        ${done?'再记一条':'打卡完成'}</button></div>`;
-  }).join('');
+        ${done?'再记一条':'打卡完成'}</button></div></div>`;
+  }).join('') + '</div>';
 }
 function addLog(track){
   const note=(($('#log_'+track)||{}).value||'').trim();
@@ -1220,10 +1239,10 @@ function viewStudy(){
       <div class="addtask"><input id="g_${k}" placeholder="加一个阶段/里程碑">
         <button class="btn sm" style="flex:0 0 68px" onclick="addGoal('${k}')">添加</button></div>
       <div class="mut" style="margin-top:8px">本周记录 ${wk} 条 · 累计 ${all.filter(l=>l.track===k).length} 条</div></div>`;
-  }).join('');
+  }).map(x=>'<div class="slide">'+x+'</div>').join('');
   return `<div class="card"><h2>🗺 我的计划 <span class="tag">李鑫</span></h2>
     <div class="mut">先把路线图里的条目逐个完成；每天在「今日」里选今天推进的那一项。</div></div>
-    ${cards}`;
+    <div class="slider">${cards}</div>`;
 }
 
 /* ---------- 错题本（分科 + 照片 + 原因） ---------- */
