@@ -619,11 +619,58 @@ header{transform:none;will-change:backdrop-filter;
 .tabs button .lbl{transition:opacity .22s,transform .26s cubic-bezier(.32,.72,.28,1)}
 .tabs button.on .lbl{transform:translateY(-.5px)}
 .tabs button .tdot{z-index:2}
+
+/* ===== v25 ===== */
+/* 顶栏：日期 → 名字（居中）→ 标语 */
+.topbar{display:block;text-align:center}
+.ttlwrap{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.pdate{font-family:var(--sans);font-size:10.5px;font-weight:500;color:var(--sub);
+  letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap}
+.nameline{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.ptitle{margin:0;display:block;font-family:var(--serif);font-size:19px;font-weight:600;
+  color:var(--forest);line-height:1.2;letter-spacing:0}
+.ptitle .bname{text-transform:uppercase;letter-spacing:4px;margin-right:-4px}
+.ptitle .psep{display:none}
+@media (max-width:360px){
+  .ptitle{font-size:16.5px}
+  .ptitle .bname{letter-spacing:2.6px;margin-right:-2.6px}
+  .pdate{font-size:10px;letter-spacing:1.2px}
+}
+.logo{border-radius:50% !important}
+.spl-logo{border-radius:50% !important}
+
+/* 打卡进度环 */
+.pwrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto;position:relative;z-index:1}
+.pring{position:relative;width:66px;height:66px;flex:0 0 auto}
+.pring::before{content:'';position:absolute;inset:-7px;border-radius:50%;
+  background:radial-gradient(circle,rgba(183,217,193,.35),rgba(183,217,193,0) 72%)}
+.pring svg{width:100%;height:100%;transform:rotate(-90deg);display:block;position:relative}
+.ptrack{fill:none;stroke:var(--stone-soft);stroke-width:5.5}
+.pfill{fill:none;stroke:var(--forest);stroke-width:5.5;stroke-linecap:round;
+  transition:stroke-dashoffset .65s cubic-bezier(.2,.8,.3,1)}
+.ptxt{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.ptxt b{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--forest);
+  line-height:1;font-variant-numeric:tabular-nums}
+.ptxt i{font-style:normal;font-size:9px;margin-left:1px;color:var(--sub);font-family:var(--sans)}
+.plab{font-size:10px;color:var(--sub);letter-spacing:.4px;white-space:nowrap}
+.ring{display:none}
+
+/* v26：名字精确居中 */
+.nameline{display:grid;grid-template-columns:44px max-content 44px;align-items:center;justify-items:center;gap:8px}
+.ptitle .bname{white-space:nowrap}
+.nameline .logo{width:44px;height:44px}
+.nameline .logoslot{width:44px;height:1px}
+.ptitle{text-align:center}
+@media (max-width:360px){
+  .nameline{grid-template-columns:38px max-content 38px;gap:6px}
+  .nameline .logo{width:38px;height:38px}
+  .nameline .logoslot{width:38px}
+}
 </style>
 </head>
 <body>
 <div id="splash" class=""><div class="spl-inner">
-  <div class="spl-logo" id="splLogo"><svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="100%" height="100%" shape-rendering="crispEdges" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#0F5132"></rect><rect x=".7" y=".7" width="46.6" height="46.6" rx="11.4" fill="none" stroke="rgba(255,255,255,.16)"></rect><g transform="translate(3.4,3.4) scale(.86)"><rect x="11" y="7" width="4" height="11" fill="#B7D9C1"></rect><rect x="15" y="12" width="4" height="6" fill="#B7D9C1"></rect><rect x="33" y="7" width="4" height="11" fill="#B7D9C1"></rect><rect x="29" y="12" width="4" height="6" fill="#B7D9C1"></rect><rect x="10" y="17" width="28" height="24" fill="#B7D9C1"></rect><rect x="15" y="25" width="7" height="8" fill="#0F5132"></rect><rect x="26" y="25" width="7" height="8" fill="#0F5132"></rect><rect x="22" y="36" width="4" height="3" fill="#0F5132"></rect><rect x="2" y="26" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="2" y="32" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="39" y="26" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="39" y="32" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect></g></svg></div>
+  <div class="spl-logo" id="splLogo"><svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="100%" height="100%" shape-rendering="crispEdges" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#0F5132"></circle><circle cx="24" cy="24" r="23.3" fill="none" stroke="rgba(255,255,255,.16)"></circle><g transform="translate(3.4,3.4) scale(.86)"><rect x="11" y="7" width="4" height="11" fill="#B7D9C1"></rect><rect x="15" y="12" width="4" height="6" fill="#B7D9C1"></rect><rect x="33" y="7" width="4" height="11" fill="#B7D9C1"></rect><rect x="29" y="12" width="4" height="6" fill="#B7D9C1"></rect><rect x="10" y="17" width="28" height="24" fill="#B7D9C1"></rect><rect x="15" y="25" width="7" height="8" fill="#0F5132"></rect><rect x="26" y="25" width="7" height="8" fill="#0F5132"></rect><rect x="22" y="36" width="4" height="3" fill="#0F5132"></rect><rect x="2" y="26" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="2" y="32" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="39" y="26" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="39" y="32" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect></g></svg></div>
   <h1>Noir Whiskers</h1>
   <div class="spl-sub"><span>双人打卡 · 互相监督</span></div>
   <div class="spl-fact"><div class="spl-fact-label">✨ 今日冷知识</div><div id="splFact"></div></div>
@@ -632,16 +679,20 @@ header{transform:none;will-change:backdrop-filter;
 <div id="app">
   <header>
     <div class="topbar">
-      <span class="logo" id="logo"><svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="100%" height="100%" shape-rendering="crispEdges" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#0F5132"></rect><rect x=".7" y=".7" width="46.6" height="46.6" rx="11.4" fill="none" stroke="rgba(255,255,255,.16)"></rect><g transform="translate(3.4,3.4) scale(.86)"><rect x="11" y="7" width="4" height="11" fill="#B7D9C1"></rect><rect x="15" y="12" width="4" height="6" fill="#B7D9C1"></rect><rect x="33" y="7" width="4" height="11" fill="#B7D9C1"></rect><rect x="29" y="12" width="4" height="6" fill="#B7D9C1"></rect><rect x="10" y="17" width="28" height="24" fill="#B7D9C1"></rect><rect x="15" y="25" width="7" height="8" fill="#0F5132"></rect><rect x="26" y="25" width="7" height="8" fill="#0F5132"></rect><rect x="22" y="36" width="4" height="3" fill="#0F5132"></rect><rect x="2" y="26" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="2" y="32" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="39" y="26" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="39" y="32" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect></g></svg></span>
       <div class="ttlwrap">
-        <h1 class="ptitle"><span class="bname">Noir Whiskers</span><span class="psep">｜</span><span class="pdate" id="hdDate">10月17日 周六</span></h1>
+        <div class="pdate" id="hdDate">10月17日 周六</div>
+        <div class="nameline">
+          <span class="logo" id="logo"><svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="100%" height="100%" shape-rendering="crispEdges" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#0F5132"></circle><circle cx="24" cy="24" r="23.3" fill="none" stroke="rgba(255,255,255,.16)"></circle><g transform="translate(3.4,3.4) scale(.86)"><rect x="11" y="7" width="4" height="11" fill="#B7D9C1"></rect><rect x="15" y="12" width="4" height="6" fill="#B7D9C1"></rect><rect x="33" y="7" width="4" height="11" fill="#B7D9C1"></rect><rect x="29" y="12" width="4" height="6" fill="#B7D9C1"></rect><rect x="10" y="17" width="28" height="24" fill="#B7D9C1"></rect><rect x="15" y="25" width="7" height="8" fill="#0F5132"></rect><rect x="26" y="25" width="7" height="8" fill="#0F5132"></rect><rect x="22" y="36" width="4" height="3" fill="#0F5132"></rect><rect x="2" y="26" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="2" y="32" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="39" y="26" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect><rect x="39" y="32" width="7" height="2" fill="#B7D9C1" opacity="0.9"></rect></g></svg></span>
+          <h1 class="ptitle"><span class="bname">Noir Whiskers</span></h1>
+          <span class="logoslot"></span>
+        </div>
         <div class="tagline"><span>双人打卡 · 互相监督</span></div>
       </div>
     </div>
     <div class="hsub" id="hdSync"><span class="sync ok"><i class="sd sd-ok">✓</i><span>已同步</span></span></div>
     <div class="seg" id="who"></div>
   </header>
-  <main id="view"></main>
+  <main id="view" style="transition: opacity 0.14s; opacity: 1;"></main>
 </div>
 <div class="tabs" id="tabs"></div>
 <div class="toast" id="toast"></div>
@@ -1132,8 +1183,8 @@ function catSVG(v){
   inner += _catRect(CATG.eyeL, feat) + _catRect(CATG.eyeR, feat) + _catRect(CATG.nose, feat);
   inner += CATG.wL.concat(CATG.wR).map(r=>_catRect(r, wcol, 0, .9)).join('');
   const art = brand
-    ? '<rect width="48" height="48" rx="12" fill="#0F5132"/>'
-      + '<rect x=".7" y=".7" width="46.6" height="46.6" rx="11.4" fill="none" stroke="rgba(255,255,255,.16)"/>'
+    ? '<circle cx="24" cy="24" r="24" fill="#0F5132"/>'
+      + '<circle cx="24" cy="24" r="23.3" fill="none" stroke="rgba(255,255,255,.16)"/>'
       + '<g transform="translate(3.4,3.4) scale(.86)">'+inner+'</g>'
     : inner;
   return '<svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="100%" height="100%" '
@@ -1413,7 +1464,17 @@ function viewToday(){
     <div class="heroL"><div class="av big">${catSVG(u.id)}</div>
       <div><div class="heroName">${esc(u.name)}</div>
         <div class="mut">${rec.checkin?'今天已打卡 ✅':'今天还没打卡'}</div></div></div>
-    <div class="ring" style="--p:${pct}"><span>${n}/${total}</span></div>
+    <div class="pwrap">
+      <div class="pring">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="ptrack" cx="32" cy="32" r="26"></circle>
+          <circle class="pfill" cx="32" cy="32" r="26"
+            stroke-dasharray="163.36" stroke-dashoffset="${(163.36*(1-pct/100)).toFixed(2)}"></circle>
+        </svg>
+        <div class="ptxt"><b>${pct}<i>%</i></b></div>
+      </div>
+      <div class="plab">${n}/${total} 项</div>
+    </div>
   </div>
   ${body}
   <div class="card"><h2>今天的一句话</h2>
