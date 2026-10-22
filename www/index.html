@@ -666,6 +666,14 @@ header{transform:none;will-change:backdrop-filter;
   .nameline .logo{width:38px;height:38px}
   .nameline .logoslot{width:38px}
 }
+
+/* v30：滚动安全 */
+html,body{overflow-x:clip}
+body{overscroll-behavior-y:auto}
+.card:active{transform:none !important}
+#splash{overflow-y:auto;-webkit-overflow-scrolling:touch;align-items:flex-start}
+.spl-inner{margin:auto}
+.word{touch-action:pan-y}
 </style>
 </head>
 <body>
@@ -680,7 +688,7 @@ header{transform:none;will-change:backdrop-filter;
   <header>
     <div class="topbar">
       <div class="ttlwrap">
-        <div class="pdate" id="hdDate">10月17日 周六</div>
+        <div class="pdate" id="hdDate">10月22日 周四</div>
         <div class="nameline">
           <span class="logo" id="logo"><svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="100%" height="100%" shape-rendering="crispEdges" aria-hidden="true"><defs><linearGradient id="nwG1" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="19.2" y2="48"><stop offset="0" stop-color="#17805A"></stop><stop offset="1" stop-color="#0D4730"></stop></linearGradient><mask id="nwM1" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><circle cx="24" cy="24.5" r="18" fill="#fff"></circle><path d="M13.6 48 L13.6 27 L15.6 12.4 L21.2 21.4 L24.4 21.4 L30.2 12.4 L31.2 27 L31.2 48 Z" fill="#000"></path><path d="M32.4 18 Q35 11.8 38.8 14.2 Q36.6 15.3 36.5 17.2 Q38.9 15.4 41 17.6 Q37.6 18.2 36.6 20.6 Q34 19.7 32.4 18 Z" fill="#000"></path></mask></defs><rect width="48" height="48" rx="13.5" fill="#0F5132"></rect><rect width="48" height="48" rx="13.5" fill="url(#nwG1)"></rect><rect width="48" height="48" rx="13.5" fill="#B7D9C1" mask="url(#nwM1)"></rect><circle cx="18.4" cy="30.6" r="1.9" fill="#B7D9C1"></circle><circle cx="26.2" cy="30.6" r="1.9" fill="#B7D9C1"></circle><rect x=".75" y=".75" width="46.5" height="46.5" rx="12.9" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"></rect></svg></span>
           <h1 class="ptitle"><span class="bname">Noir Whiskers</span></h1>
@@ -689,13 +697,13 @@ header{transform:none;will-change:backdrop-filter;
         <div class="tagline"><span>双人打卡 · 互相监督</span></div>
       </div>
     </div>
-    <div class="hsub" id="hdSync"><span class="sync ok"><i class="sd sd-ok">✓</i><span>已同步</span></span></div>
+    <div class="hsub" id="hdSync"><span class="sync off"><span>本地模式</span></span></div>
     <div class="seg" id="who"></div>
   </header>
   <main id="view" style="transition: opacity 0.14s; opacity: 1;"></main>
 </div>
 <div class="tabs" id="tabs"></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">恢复成功</div>
 
 <script>
 /* ================= 词库（内嵌，离线可用） ================= */
@@ -1259,7 +1267,7 @@ function lastActive(u){
 }
 
 /* ---------- 渲染 ---------- */
-function render(){
+function renderCore(){
   const list = TABS[me] || TABS.her;
   if (!list.some(x=>x[0]===tab)) tab='today';
   const lg = $('#logo'); if (lg && !lg.innerHTML) lg.innerHTML = brandSVG();
@@ -1322,6 +1330,23 @@ function moveInd(){
     requestAnimationFrame(()=>{ ind.style.transition = ''; });
   }
 }
+function render(){
+  try { renderCore(); }
+  catch(err){
+    try { console.error(err); } catch(_){}
+    const v = document.getElementById('view');
+    if (v) v.innerHTML = '<div class="card"><h2>页面加载出错了</h2>'
+      + '<div class="mut">' + String(err && err.message || err) + '</div>'
+      + '<div class="mut" style="margin-top:10px">先备份，再重置本机数据即可恢复（云端数据不受影响）。</div>'
+      + '<div class="row" style="margin-top:12px">'
+      + '<button class="btn" onclick="oneBackup()">一键备份</button>'
+      + '<button class="btn gray" onclick="doReset()">重置本机</button></div></div>';
+    const tb = document.getElementById('tabs'); if (tb) tb.innerHTML = '';
+  }
+}
+window.addEventListener('error', function(ev){
+  try { if (typeof toast === 'function') toast('出错了：' + (ev.message||'')); } catch(_){}
+});
 function drawSync(){
   const el=$('#hdSync'); if(!el) return;
   const map = {
@@ -1365,35 +1390,40 @@ function switchTab(k){
 function initSwipe(){
   const wordEl = document.querySelector('#view .word[data-wi]');
   if (!wordEl || wordEl._sw) return;
+  wordEl._sw = 1;
   const card = wordEl.closest('.card');
-  if (!card || card._sw) return;
-  wordEl._sw = 1; card._sw = 1;
-  const swL = document.createElement('div'); swL.className = 'swl';
-  const swR = document.createElement('div'); swR.className = 'swr';
-  card.appendChild(swL); card.appendChild(swR);
-  let sx=0, sy=0, dx=0, dragging=false, lock=null;
-  const TH = Math.min(110, Math.max(72, card.clientWidth*0.22));
-  const pt = e => (e.touches && e.touches[0]) ? e.touches[0] : e;
+  if (!card) return;
+  if (!card.querySelector('.swl')){
+    const l = document.createElement('div'); l.className = 'swl';
+    const r = document.createElement('div'); r.className = 'swr';
+    card.appendChild(l); card.appendChild(r);
+    card._swL = l; card._swR = r;
+  }
+  const swL = card._swL, swR = card._swR;
+  const TH = Math.max(64, Math.min(110, card.clientWidth*0.22));
+  let sx=0, sy=0, dx=0, active=false, mode=null;
   const relax = () => {
-    card.style.transition = 'transform .28s cubic-bezier(.2,.8,.3,1), opacity .2s';
-    card.style.transform = 'translateX(0) rotate(0)';
+    card.style.transition = 'transform .3s cubic-bezier(.2,.8,.3,1)';
+    card.style.transform = '';
     card.style.opacity = '1';
     swL.style.opacity = 0; swR.style.opacity = 0;
   };
   const down = e => {
     if (window._zhanBusy) return;
-    const p = pt(e); sx = p.clientX; sy = p.clientY; dx = 0; dragging = true; lock = null;
+    if (e.pointerType === 'mouse' && e.button > 0) return;
+    active = true; mode = null; dx = 0;
+    sx = e.clientX; sy = e.clientY;
     card.style.transition = 'none';
   };
   const move = e => {
-    if (!dragging) return;
-    const p = pt(e), mx = p.clientX - sx, my = p.clientY - sy;
-    if (lock === null){
-      if (Math.abs(mx) > Math.abs(my) + 4) lock = 'x';
-      else if (Math.abs(my) > Math.abs(mx) + 4) lock = 'y';
+    if (!active) return;
+    const mx = e.clientX - sx, my = e.clientY - sy;
+    if (mode === null){
+      if (Math.abs(my) > 10 && Math.abs(my) >= Math.abs(mx)) { active = false; return; }  /* 纵向 → 交给页面滚动 */
+      if (Math.abs(mx) > 12 && Math.abs(mx) > Math.abs(my) * 1.5) mode = 'x';
+      else return;
     }
-    if (lock !== 'x') return;
-    if (e.cancelable) e.preventDefault();
+    if (mode !== 'x') return;
     dx = mx;
     card.style.transform = 'translateX('+dx+'px) rotate('+(dx/34)+'deg)';
     const k = Math.min(1, Math.abs(dx)/TH);
@@ -1401,25 +1431,24 @@ function initSwipe(){
     swL.style.opacity = dx < 0 ? k.toFixed(2) : 0;
   };
   const up = () => {
-    if (!dragging) return;
-    dragging = false;
+    if (!active) return;
+    active = false;
+    if (mode !== 'x'){ relax(); return; }
     if (Math.abs(dx) > TH){
       const ok = dx > 0;
       card.style.transition = 'transform .24s ease-out, opacity .24s';
-      card.style.transform = 'translateX('+(ok?460:-460)+'px) rotate('+(ok?20:-20)+'deg)';
+      card.style.transform = 'translateX('+(ok?460:-460)+'px) rotate('+(ok?18:-18)+'deg)';
       card.style.opacity = '0';
       swL.style.opacity = 0; swR.style.opacity = 0;
       const wi = Number(wordEl.dataset.wi), kind = wordEl.dataset.kind;
       setTimeout(()=>{ const ss = sessionOf(TODAYS); if (ss && !ss.done) grade(wi, ok, kind); }, 200);
-    } else { relax(); }
+    } else relax();
   };
-  card.addEventListener('touchstart', down, {passive:true});
-  card.addEventListener('touchmove', move, {passive:false});
-  card.addEventListener('touchend', up);
-  card.addEventListener('touchcancel', up);
-  card.addEventListener('mousedown', e=>{ if(e.button===0) down(e); });
-  window.addEventListener('mousemove', e=>{ if(dragging) move(e); });
-  window.addEventListener('mouseup', ()=>{ if(dragging) up(); });
+  wordEl.addEventListener('pointerdown', down);
+  wordEl.addEventListener('pointermove', move);
+  wordEl.addEventListener('pointerup', up);
+  wordEl.addEventListener('pointercancel', up);
+  wordEl.addEventListener('pointerleave', up);
 }
 function initSliders(){
   document.querySelectorAll('.slider').forEach(sl=>{
@@ -2010,6 +2039,14 @@ function viewSet(){
       <div class="t">打开时和每 1 分钟自动同步（建议开）</div></div>
   </div>
 
+  <div class="card"><h2>🔐 一键备份 / 恢复</h2>
+    <div class="mut">换手机、重装 App 前点一下「一键备份」，数据会变成一段码复制到剪贴板；到新 App 点「一键恢复」即可。</div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="oneBackup()">一键备份</button>
+      <button class="btn gray" onclick="oneRestore()">一键恢复</button></div>
+    <div class="mut" id="bkMsg" style="margin-top:9px">建议备份后把码发到微信「文件传输助手」，或存进备忘录。</div>
+  </div>
+
   <div class="card"><h2>🔗 同步码（不用 Token 的备用办法）</h2>
     <div class="mut">一方点“生成”，把码复制发到微信；另一方粘贴后点“合并”。两边数据会合并，不覆盖。</div>
     <div style="margin-top:10px"><button class="btn" onclick="genCode()">生成我的同步码</button></div>
@@ -2250,6 +2287,43 @@ async function publishApp(){
     log('❌ 发布失败：' + esc(e.message));
     toast('发布失败：' + e.message);
   }
+}
+async function oneBackup(){
+  let code;
+  try { code = makeCode(); } catch(e){ toast('备份失败：'+e.message); return; }
+  const kb = Math.max(1, Math.round(code.length/1024));
+  const msg = document.getElementById('bkMsg');
+  const ok = (()=>{ try {
+      const ta = document.createElement('textarea');
+      ta.value = code; ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, code.length);
+      const r = document.execCommand('copy'); document.body.removeChild(ta);
+      return r;
+    } catch(e){ return false; } })();
+  if (ok){
+    if (msg) msg.innerHTML = '✅ 已复制备份码（'+kb+' KB），存到微信/备忘录即可';
+    toast('已备份（'+kb+'KB），码已复制');
+  } else {
+    const box = document.getElementById('codeBox');
+    if (box){ box.value = code; box.focus(); box.select(); }
+    if (msg) msg.innerHTML = '已生成备份码（'+kb+' KB），请长按文本框手动复制';
+    toast('已生成（'+kb+'KB），请长按复制');
+  }
+}
+async function oneRestore(){
+  let txt = '';
+  try { if (navigator.clipboard && navigator.clipboard.readText) txt = await navigator.clipboard.readText(); } catch(e){}
+  if (!txt || txt.trim().length < 20){
+    const box = document.getElementById('codeBox');
+    if (box && box.value.trim()) txt = box.value;
+  }
+  if (!txt || txt.trim().length < 20){
+    toast('剪贴板里没有备份码，请粘贴到下面的文本框再点恢复');
+    const box = document.getElementById('codeBox'); if (box) box.focus();
+    return;
+  }
+  try { applyCode(txt); toast('恢复成功'); }
+  catch(e){ toast('恢复失败：' + (e.message||'格式不对')); }
 }
 function genCode(){ $('#codeBox').value = makeCode(); toast('已生成，请复制发给对方'); }
 function copyCode(){
